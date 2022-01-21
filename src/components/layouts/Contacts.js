@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,58 +7,57 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { db } from "../firebse";
-import { collection, getDocs } from "firebase/firestore";
-import { useDispatch } from "react-redux";
-import { getAllUsers } from "../services/redux/reducers/userSlice";
-import UserTableAvatar from "./UserTableAvatar";
-import { Link } from "react-router-dom";
 
 const columns = [
-  { id: "picture", label: "Picture", minWidth: 170 },
-  { id: "name", label: "Name", minWidth: 100 },
+  { id: "name", label: "Name", minWidth: 170 },
+  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
   {
-    id: "phone",
-    label: "Phone Number",
+    id: "population",
+    label: "Population",
     minWidth: 170,
     align: "right",
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "email",
-    label: "Email",
+    id: "size",
+    label: "Size\u00a0(km\u00b2)",
+    minWidth: 170,
+    align: "right",
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "density",
+    label: "Density",
     minWidth: 170,
     align: "right",
     format: (value) => value.toFixed(2),
   },
 ];
 
-function createData(picture, name, phone, email) {
-  return { picture, name, phone, email };
+function createData(name, code, population, size) {
+  const density = population / size;
+  return { name, code, population, size, density };
 }
 
-export default function HomepageUserList() {
-  const [users, setUsers] = useState([]);
-  const usersCollectiion = collection(db, "DGM_YOUTH_users");
-  let rows = [];
+const rows = [
+  createData("India", "IN", 1324171354, 3287263),
+  createData("China", "CN", 1403500365, 9596961),
+  createData("Italy", "IT", 60483973, 301340),
+  createData("United States", "US", 327167434, 9833520),
+  createData("Canada", "CA", 37602103, 9984670),
+  createData("Australia", "AU", 25475400, 7692024),
+  createData("Germany", "DE", 83019200, 357578),
+  createData("Ireland", "IE", 4857000, 70273),
+  createData("Mexico", "MX", 126577691, 1972550),
+  createData("Japan", "JP", 126317000, 377973),
+  createData("France", "FR", 67022000, 640679),
+  createData("United Kingdom", "GB", 67545757, 242495),
+  createData("Russia", "RU", 146793744, 17098246),
+  createData("Nigeria", "NG", 200962417, 923768),
+  createData("Brazil", "BR", 210147125, 8515767),
+];
 
-  const [searchInput, setSearchInput] = useState("");
-
-  const dispatch = useDispatch();
-
-  rows = users.map((user) =>
-    createData(
-      <Link to={`/profile-details/${user.uid}`}>
-        <UserTableAvatar url={user.avatar} />
-      </Link>,
-      <Link to={`/profile-details/${user.uid}`}>
-        {user.firstName + " " + user.lastName}
-      </Link>,
-      <Link to={`/profile-details/${user.uid}`}>{user.phone}</Link>,
-      <Link to={`/profile-details/${user.uid}`}>{user.email}</Link>
-    )
-  );
-
+export default function ColumnGroupingTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -71,57 +70,27 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectiion);
-      console.log("current data ", data.docs.data);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    dispatch(getAllUsers(users));
-    console.log("users....", users);
-    getUsers();
-  }, []);
-
-  setTimeout(() => {
-    dispatch(getAllUsers(users));
-  }, 1000);
-
   return (
-    <div>
-      {/* <div>
-        <input
-          style={{
-            width: "100%",
-            margin: "10px 0px",
-            height: "50px",
-            borderWidth: "1px",
-            borderColor: "purple",
-            borderRadius: "6px",
-            textAlign: "center",
-            color: "purple",
-            fontSize: "20px",
-          }}
-          type="text"
-          placeholder="Search by Name"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </div> */}
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 600 }}>
+    <div className="layout_margin">
+      <h3 style={{ color: "purple" }}>Members Contact</h3>
+      <Paper sx={{ width: "100%", justifyContent: "center" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
+              <TableRow>
+                <TableCell align="center" colSpan={2}>
+                  Country
+                </TableCell>
+                <TableCell align="center" colSpan={3}>
+                  Details
+                </TableCell>
+              </TableRow>
               <TableRow>
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{
-                      minWidth: column.minWidth,
-                      color: "purple",
-                      fontWeight: "bolder",
-                    }}
+                    style={{ top: 57, minWidth: column.minWidth }}
                   >
                     {column.label}
                   </TableCell>

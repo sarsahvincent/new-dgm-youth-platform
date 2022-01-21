@@ -32,7 +32,7 @@ function Register() {
         email,
         password
       );
-      await setDoc(doc(db, "users", result.user.uid), {
+      await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
         uid: result.user.uid,
         name,
         email,

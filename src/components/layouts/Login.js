@@ -8,49 +8,48 @@ import { getCurrentUserId } from "../../services/redux/reducers/userSlice";
 import { Spinner } from "react-bootstrap";
 
 function Login() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [data, setData] = useState({
-      email: "",
-      password: "",
-      error: null,
-      loading: false,
-    });
-  
-    const { email, password, error, loading } = data;
-  
-    const handleChange = (e) => {
-      setData({ ...data, [e.target.name]: e.target.value });
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      setData({ ...data, error: null, loading: true });
-      if (!email || !password) {
-        setData({ ...data, error: "All fields are required." });
-      }
-      try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        await updateDoc(doc(db, "users", result.user.uid), {
-          isOnline: true,
-        });
-  
-        dispatch(getCurrentUserId(result.user.uid));
-  
-        setData({
-          email: "",
-          password: "",
-          loading: false,
-          error: null,
-        });
-        setData({ ...data, loading: true });
-        navigate("/");
-      } catch (err) {
-        setData({ ...data, error: err.message, loading: false });
-      }
-    };
-    return (
-        <section className="login_container">
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    error: null,
+    loading: false,
+  });
+
+  const { email, password, error, loading } = data;
+
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setData({ ...data, error: null, loading: true });
+    if (!email || !password) {
+      setData({ ...data, error: "All fields are required." });
+    }
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      await updateDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
+        isOnline: true,
+      });
+      dispatch(getCurrentUserId(result.user.uid));
+      setData({
+        email: "",
+        password: "",
+        loading: false,
+        error: null,
+      });
+      setData({ ...data, loading: true });
+      navigate("/");
+    } catch (err) {
+      setData({ ...data, error: err.message, loading: false });
+    }
+  };
+
+  return (
+    <section className="login_container">
       <h3>Login to your Account</h3>
       <form className="form" onSubmit={handleSubmit}>
         <div className="input_container">
@@ -79,7 +78,7 @@ function Login() {
         </div>
       </form>
     </section>
-    )
+  );
 }
 
-export default Login
+export default Login;

@@ -33,7 +33,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import CreateIcon from "@mui/icons-material/Create";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const drawerWidth = 240;
 
@@ -118,7 +118,7 @@ export default function MiniDrawer({ layout }) {
   const navigate = useNavigate();
 
   const handleSignout = async () => {
-    await updateDoc(doc(db, "users", auth.currentUser?.uid), {
+    await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser?.uid), {
       isOnline: false,
     });
     await signOut(auth);
@@ -155,7 +155,7 @@ export default function MiniDrawer({ layout }) {
           ) : null}
 
           <div>
-            <Link to="/">
+            <Link to="/dashboard">
               <Typography
                 style={{
                   color: "white",
@@ -165,7 +165,7 @@ export default function MiniDrawer({ layout }) {
                 component="div"
               >
                 <img src={DGMlogo} alt="Lgo" className="navbar_logos" />
-                GMD Youth
+                DGM Youth
               </Typography>
             </Link>
           </div>
@@ -245,7 +245,7 @@ export default function MiniDrawer({ layout }) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          <Link to="/">
+          <Link to="/dashboard">
             <List>
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
@@ -258,7 +258,7 @@ export default function MiniDrawer({ layout }) {
             </List>
           </Link>
           <Divider />
-          <Link to="/profile">
+          <Link to="/">
             <List>
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
@@ -274,14 +274,16 @@ export default function MiniDrawer({ layout }) {
             </List>
           </Link>
           <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <PersonAddIcon style={{ color: "purple" }} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
-              <b>Add Acount</b>
-            </ListItemText>
-          </ListItem>
+          <Link to="/add-account">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <PersonAddIcon style={{ color: "purple" }} fontSize="large" />
+              </ListItemIcon>
+              <ListItemText style={{ color: "purple" }}>
+                <b>Add Acount</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
           <Divider />
           <Link to="/account-management">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
@@ -292,12 +294,12 @@ export default function MiniDrawer({ layout }) {
                 />
               </ListItemIcon>
               <ListItemText style={{ color: "purple" }}>
-                <b>Manage Account</b>
+                <b>Converts</b>
               </ListItemText>
             </ListItem>
           </Link>
           <Divider />
-          <Link to="/contact">
+          <Link to="/contacts">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <ContactPhoneIcon
@@ -320,15 +322,16 @@ export default function MiniDrawer({ layout }) {
             </ListItemText>
           </ListItem>
           <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <TodayIcon style={{ color: "purple" }} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
-              <b>Activities</b>
-            </ListItemText>
-          </ListItem>
-
+          <Link to="/events">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <TodayIcon style={{ color: "purple" }} fontSize="large" />
+              </ListItemIcon>
+              <ListItemText style={{ color: "purple" }}>
+                <b>Events</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
@@ -371,7 +374,11 @@ export default function MiniDrawer({ layout }) {
 
       <Box
         component="main"
-        sx={{ p: 1, height: "100vh", background: "rgb(245, 240, 240)" }}
+        sx={{
+          p: 1,
+          height: "100vh",
+          backgroundColor: "rgba(250, 245, 245, 0.911)",
+        }}
       >
         <DrawerHeader />
         {layout}

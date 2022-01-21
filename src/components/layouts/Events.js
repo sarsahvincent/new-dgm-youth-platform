@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
-import ManIcon from "@mui/icons-material/Man";
-import WomanIcon from "@mui/icons-material/Woman";
-import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
-import GroupsIcon from "@mui/icons-material/Groups";
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { Box } from "@mui/system";
-import HomepageUserList from "../HomepageUserList";
+import ActivityCreator from "../ActivityCreator";
 import HomepageEventTablet from "../HomepageEventTable";
 import { useSelector } from "react-redux";
+
 
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
@@ -52,7 +52,7 @@ function HomePageContent() {
 
   return (
     <div className="layout_margin">
-      <h3 style={{ color: "purple" }}>Dashboard</h3>
+      <h3 style={{ color: "purple" }}>Events</h3>
       <Box
         component="div"
         display="inline"
@@ -74,9 +74,9 @@ function HomePageContent() {
                 p: 2,
               }}
             >
-              <GroupsIcon style={{ color: "purple", fontSize: 30 }} />
+              <EventNoteIcon style={{ color: "purple", fontSize: 30 }} />
               <div style={{ color: "purple", textAlign: "center" }}>
-                <h4>Total Youth</h4>
+                <h4>Total Event</h4>
                 <h2>{allUsers?.length}</h2>
               </div>
             </Paper>
@@ -89,9 +89,9 @@ function HomePageContent() {
                 p: 2,
               }}
             >
-              <ManIcon style={{ color: "purple", fontSize: 30 }} />
+              <AssignmentTurnedInIcon style={{ color: "green", fontSize: 30 }} />
               <div style={{ color: "purple", textAlign: "center" }}>
-                <h4>Men</h4>
+                <h4>Executed</h4>
                 <h2>{men}</h2>
               </div>
             </Paper>
@@ -104,22 +104,14 @@ function HomePageContent() {
                 p: 1,
               }}
             >
-              <WomanIcon style={{ color: "purple", fontSize: 30 }} />
+              <PendingActionsIcon style={{ color: "blue", fontSize: 30 }} />
               <div style={{ color: "purple", textAlign: "center" }}>
-                <h4>Women</h4>
+                <h4>Pending</h4>
                 <h2>{womem}</h2>
               </div>
             </Paper>
           </div>
-          <div>
-            <Paper className="dashboard_headings" elevation={3} sx={{ p: 1 }}>
-              <EmojiPeopleIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
-                <h4>New Convert</h4>
-                <h2>{newConvert}</h2>
-              </div>
-            </Paper>
-          </div>
+        
         </div>
       </Box>
       <div className="hompage_table_items">
@@ -127,9 +119,9 @@ function HomePageContent() {
           <h3
             style={{ textAlign: "center", color: "purple", marginTop: "15px" }}
           >
-            Members
+            Create Activity
           </h3>
-          <HomepageUserList />
+          <ActivityCreator />
         </div>
         <div className="homepageEventListTable">
           <h3

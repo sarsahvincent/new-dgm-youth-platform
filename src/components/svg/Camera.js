@@ -5,7 +5,12 @@ const Camera = () => {
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-       style={{ widt: "25px", height: "25px", cursor: "pointer"}}
+        style={{
+          widt: "25px",
+          height: "25px",
+          color: "purple",
+          cursor: "pointer",
+        }}
         viewBox="0 0 20 20"
         fill="currentColor"
       >

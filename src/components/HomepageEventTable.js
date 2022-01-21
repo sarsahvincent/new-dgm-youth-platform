@@ -13,7 +13,7 @@ export default function ControlledAccordions() {
   };
 
   return (
-    <div  className="homepageUserListTable">
+    <div>
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}

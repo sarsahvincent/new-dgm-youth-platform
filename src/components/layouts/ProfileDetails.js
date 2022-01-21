@@ -4,6 +4,7 @@ import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
 import { storage, db, auth } from "../../firebse";
+import { useParams } from "react-router-dom";
 import {
   ref,
   getDownloadURL,
@@ -16,6 +17,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import Loading from "../Loading";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -24,13 +26,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-function Profile() {
+function ProfileDetails() {
+    const { id } = useParams();
   const [img, setImg] = useState();
   const [user, setUser] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+    getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
       if (docSnap.exists) {
         setUser(docSnap.data());
       }
@@ -49,7 +52,7 @@ function Profile() {
           const snap = await uploadBytes(imgRef, img);
           const url = await getDownloadURL(ref(storage, snap.ref.fullPath));
 
-          await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid), {
+          await updateDoc(doc(db, "DGM_YOUTH_users", id), {
             avatar: url,
             avatarPath: snap.ref.fullPath,
           });
@@ -68,7 +71,7 @@ function Profile() {
       if (confirm) {
         deleteObject(ref(storage, user.avatarPath));
       }
-      await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid), {
+      await updateDoc(doc(db, "DGM_YOUTH_users", id), {
         avatar: "",
         avatarPath: "",
       });
@@ -81,8 +84,8 @@ function Profile() {
   return user ? (
     <div className="layout_margin m-2 mt-3">
       <Box sx={{ flexGrow: 1 }}>
-        <Grid sx={{ boxShadow: 0 }} container spacing={2}>
-          <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid    sx={{ boxShadow: 0 }} container spacing={2}>
+          <Grid    sx={{ boxShadow: 0}} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Item>
               <div className="profile_container">
                 <div className="img_container">
@@ -320,7 +323,7 @@ function Profile() {
         </Grid>
       </Box>
     </div>
-  ) : null;
+  ) : <Loading/>;
 }
 
-export default Profile;
+export default ProfileDetails;
