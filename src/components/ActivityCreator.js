@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { Paper } from "@mui/material";
+import { auth, db } from "../firebse";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import ButtonLoader from "./ButtonLoader";
+
+const id = Math.random().toString(36).slice(2);
 
 const ActivityCreator = () => {
   const [formValues, setFormValues] = useState([
-    { name: "", qautity: "", unitCost: "", total: null },
+    { name: "", qautity: "", unitCost: "", total: "" },
   ]);
+
+  const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -17,7 +22,7 @@ const ActivityCreator = () => {
   let addFormFields = () => {
     setFormValues([
       ...formValues,
-      { name: "", qautity: "", unitCost: "", total: null },
+      { name: "", qautity: "", unitCost: "", total: "" },
     ]);
   };
 
@@ -27,20 +32,48 @@ const ActivityCreator = () => {
     setFormValues(newFormValues);
   };
 
-  let handleSubmit = (event) => {
+  let handleSubmit = async (event) => {
     event.preventDefault();
-    alert(JSON.stringify(formValues));
+
+
+    if (
+      formValues[0].name === "" ||
+      formValues[0].qautity === "" ||
+      formValues[0].unitCost === "" ||
+      title === ""
+    ) {
+      alert("You cannot submit an empty form");
+      return;
+    }
+    setLoading(true);
+    try {
+      await setDoc(doc(db, "DGM_YOUTH_Activities", id + title), {
+        formValues,
+        title,
+        createdAt: Timestamp.fromDate(new Date()),
+      });
+      setLoading(false);
+      setFormValues([{ name: "", qautity: "", unitCost: "", total: "" }]);
+      setTitle("");
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
-  formValues.map(value => {
-   
-  })
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="activityFormContainer" onSubmit={handleSubmit}>
+      <input
+        placeholder="Enter Title"
+        className="activityTitle"
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       {formValues.map((element, index) => (
         <div className="form-inline" key={index}>
           <input
+            className="itemName"
+            placeholder="Name of item"
             type="text"
             name="name"
             value={element.name || ""}
@@ -48,6 +81,7 @@ const ActivityCreator = () => {
           />
 
           <input
+            placeholder="Quantiy"
             type="number"
             name="qautity"
             value={element.qautity || ""}
@@ -55,6 +89,7 @@ const ActivityCreator = () => {
           />
 
           <input
+            placeholder="Unit Cost GH"
             type="number"
             name="unitCost"
             value={element.unitCost || ""}
@@ -62,17 +97,19 @@ const ActivityCreator = () => {
           />
 
           <input
+            className="total"
+            placeholder="Total"
             disabled
-            type="text"
+            type="number"
             name="total"
-            value={element.total || ""}
+            value={element.qautity * element.unitCost}
             onChange={(e) => handleChange(index, e)}
           />
 
           {index ? (
             <button
               type="button"
-              className="button remove"
+              className="button-remove"
               onClick={() => removeFormFields(index)}
             >
               Remove
@@ -82,15 +119,20 @@ const ActivityCreator = () => {
       ))}
       <div className="button-section">
         <button
-          className="button add"
+          className="buttonadd"
           type="button"
           onClick={() => addFormFields()}
         >
           Add
         </button>
-        <button className="button submit" type="submit">
-          Submit
-        </button>
+
+        {loading ? (
+          <ButtonLoader />
+        ) : (
+          <button className="buttonsubmit" type="submit">
+            Submit
+          </button>
+        )}
       </div>
     </form>
   );

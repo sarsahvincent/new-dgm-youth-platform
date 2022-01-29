@@ -139,10 +139,12 @@ h6 {
 }
 
 .homepageEventListTable {
+  flex:2;
 }
 
 .homepageUserListTable {
   margin-right: 20px;
+  flex: 3;
 }
 
 .dashboard_headings_main {
@@ -569,4 +571,73 @@ h6 {
     display: flex;
     flex-direction: column;
   }
+}
+
+
+/* ACTIVITY FORMS */
+
+.activityFormContainer{
+  display:flex;
+  align-items: left;
+  flex-direction: column
+}
+
+.form-inline input{
+margin: 5px 3px;
+width: 150px;
+border: 2px solid purple;
+border-radius: 5px;
+text-align: center;
+}
+
+.itemName{
+  width: 200px !important;
+}
+.total{
+  width: 90px !important;
+}
+
+.button-remove{
+  border-radius: 5px;
+  border: none;
+  background-color: red;
+  color: white;
+  padding:2px 10px;
+}
+
+.buttonadd{
+  font-size:18px;
+  border-radius: 5px;
+  border: none;
+  background-color: green;
+  color: white;
+  padding:2px 20px;
+  margin:10px;
+  margin-left:0px;
+}
+
+.buttonsubmit{
+  border-radius: 5px;
+  font-size:18px;
+  border: none;
+  background-color: purple;
+  color: white;
+  padding:2px 10px;
+}
+
+.activityTitle{
+  margin: 5px 3px;
+width: 300px;
+border: 2px solid purple;
+border-radius: 5px;
+text-align: center;
+font-size: 20px;
+font-weight: bold;
+color: purple;
+
+}
+
+.button-section{
+  display: flex;
+  align-items: center;
 }

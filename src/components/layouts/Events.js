@@ -86,21 +86,6 @@ function HomePageContent() {
               elevation={3}
               className="dashboard_headings"
               sx={{
-                p: 2,
-              }}
-            >
-              <AssignmentTurnedInIcon style={{ color: "green", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
-                <h4>Executed</h4>
-                <h2>{men}</h2>
-              </div>
-            </Paper>
-          </div>
-          <div>
-            <Paper
-              elevation={3}
-              className="dashboard_headings"
-              sx={{
                 p: 1,
               }}
             >
@@ -111,6 +96,22 @@ function HomePageContent() {
               </div>
             </Paper>
           </div>
+          <div>
+            <Paper
+              elevation={3}
+              className="dashboard_headings"
+              sx={{
+                p: 2,
+              }}
+            >
+              <AssignmentTurnedInIcon style={{ color: "green", fontSize: 30 }} />
+              <div style={{ color: "purple", textAlign: "center" }}>
+                <h4>Executed</h4>
+                <h2>{men}</h2>
+              </div>
+            </Paper>
+          </div>
+      
         
         </div>
       </Box>
