@@ -27,7 +27,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ProfileDetails() {
-    const { id } = useParams();
+  const { id } = useParams();
   const [img, setImg] = useState();
   const [user, setUser] = useState();
   const navigate = useNavigate();
@@ -84,8 +84,8 @@ function ProfileDetails() {
   return user ? (
     <div className="layout_margin m-2 mt-3">
       <Box sx={{ flexGrow: 1 }}>
-        <Grid    sx={{ boxShadow: 0 }} container spacing={2}>
-          <Grid    sx={{ boxShadow: 0}} item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid sx={{ boxShadow: 0 }} container spacing={2}>
+          <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Item>
               <div className="profile_container">
                 <div className="img_container">
@@ -162,7 +162,7 @@ function ProfileDetails() {
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
             <div className="profile_heading">
-              <Card sx={{ boxShadow: 2 }} className="profile_heading_subtitle">
+              <Card sx={{ boxShadow: 2 , backgroundColor: "purple" }} className="profile_heading_subtitle">
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -179,11 +179,15 @@ function ProfileDetails() {
                     />
                   </svg>
                 </div>
-                <h6>Monthly Dues Paied</h6>
-                <div style={{ color: "purple", fontSize: "25px" }}> 5 / 12</div>
+                <div className="profileDetailsHeading">
+                  <h6>Monthly Dues Paied</h6>
+                  <div style={{ color: "white", fontSize: "25px" }}>
+                    5 / 12
+                  </div>
+                </div>
               </Card>
               <Card
-                sx={{ boxShadow: 2 }}
+                sx={{ boxShadow: 2, backgroundColor: "purple"  }}
                 className="profile_heading_subtitle group"
               >
                 <div>
@@ -202,10 +206,13 @@ function ProfileDetails() {
                     />
                   </svg>
                 </div>
-                <h6> Group</h6>
-                <div style={{ color: "purple", fontSize: "25px" }}>4</div>
+                <div className="profileDetailsHeading">
+                  <h6 >
+                     Group</h6>
+                  <div style={{ color: "white", fontSize: "25px" }}>4</div>
+                </div>
               </Card>
-              <Card sx={{ boxShadow: 2 }} className="profile_heading_subtitle">
+              <Card sx={{ boxShadow: 2 , backgroundColor: "purple" }} className="profile_heading_subtitle">
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -222,8 +229,11 @@ function ProfileDetails() {
                     />
                   </svg>
                 </div>
-                <h6> Soules Won</h6>
-                <div style={{ color: "purple", fontSize: "25px" }}> 6</div>
+                <div className="profileDetailsHeading">
+             
+                  <h6> Soules Won</h6>
+                  <div style={{ color: "white", fontSize: "25px" }}> 6</div>
+                </div>
               </Card>
             </div>
 
@@ -323,7 +333,9 @@ function ProfileDetails() {
         </Grid>
       </Box>
     </div>
-  ) : <Loading/>;
+  ) : (
+    <Loading />
+  );
 }
 
 export default ProfileDetails;

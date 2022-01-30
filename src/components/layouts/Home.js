@@ -66,16 +66,17 @@ function HomePageContent() {
         }}
       >
         <div className="dashboard_headings_main">
-          <div>
+          <div >
             <Paper
               className="dashboard_headings"
               elevation={3}
               sx={{
                 p: 2,
+                backgroundColor: "purple",
               }}
             >
-              <GroupsIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <GroupsIcon style={{ color: "white", fontSize: 40 }} />
+              <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Total Youth</h4>
                 <h2>{allUsers?.length}</h2>
               </div>
@@ -87,10 +88,11 @@ function HomePageContent() {
               className="dashboard_headings"
               sx={{
                 p: 2,
+                backgroundColor: "purple",
               }}
             >
-              <ManIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <ManIcon style={{ color: "white", fontSize: 40 }} />
+              <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Men</h4>
                 <h2>{men}</h2>
               </div>
@@ -102,19 +104,25 @@ function HomePageContent() {
               className="dashboard_headings"
               sx={{
                 p: 1,
+                backgroundColor: "purple",
               }}
             >
-              <WomanIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <WomanIcon style={{ color: "white", fontSize: 40 }} />
+              <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Women</h4>
                 <h2>{womem}</h2>
               </div>
             </Paper>
           </div>
           <div>
-            <Paper className="dashboard_headings" elevation={3} sx={{ p: 1 }}>
-              <EmojiPeopleIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+            <Paper
+              className="dashboard_headings"
+              col-md={4}
+              elevation={3}
+              sx={{ p: 1, backgroundColor: "purple" }}
+            >
+              <EmojiPeopleIcon style={{ color: "white", fontSize: 40 }} />
+              <div style={{ color: "white", textAlign: "right" }}>
                 <h4>New Convert</h4>
                 <h2>{newConvert}</h2>
               </div>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { auth, db } from "../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import ButtonLoader from "./ButtonLoader";
+import { SuccesAlert } from "./Alert";
 
 const id = Math.random().toString(36).slice(2);
 
@@ -12,6 +14,9 @@ const ActivityCreator = () => {
 
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("success" || "error");
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -35,14 +40,17 @@ const ActivityCreator = () => {
   let handleSubmit = async (event) => {
     event.preventDefault();
 
-
     if (
       formValues[0].name === "" ||
       formValues[0].qautity === "" ||
       formValues[0].unitCost === "" ||
       title === ""
     ) {
-      alert("You cannot submit an empty form");
+      setError(true);
+      toast.error(`Please fill all input fields.`, {
+        position: "top-right",
+      });
+
       return;
     }
     setLoading(true);
@@ -55,6 +63,10 @@ const ActivityCreator = () => {
       setLoading(false);
       setFormValues([{ name: "", qautity: "", unitCost: "", total: "" }]);
       setTitle("");
+      setSuccess(true);
+      toast.success(`Activity Successfully Submitted!.`, {
+        position: "top-right",
+      });
     } catch (err) {
       console.error(err.message);
     }
@@ -134,6 +146,8 @@ const ActivityCreator = () => {
           </button>
         )}
       </div>
+      {error && <ToastContainer />}
+      {success && <ToastContainer />}
     </form>
   );
 };
