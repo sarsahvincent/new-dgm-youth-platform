@@ -1,54 +1,59 @@
 import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import { Box } from "@mui/system";
 import ActivityCreator from "../ActivityCreator";
 import HomepageEventTablet from "../HomepageEventTable";
 import { useSelector } from "react-redux";
-
+import { db } from "../../firebse";
+import { collection, getDocs } from "firebase/firestore";
 
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
-  const [men, setMen] = useState([]);
-  const [womem, setWomen] = useState([]);
-  const [newConvert, setNewConvert] = useState([]);
+  const [expanded, setExpanded] = React.useState(false);
+  const [activities, setActivities] = React.useState([]);
+  const [allPending, setAllPending] = React.useState([]);
+  const [allexecuted, setAllExecuted] = React.useState([]);
+  const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
 
-  let numberOfMen = [];
-  let numberOfWomen = [];
-  let numberOfNewConvert = [];
-
-  const getAllMen = () => {
-    const findMan = allUsers.filter((user) => user.sex === "Male");
-    if (findMan) {
-      numberOfMen.push(findMan);
-    }
-  };
-  const getAllWomen = () => {
-    const findWoman = allUsers.filter((user) => user.sex === "Female");
-    if (findWoman) {
-      numberOfWomen.push(findWoman);
-    }
-  };
-
-  const getAllNewConvert = () => {
-    const findNewConvert = allUsers.filter(
-      (user) => user.membershipStatus === "New Convert"
+  let numberOfPending = [];
+  let numberOfExecuted = [];
+  const pending = () => {
+    const findPending = activities?.filter(
+      (activity) => activity.status === "pending"
     );
-    if (findNewConvert) {
-      numberOfNewConvert.push(findNewConvert);
+    if (findPending) {
+      numberOfPending.push(findPending);
     }
+    return numberOfPending[0].length;
+  };
+  const executed = () => {
+    const findExecuted = activities?.filter(
+      (activity) => activity.status === "executed"
+    );
+    if (findExecuted) {
+      numberOfExecuted.push(findExecuted);
+    }
+    return numberOfExecuted[0].length;
   };
 
   useEffect(() => {
-    getAllWomen();
-    setWomen(numberOfWomen[0].length);
-    getAllMen();
-    setMen(numberOfMen[0].length);
-    getAllNewConvert();
-    setNewConvert(numberOfNewConvert[0].length);
-  }, [allUsers]);
+    const getUsers = async () => {
+      const data = await getDocs(activitiesCollectiion);
+      setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    pending();
+    setAllPending(pending);
+    executed();
+    setAllExecuted(executed);
+  }, [activities]);
 
   return (
     <div className="layout_margin">
@@ -72,12 +77,13 @@ function HomePageContent() {
               elevation={3}
               sx={{
                 p: 2,
+                backgroundColor: "purple",
               }}
             >
-              <EventNoteIcon style={{ color: "purple", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <EventNoteIcon style={{ color: "white", fontSize: 30 }} />
+              <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Total Event</h4>
-                <h2>{allUsers?.length}</h2>
+                <h2>{activities?.length}</h2>
               </div>
             </Paper>
           </div>
@@ -87,12 +93,13 @@ function HomePageContent() {
               className="dashboard_headings"
               sx={{
                 p: 1,
+                backgroundColor: "purple",
               }}
             >
-              <PendingActionsIcon style={{ color: "blue", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <PendingActionsIcon style={{ color: "white", fontSize: 30 }} />
+              <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Pending</h4>
-                <h2>{womem}</h2>
+                <h2>{allPending}</h2>
               </div>
             </Paper>
           </div>
@@ -102,17 +109,18 @@ function HomePageContent() {
               className="dashboard_headings"
               sx={{
                 p: 2,
+                backgroundColor: "purple",
               }}
             >
-              <AssignmentTurnedInIcon style={{ color: "green", fontSize: 30 }} />
-              <div style={{ color: "purple", textAlign: "center" }}>
+              <AssignmentTurnedInIcon
+                style={{ color: "white", fontSize: 30 }}
+              />
+              <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Executed</h4>
-                <h2>{men}</h2>
+                <h2>{allexecuted}</h2>
               </div>
             </Paper>
           </div>
-      
-        
         </div>
       </Box>
       <div className="hompage_table_items">

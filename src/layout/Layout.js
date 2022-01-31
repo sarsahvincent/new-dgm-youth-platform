@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useLocation } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -103,6 +104,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ layout }) {
+  const location = useLocation();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -373,11 +375,15 @@ export default function MiniDrawer({ layout }) {
       ) : null}
 
       <Box
+        className={
+          location.pathname === "/login"
+            ? "loginLogoutbackround"
+            : "layoutbackround"
+        }
         component="main"
         sx={{
           p: 1,
           height: "100vh",
-          backgroundColor: "rgba(250, 245, 245, 0.911)",
         }}
       >
         <DrawerHeader />

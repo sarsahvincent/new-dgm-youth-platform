@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { auth, db } from "../firebse";
+import { db } from "../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import ButtonLoader from "./ButtonLoader";
-import { SuccesAlert } from "./Alert";
+import { useDispatch } from "react-redux";
+import { collection, getDocs } from "firebase/firestore";
+import { getAllActivities } from "../services/redux/reducers/activitiesSlice";
 
 const id = Math.random().toString(36).slice(2);
 
@@ -11,13 +13,14 @@ const ActivityCreator = () => {
   const [formValues, setFormValues] = useState([
     { name: "", qautity: "", unitCost: "", total: "" },
   ]);
-
+  const [activites, setActivites] = React.useState([]);
+  const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
+  const [status, setStatus] = React.useState("pending");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState("success" || "error");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  const dispatch = useDispatch();
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
     newFormValues[i][e.target.name] = e.target.value;
@@ -59,7 +62,13 @@ const ActivityCreator = () => {
         formValues,
         title,
         createdAt: Timestamp.fromDate(new Date()),
+
+        status,
       });
+      const data = await getDocs(activitiesCollectiion);
+      setActivites(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      dispatch(getAllActivities(activites));
+
       setLoading(false);
       setFormValues([{ name: "", qautity: "", unitCost: "", total: "" }]);
       setTitle("");
@@ -67,6 +76,9 @@ const ActivityCreator = () => {
       toast.success(`Activity Successfully Submitted!.`, {
         position: "top-right",
       });
+      setTimeout(function () {
+        window.location.reload();
+      }, 4000);
     } catch (err) {
       console.error(err.message);
     }

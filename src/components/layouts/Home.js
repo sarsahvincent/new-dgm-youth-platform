@@ -20,20 +20,20 @@ function HomePageContent() {
   let numberOfNewConvert = [];
 
   const getAllMen = () => {
-    const findMan = allUsers.filter((user) => user.sex === "Male");
+    const findMan = allUsers?.filter((user) => user.sex === "Male");
     if (findMan) {
       numberOfMen.push(findMan);
     }
   };
   const getAllWomen = () => {
-    const findWoman = allUsers.filter((user) => user.sex === "Female");
+    const findWoman = allUsers?.filter((user) => user.sex === "Female");
     if (findWoman) {
       numberOfWomen.push(findWoman);
     }
   };
 
   const getAllNewConvert = () => {
-    const findNewConvert = allUsers.filter(
+    const findNewConvert = allUsers?.filter(
       (user) => user.membershipStatus === "New Convert"
     );
     if (findNewConvert) {

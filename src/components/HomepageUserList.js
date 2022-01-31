@@ -75,11 +75,10 @@ export default function HomepageUserList() {
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectiion);
-      console.log("current data ", data.docs.data);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     dispatch(getAllUsers(users));
-    console.log("users....", users);
+  
     getUsers();
   }, []);
 
@@ -89,25 +88,7 @@ export default function HomepageUserList() {
 
   return (
     <div>
-      {/* <div>
-        <input
-          style={{
-            width: "100%",
-            margin: "10px 0px",
-            height: "50px",
-            borderWidth: "1px",
-            borderColor: "purple",
-            borderRadius: "6px",
-            textAlign: "center",
-            color: "purple",
-            fontSize: "20px",
-          }}
-          type="text"
-          placeholder="Search by Name"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </div> */}
+      
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label="sticky table">
