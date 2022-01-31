@@ -5,8 +5,9 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 import { db } from "../firebse";
 import { collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
@@ -50,21 +51,29 @@ export default function ControlledAccordions() {
             </Typography>
             {activity?.status === "executed" ? (
               <Typography sx={{ color: "green" }}>
-                Task Executed{" "}
+                Executed
                 <span>
-                  {" "}
                   <CheckCircleOutlineIcon
                     style={{ color: "green", fontSize: 20 }}
                   />
                 </span>
               </Typography>
+            ) : activity?.status === "approved" ? (
+              <Typography sx={{ color: "blue" }}>
+                Approved{" "}
+                <span>
+                  <AssignmentTurnedInIcon
+                    style={{ color: "blue", fontSize: 20 }}
+                  />
+                </span>
+              </Typography>
             ) : (
-              <Typography sx={{ color: "red" }}>Task Pending   <span>
-              {" "}
-              <PendingActionsIcon
-                style={{ color: "red", fontSize: 20 }}
-              />
-            </span></Typography>
+              <Typography sx={{ color: "red" }}>
+                Pending{" "}
+                <span>
+                  <PendingActionsIcon style={{ color: "red", fontSize: 20 }} />
+                </span>
+              </Typography>
             )}
           </AccordionSummary>
           <AccordionDetails>

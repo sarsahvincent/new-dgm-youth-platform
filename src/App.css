@@ -161,13 +161,12 @@ h6 {
 
 .login_container {
   background-color: purple;
- 
 }
 .login_container input {
   background-color: transparent;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   font-weight: bold;
-  border:2px solid white;
+  border: 2px solid white;
 }
 
 .layoutbackround {

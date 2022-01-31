@@ -6,6 +6,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import { Box } from "@mui/system";
 import ActivityCreator from "../ActivityCreator";
 import HomepageEventTablet from "../HomepageEventTable";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 import { useSelector } from "react-redux";
 import { db } from "../../firebse";
 import { collection, getDocs } from "firebase/firestore";
@@ -15,11 +17,13 @@ function HomePageContent() {
   const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
   const [allPending, setAllPending] = React.useState([]);
+  const [allApproved, setAaaApproved] = React.useState([]);
   const [allexecuted, setAllExecuted] = React.useState([]);
   const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
 
   let numberOfPending = [];
   let numberOfExecuted = [];
+  let numberOfApproved = [];
   const pending = () => {
     const findPending = activities?.filter(
       (activity) => activity.status === "pending"
@@ -38,6 +42,15 @@ function HomePageContent() {
     }
     return numberOfExecuted[0].length;
   };
+  const approved = () => {
+    const findApproved = activities?.filter(
+      (activity) => activity.status === "approved"
+    );
+    if (findApproved) {
+      numberOfApproved.push(findApproved);
+    }
+    return numberOfApproved[0].length;
+  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -53,6 +66,8 @@ function HomePageContent() {
     setAllPending(pending);
     executed();
     setAllExecuted(executed);
+    approved();
+    setAaaApproved(approved);
   }, [activities]);
 
   return (
@@ -96,6 +111,22 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
+              <AssignmentTurnedInIcon style={{ color: "white", fontSize: 30 }} />
+              <div style={{ color: "white", textAlign: "center" }}>
+                <h4>Approved</h4>
+                <h2>{allApproved}</h2>
+              </div>
+            </Paper>
+          </div>
+          <div>
+            <Paper
+              elevation={3}
+              className="dashboard_headings"
+              sx={{
+                p: 1,
+                backgroundColor: "purple",
+              }}
+            >
               <PendingActionsIcon style={{ color: "white", fontSize: 30 }} />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Pending</h4>
@@ -112,7 +143,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <AssignmentTurnedInIcon
+              <CheckCircleOutlineIcon
                 style={{ color: "white", fontSize: 30 }}
               />
               <div style={{ color: "white", textAlign: "center" }}>
@@ -138,7 +169,7 @@ function HomePageContent() {
           >
             Activities
           </h3>
-          <HomepageEventTablet />
+          <HomepageEventTablet  />
         </div>
       </div>
     </div>
