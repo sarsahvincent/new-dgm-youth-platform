@@ -602,12 +602,30 @@ h6 {
 
 /* ACTIVITY FORMS */
 
+.activitiesTable {
+  max-height: 55vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.activitiesTable::-webkit-scrollbar {
+  display: none;
+}
+
 .activityFormContainer {
+  max-height: 55vh;
   display: flex;
   align-items: left;
   flex-direction: column;
-  max-height: 55vh;
-  overflow: auto;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+ 
+}
+
+
+.activityFormContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .form-inline input {
