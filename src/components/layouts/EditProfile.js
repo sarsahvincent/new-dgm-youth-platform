@@ -6,36 +6,58 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
+import { useParams, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
+import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, Timestamp, getDoc, updateDoc } from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
-import Invitee from './Invitee'
+import Invitee from "./Invitee";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserDetails } from "../../services/redux/reducers/userSlice";
 
-function EditAccount() {
+function EditProfile() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const test = user?.firstName;
+  const { profileDetails } = useSelector((state) => state.users);
   const [data, setData] = useState({
-    salutation: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    emergencyContactName: "",
-    occupation: "",
-    maritalStatus: "",
-    age: "",
-    sex: "",
-    membershipStatus: "",
-    role: "",
-    status: "",
-    baptism: "",
-    city: "",
-    address: "",
-    email: "",
-    phone: "",
-    emergencyContact: "",
-    password: "",
-    confirmPassword: "",
+    salutation: profileDetails?.salutation ? profileDetails.salutation : "",
+    firstName: profileDetails?.lastName ? profileDetails.firstName : "",
+    middleName: profileDetails?.middleName ? profileDetails.middleName : "",
+    lastName: profileDetails?.lastName ? profileDetails.lastName : "",
+    emergencyContactName: profileDetails?.emergencyContactName
+      ? profileDetails.emergencyContactName
+      : "",
+    occupation: profileDetails?.occupation ? profileDetails.occupation : "",
+    maritalStatus: profileDetails?.maritalStatus
+      ? profileDetails.maritalStatus
+      : "",
+    age: profileDetails?.age ? profileDetails.age : "",
+    sex: profileDetails?.sex ? profileDetails.sex : "",
+    membershipStatus: profileDetails?.membershipStatus
+      ? profileDetails.membershipStatus
+      : "",
+    role: profileDetails?.role ? profileDetails.role : "",
+    status: profileDetails?.status ? profileDetails.status : "",
+    baptism: profileDetails?.baptism ? profileDetails.baptism : "",
+    city: profileDetails?.city ? profileDetails.city : "",
+    address: profileDetails?.address ? profileDetails.address : "",
+    email: profileDetails?.email ? profileDetails.email : "",
+    phone: profileDetails?.phone ? profileDetails.phone : "",
+    emergencyContact: profileDetails?.emergencyContact
+      ? profileDetails.emergencyContact
+      : "",
+    dues: profileDetails?.dues ? profileDetails.dues : 0,
+    groupNumber: profileDetails?.groupNumber ? profileDetails.groupNumber : "",
+    groupRole: profileDetails?.groupRole ? profileDetails.groupRole : "",
+    soulsWon: profileDetails?.soulsWon ? profileDetails.soulsWon : 0,
     loading: null,
     error: false,
   });
@@ -59,9 +81,11 @@ function EditAccount() {
     email,
     phone,
     emergencyContact,
-    password,
-    confirmPassword,
-    loading,
+    dues,
+    groupNumber,
+    groupRole,
+    soulsWon,
+
     error,
   } = data;
 
@@ -88,85 +112,106 @@ function EditAccount() {
       !phone ||
       !email ||
       !emergencyContact ||
-      !password ||
-      !membershipStatus ||
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
       return;
-    } else if (password !== confirmPassword) {
-      setData({ ...data, error: "Password do not match" });
-      return;
     }
+    setLoading(true);
 
-    try {
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
-        uid: result.user.uid,
-        salutation,
-        firstName,
-        middleName,
-        lastName,
-        emergencyContactName,
-        occupation,
-        maritalStatus,
-        age,
-        sex,
-        status,
-        baptism,
-        city,
-        address,
-        email,
-        phone,
-        fullName: `${firstName} ${middleName} ${lastName} `,
-        membershipStatus,
-        role,
-        emergencyContact,
-        createdAt: Timestamp.fromDate(new Date()),
-        isOnline: true,
-      });
-      setData({
-        salutation: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        emergencyContactName: "",
-        occupation: "",
-        maritalStatus: "",
-        age: "",
-        sex: "",
-        status: "",
-        baptism: "",
-        city: "",
-        address: "",
-        email: "",
-        phone: "",
-        membershipStatus: "",
-        role: "",
-        emergencyContact: "",
-        loading: false,
-        error: null,
-      });
-      window.location.reload();
-    } catch (err) {
-      setData({ ...data, error: err.message, loading: false });
-    }
+    const updateDate = async () => {
+      try {
+        await updateDoc(doc(db, "DGM_YOUTH_users", id), {
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          age,
+          sex,
+          status,
+          baptism,
+          membershipStatus,
+          role,
+          city,
+          address,
+          email,
+          phone,
+          emergencyContact,
+          dues,
+          groupNumber,
+          groupRole,
+          soulsWon,
+        });
+
+        await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
+          if (docSnap.exists) {
+            const data = docSnap.data();
+            setUser(data);
+            dispatch(getUserDetails(data));
+          }
+        });
+        setLoading(false);
+        setSuccess(true);
+
+        setData({
+          salutation: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          emergencyContactName: "",
+          occupation: "",
+          maritalStatus: "",
+          age: "",
+          sex: "",
+          status: "",
+          baptism: "",
+          city: "",
+          address: "",
+          email: "",
+          phone: "",
+          membershipStatus: "",
+          role: "",
+          emergencyContact: "",
+          dues: "",
+          groupNumber: "",
+          groupRole: "",
+          soulsWon: "",
+          loading: false,
+          error: null,
+        });
+
+        toast.success(`Profile Successfully Updated!.`, {
+          position: "top-right",
+        });
+        setTimeout(function () {
+          navigate(`/profile-details/${id}`);
+        }, 4000);
+      } catch (e) {}
+    };
+    updateDate();
   };
+
+  /*  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
+      if (docSnap.exists) {
+        setUser(docSnap.data());
+      }
+    });
+  }, []); */
 
   return (
     <div className="layout_margin">
-      <h3 style={{ color: "purple" }}>New Account</h3>
+      <h3 style={{ color: "purple" }}>Edit Account</h3>
       <form action="" className="new_member_form" onSubmit={handleSubmit}>
-        <Paper elevation={4} sx={{ padding: 5, mt: 4 }}>
+        <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="salutation"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Salutation *
@@ -188,7 +233,7 @@ function EditAccount() {
               </div>
               <div>
                 <label htmlFor="role"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Role *
@@ -214,7 +259,7 @@ function EditAccount() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="membershipStatus"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Membership Status *
@@ -235,7 +280,7 @@ function EditAccount() {
               </div>
               <div>
                 <label htmlFor="status"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Status *
@@ -263,7 +308,7 @@ function EditAccount() {
                   <Box
                     component="form"
                     sx={{
-                      "& > :not(style)": { m: 1, width: "35ch" },
+                      "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
                     noValidate
                     autoComplete="off"
@@ -273,7 +318,7 @@ function EditAccount() {
                       id="outlined-basic"
                       label="First Name *"
                       variant="outlined"
-                      value={firstName}
+                      defaultValue={firstName}
                       onChange={handleChange}
                     />
                   </Box>
@@ -284,7 +329,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -294,7 +339,7 @@ function EditAccount() {
                     id="outlined-basic"
                     label="Middle Name"
                     variant="outlined"
-                    value={middleName}
+                    defaultValue={middleName}
                     onChange={handleChange}
                   />
                 </Box>
@@ -306,7 +351,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -323,7 +368,7 @@ function EditAccount() {
               </div>
               <div>
                 <label htmlFor="sex"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Gender *
@@ -346,7 +391,7 @@ function EditAccount() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="maritalStatus"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Marital Status *
@@ -370,7 +415,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -393,7 +438,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -413,7 +458,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -432,12 +477,12 @@ function EditAccount() {
             </div>
           </div>
         </Paper>
-        <Paper elevation={4} sx={{ padding: 5, mt: 4 }}>
+        <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="baptism"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Baptism *
@@ -461,7 +506,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -483,7 +528,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -503,7 +548,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -526,7 +571,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -547,7 +592,7 @@ function EditAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -566,57 +611,111 @@ function EditAccount() {
             </div>
             <div className="new_member_form_group">
               <div>
-                <label htmlFor="password"></label>
+                <label htmlFor="groupNumber"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Group Number
+                    </InputLabel>
+                    <Select
+                      name="groupNumber"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={groupNumber}
+                      label=" Group Number"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="1">1</MenuItem>
+                      <MenuItem value="2">2</MenuItem>
+                      <MenuItem value="3">3</MenuItem>
+                      <MenuItem value="4">4</MenuItem>
+                      <MenuItem value="5">5</MenuItem>
+                      <MenuItem value="6">6</MenuItem>
+                      <MenuItem value="7">7</MenuItem>
+                      <MenuItem value="8">8</MenuItem>
+                      <MenuItem value="9">9</MenuItem>
+                      <MenuItem value="10">10</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </div>
+              <div>
+                <label htmlFor="groupRole"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Group Role
+                    </InputLabel>
+                    <Select
+                      name="groupRole"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={groupRole}
+                      label=" Group Role"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="Mr">Leader</MenuItem>
+                      <MenuItem value="Mrs">Asistant Leader</MenuItem>
+                      <MenuItem value="Miss">Member</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </div>
+            </div>
+            <div className="new_member_form_group">
+              <div>
+                <label htmlFor="soulsWon"></label>
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
                 >
                   <TextField
-                    name="password"
+                    name="soulsWon"
                     id="outlined-basic"
-                    label="Password *"
-                    type="password"
+                    label="Souls Won"
+                    type="number"
                     variant="outlined"
-                    value={password}
+                    value={soulsWon}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="confirmPassword"></label>
+                <label htmlFor="dues"></label>
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
                 >
                   <TextField
-                    name="confirmPassword"
+                    name="dues"
                     id="outlined-basic"
-                    label="Confirm Password *"
-                    type="password"
+                    label="Monthly Dues*"
+                    type="number"
                     variant="outlined"
-                    value={confirmPassword}
+                    value={dues}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
+
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group">
-                <Invitee/>
+                <Invitee />
                 {/* <div>
                   <label htmlFor="invitee"></label>
                   <Box
                     component="form"
                     sx={{
-                      "& > :not(style)": { m: 1, width: "35ch" },
+                      "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
                     noValidate
                     autoComplete="off"
@@ -652,12 +751,13 @@ function EditAccount() {
             variant="contained"
             endIcon={loading ? null : <SendIcon />}
           >
-            {loading ? <ButtonLoader /> : "Register"}
+            {loading ? <ButtonLoader /> : "Update Profile"}
           </Button>
         </Paper>
+        {success && <ToastContainer />}
       </form>
     </div>
   );
 }
 
-export default EditAccount;
+export default EditProfile;

@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userId: localStorage.getItem("userId")
-    ? JSON.parse(localStorage.getItem("userId"))
-    : [],
+  userId: [],
   allUsers: localStorage.getItem("allUsers")
     ? JSON.parse(localStorage.getItem("allUsers"))
     : [],
@@ -12,6 +10,9 @@ const initialState = {
     : [],
   totalFemales: localStorage.getItem("totalFemales")
     ? JSON.parse(localStorage.getItem("totalFemales"))
+    : [],
+  profileDetails: localStorage.getItem("profileDetails")
+    ? JSON.parse(localStorage.getItem("profileDetails"))
     : [],
 };
 
@@ -39,9 +40,21 @@ const usersSlice = createSlice({
       totalFemales.push(females);
       localStorage.setItem("totalFemales", JSON.stringify(state.allUsers));
     },
+    getUserDetails(state, action) {
+      state.profileDetails = action.payload;
+      localStorage.setItem(
+        "profileDetails",
+        JSON.stringify(state.profileDetails)
+      );
+    },
   },
 });
 
-export const { getCurrentUser, getCurrentUserId, getAllUsers , gitAllMales} =
-  usersSlice.actions;
+export const {
+  getCurrentUser,
+  getCurrentUserId,
+  getAllUsers,
+  gitAllMales,
+  getUserDetails,
+} = usersSlice.actions;
 export default usersSlice.reducer;
