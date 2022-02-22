@@ -47,7 +47,6 @@ function Profile() {
           storage,
           `chat-app/avatar/${new Date().getTime()} - ${img.name}`
         );
-
         try {
           if (user.avatarPath) {
             await deleteObject(ref(storage, user.avatarPath));
@@ -61,13 +60,12 @@ function Profile() {
           });
           setImg("");
         } catch (error) {
-          console.log(error.message);
+        
         }
       };
       uplaodImg();
     }
   }, [img]);
-
   const deleteImage = async () => {
     try {
       const confirm = window.confirm("Delete avatar");
@@ -80,10 +78,9 @@ function Profile() {
       });
       window.location.reload();
     } catch (err) {
-      console.log(err.message);
+    
     }
   };
-
   return user ? (
     <div className="layout_margin m-2 mt-3">
       <div

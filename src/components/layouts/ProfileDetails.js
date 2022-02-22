@@ -68,7 +68,7 @@ function ProfileDetails() {
           });
           setImg("");
         } catch (error) {
-          console.log(error.message);
+        
         }
       };
       uplaodImg();
@@ -87,7 +87,7 @@ function ProfileDetails() {
       });
       window.location.reload();
     } catch (err) {
-      console.log(err.message);
+     
     }
   };
 
