@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
@@ -32,7 +32,6 @@ const Item = styled(Paper)(({ theme }) => ({
 function Profile() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {

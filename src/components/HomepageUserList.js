@@ -42,8 +42,6 @@ export default function HomepageUserList() {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   let rows = [];
 
-  const [searchInput, setSearchInput] = useState("");
-
   const dispatch = useDispatch();
 
   rows = users.map((user) =>
