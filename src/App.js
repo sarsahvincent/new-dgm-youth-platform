@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
@@ -12,7 +12,7 @@ import AddAccount from "./pages/AddAccount";
 import Contacts from "./pages/Contacts";
 import ProfileDetails from "./pages/ViewProfile";
 import Events from "./pages/Events";
-
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -28,6 +28,7 @@ function App() {
           <Route exact path="/add-account" element={<PrivateRoute />}>
             <Route exact path="/add-account" element={<AddAccount />} />
           </Route>
+
           <Route exact path="/events" element={<PrivateRoute />}>
             <Route exact path="/events" element={<Events />} />
           </Route>
@@ -35,7 +36,14 @@ function App() {
             <Route exact path="/contacts" element={<Contacts />} />
           </Route>
           <Route exact path="/profile-details/:id" element={<PrivateRoute />}>
-            <Route exact path="/profile-details/:id" element={<ProfileDetails />} />
+            <Route
+              exact
+              path="/profile-details/:id"
+              element={<ProfileDetails />}
+            />
+          </Route>
+          <Route exact path="/edit-profile/:id" element={<PrivateRoute />}>
+            <Route exact path="/edit-profile/:id" element={<EditProfile />} />
           </Route>
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />

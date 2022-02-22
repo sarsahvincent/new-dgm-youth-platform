@@ -12,7 +12,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
-import Invitee from './Invitee'
+import Invitee from "./Invitee";
 
 function AddAccount() {
   const [data, setData] = useState({
@@ -161,12 +161,12 @@ function AddAccount() {
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>New Account</h3>
       <form action="" className="new_member_form" onSubmit={handleSubmit}>
-        <Paper elevation={4} sx={{ padding: 5, mt: 4 }}>
+        <Paper className="firstSectionForm" elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="salutation"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch"}}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Salutation *
@@ -188,7 +188,7 @@ function AddAccount() {
               </div>
               <div>
                 <label htmlFor="role"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Role *
@@ -214,7 +214,7 @@ function AddAccount() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="membershipStatus"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Membership Status *
@@ -235,7 +235,7 @@ function AddAccount() {
               </div>
               <div>
                 <label htmlFor="status"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Status *
@@ -263,7 +263,7 @@ function AddAccount() {
                   <Box
                     component="form"
                     sx={{
-                      "& > :not(style)": { m: 1, width: "35ch" },
+                      "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
                     noValidate
                     autoComplete="off"
@@ -284,7 +284,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -306,7 +306,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -323,7 +323,7 @@ function AddAccount() {
               </div>
               <div>
                 <label htmlFor="sex"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Gender *
@@ -346,7 +346,7 @@ function AddAccount() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="maritalStatus"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Marital Status *
@@ -370,7 +370,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -393,7 +393,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -413,7 +413,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -432,12 +432,12 @@ function AddAccount() {
             </div>
           </div>
         </Paper>
-        <Paper elevation={4} sx={{ padding: 5, mt: 4 }}>
+        <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="baptism"></label>
-                <Box sx={{ m: 1, width: "35ch" }}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Baptism *
@@ -461,7 +461,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -483,7 +483,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -503,7 +503,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -526,7 +526,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -547,7 +547,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -570,7 +570,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -591,7 +591,7 @@ function AddAccount() {
                 <Box
                   component="form"
                   sx={{
-                    "& > :not(style)": { m: 1, width: "35ch" },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
                   autoComplete="off"
@@ -610,13 +610,13 @@ function AddAccount() {
             </div>
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group">
-                <Invitee/>
+                <Invitee />
                 {/* <div>
                   <label htmlFor="invitee"></label>
                   <Box
                     component="form"
                     sx={{
-                      "& > :not(style)": { m: 1, width: "35ch" },
+                      "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
                     noValidate
                     autoComplete="off"
@@ -648,6 +648,8 @@ function AddAccount() {
               fontSize: 18,
               fontWeight: "bolder",
               letterSpacing: "5px",
+              borderRadius: 2,
+              marginBottom:10
             }}
             variant="contained"
             endIcon={loading ? null : <SendIcon />}

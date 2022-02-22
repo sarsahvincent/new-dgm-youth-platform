@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
@@ -16,6 +16,11 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import { getUserDetails } from "../../services/redux/reducers/userSlice";
+import { useDispatch } from "react-redux";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -27,12 +32,12 @@ const Item = styled(Paper)(({ theme }) => ({
 function Profile() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
-  const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
         setUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
       }
     });
     if (img) {
@@ -41,7 +46,6 @@ function Profile() {
           storage,
           `chat-app/avatar/${new Date().getTime()} - ${img.name}`
         );
-
         try {
           if (user.avatarPath) {
             await deleteObject(ref(storage, user.avatarPath));
@@ -55,13 +59,12 @@ function Profile() {
           });
           setImg("");
         } catch (error) {
-          console.log(error.message);
+        
         }
       };
       uplaodImg();
     }
   }, [img]);
-
   const deleteImage = async () => {
     try {
       const confirm = window.confirm("Delete avatar");
@@ -74,13 +77,53 @@ function Profile() {
       });
       window.location.reload();
     } catch (err) {
-      console.log(err.message);
+    
     }
   };
-
   return user ? (
     <div className="layout_margin m-2 mt-3">
-      <h3 style={{ color: "purple" }}>Profile</h3>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <h3 style={{ color: "purple" }}>Profile</h3>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <div>
+            <Tooltip title=" Delete Profile">
+              <span>
+                <DeleteIcon
+                  style={{
+                    color: "red",
+                    fontSize: 25,
+                    marginRight: 10,
+                    cursor: "pointer",
+                  }}
+                />
+              </span>
+            </Tooltip>
+          </div>
+          <div>
+            <Tooltip title="Edit Profile">
+              <Link to={`/edit-profile/${user.uid}`}>
+                <span>
+                  <EditIcon
+                    style={{ color: "green", fontSize: 25, cursor: "pointer" }}
+                  />
+                </span>
+              </Link>
+            </Tooltip>
+          </div>
+        </div>
+      </div>
       <Box sx={{ flexGrow: 1 }}>
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
@@ -183,7 +226,9 @@ function Profile() {
                 <div className="profileDetailsHeading">
                   <h6>Monthly Dues Paied</h6>
 
-                  <div style={{ color: "white", fontSize: "25px" }}>5 / 12</div>
+                  <div style={{ color: "white", fontSize: "25px" }}>
+                    {user.dues ? user.dues : 0} / 12
+                  </div>
                 </div>
               </Card>
               <Card
@@ -208,7 +253,9 @@ function Profile() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Group</h6>
-                  <div style={{ color: "white", fontSize: "25px"}}>4</div>
+                  <div style={{ color: "white", fontSize: "25px" }}>
+                    {user.groupNumber ? user.groupNumber : 0}
+                  </div>
                 </div>
               </Card>
               <Card
@@ -233,7 +280,10 @@ function Profile() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Soules Won</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}> 6</div>
+                  <div style={{ color: "white", fontSize: "25px" }}>
+                    {" "}
+                    {user?.soulsWon ? user?.soulsWon : 0}
+                  </div>
                 </div>
               </Card>
             </div>

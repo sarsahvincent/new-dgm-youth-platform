@@ -42,8 +42,6 @@ export default function HomepageUserList() {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   let rows = [];
 
-  const [searchInput, setSearchInput] = useState("");
-
   const dispatch = useDispatch();
 
   rows = users.map((user) =>
@@ -71,14 +69,13 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
-
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectiion);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     dispatch(getAllUsers(users));
-  
+
     getUsers();
   }, []);
 
@@ -87,10 +84,9 @@ export default function HomepageUserList() {
   }, 1000);
 
   return (
-    <div>
-      
+    <div className="membersListContainer">
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 600 }}>
+        <TableContainer sx={{ }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

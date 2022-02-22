@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
@@ -14,7 +14,6 @@ import { collection, getDocs } from "firebase/firestore";
 
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
-  const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
   const [allPending, setAllPending] = React.useState([]);
   const [allApproved, setAaaApproved] = React.useState([]);

@@ -32,7 +32,7 @@ export default function ControlledAccordions() {
   }, []);
 
   return (
-    <div>
+    <div className="activitiesTable">
       {activities.map((activity, index) => (
         <Accordion
           key={index}

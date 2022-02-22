@@ -6,7 +6,7 @@ import ProfileDetails from "../components/layouts/ProfileDetails";
 function ViewProfile() {
   const { id } = useParams();
 
-  console.log("parmas id ", id)
+ 
   return <Layout layout={<ProfileDetails />} />;
 }
 export default ViewProfile;
