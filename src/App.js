@@ -13,6 +13,7 @@ import Contacts from "./pages/Contacts";
 import ProfileDetails from "./pages/ViewProfile";
 import Events from "./pages/Events";
 import EditProfile from "./pages/EditProfile";
+import Finance from "./pages/Finance";
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
           </Route>
           <Route exact path="/contacts" element={<PrivateRoute />}>
             <Route exact path="/contacts" element={<Contacts />} />
+          </Route>
+          <Route exact path="/finance" element={<PrivateRoute />}>
+            <Route exact path="/finance" element={<Finance />} />
           </Route>
           <Route exact path="/profile-details/:id" element={<PrivateRoute />}>
             <Route

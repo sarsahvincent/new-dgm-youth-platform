@@ -344,14 +344,24 @@ export default function MiniDrawer({ layout }) {
             </ListItemText>
           </ListItem>
           <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+        {/*   <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
               <Paid style={{ color: "purple" }} fontSize="large" />
             </ListItemIcon>
             <ListItemText style={{ color: "purple" }}>
-              <b>Dues</b>
+              <b>Finace</b>
+            </ListItemText>
+          </ListItem> */}
+            <Link to="/finance">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+            <ListItemIcon>
+              <Paid style={{ color: "purple" }} fontSize="large" />
+            </ListItemIcon>
+            <ListItemText style={{ color: "purple" }}>
+              <b>Finace</b>
             </ListItemText>
           </ListItem>
+          </Link>
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>

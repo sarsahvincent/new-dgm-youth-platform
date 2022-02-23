@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Icon from "@mdi/react";
+import { mdiCashMultiple, mdiHandCoinOutline, mdiCalendarMonth } from "@mdi/js";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
 import { storage, db, auth } from "../../firebse";
+import SendIcon from "@mui/icons-material/Send";
+import Button from "@mui/material/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Loading from "../Loading";
+import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import {
   ref,
   getDownloadURL,
@@ -21,7 +28,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { useDispatch } from "react-redux";
-import Loading from "../Loading";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -30,7 +36,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-function Profile() {
+function Finance() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
   const dispatch = useDispatch();
@@ -59,9 +65,7 @@ function Profile() {
             avatarPath: snap.ref.fullPath,
           });
           setImg("");
-        } catch (error) {
-        
-        }
+        } catch (error) {}
       };
       uplaodImg();
     }
@@ -77,9 +81,7 @@ function Profile() {
         avatarPath: "",
       });
       window.location.reload();
-    } catch (err) {
-    
-    }
+    } catch (err) {}
   };
   return user ? (
     <div className="layout_margin m-2 mt-3">
@@ -90,117 +92,29 @@ function Profile() {
           justifyContent: "space-between",
         }}
       >
-        <h3 style={{ color: "purple" }}>Profile</h3>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
-        >
-          <div>
-            <Tooltip title=" Delete Profile">
-              <span>
-                <DeleteIcon
-                  style={{
-                    color: "red",
-                    fontSize: 25,
-                    marginRight: 10,
-                    cursor: "pointer",
-                  }}
-                />
-              </span>
-            </Tooltip>
-          </div>
-          <div>
-            <Tooltip title="Edit Profile">
-              <Link to={`/edit-profile/${user.uid}`}>
-                <span>
-                  <EditIcon
-                    style={{ color: "green", fontSize: 25, cursor: "pointer" }}
-                  />
-                </span>
-              </Link>
-            </Tooltip>
-          </div>
-        </div>
+        <h3 style={{ color: "purple" }}>Finance</h3>
       </div>
       <Box sx={{ flexGrow: 1 }}>
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
-            <Item>
-              <div className="profile_container">
-                <div className="img_container">
-                  <img src={user?.avatar || Img} alt="profle" />
-                  <div className="overlay">
-                    <div>
-                      <label htmlFor="photo">
-                        <Camera />
-                      </label>
-                      {user.avatarPath ? (
-                        <Delete deleteImage={deleteImage} />
-                      ) : null}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        id="photo"
-                        onChange={(e) => setImg(e.target.files[0])}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="text_container">
-                  <h3>
-                    {user.firstName} <span>{user.lastName} </span>
-                  </h3>
-                  <p>{user.email}</p>
-                  <hr />
-                  <small>
-                    Joined on : {user.createdAt?.toDate().toDateString()}
-                  </small>
-                </div>
-              </div>
-              <div>
-                <div className="profile_subDetails">
-                  Role :
-                  <span style={{ color: "purple" }}>
-                    {user.role === "1"
-                      ? "President"
-                      : user.role === "2"
-                      ? "Vice President"
-                      : user.role === "3"
-                      ? "Tresurer"
-                      : user.role === "4"
-                      ? "Executive"
-                      : user.role === "5"
-                      ? "Member"
-                      : null}
-                  </span>
-                </div>
-                <div className="profile_subDetails">
-                  Age :<span style={{ color: "purple" }}>{user.age}</span>
-                </div>
-                <div className="profile_subDetails">
-                  Phone :<span style={{ color: "purple" }}>{user.phone}</span>
-                </div>
-                <div className="profile_subDetails">
-                  Status :
-                  <span
-                    style={{
-                      color:
-                        user.status === "Very Active"
-                          ? "green"
-                          : user.status === "Active"
-                          ? "blue"
-                          : "red",
-                    }}
-                  >
-                    {user.status}
-                  </span>
-                </div>
-              </div>
-            </Item>
+            <Button
+              size="large"
+              sx={{ width: "100%", marginBottom: 2 }}
+              variant="contained"
+              color="success"
+              endIcon={<AddCircleIcon />}
+            >
+              Add Funds
+            </Button>
+            <Button
+              size="large"
+              sx={{ width: "100%" }}
+              variant="contained"
+              color="warning"
+              endIcon={<IndeterminateCheckBoxIcon />}
+            >
+              Request for Funds
+            </Button>
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
             <div className="profile_heading">
@@ -209,26 +123,21 @@ function Profile() {
                 className="profile_heading_subtitle"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                  <Icon
+                    path={mdiCashMultiple}
+                    title="User Profile"
+                    size={2}
+                    horizontal
+                    vertical
+                    rotate={180}
+                    color="white"
+                  />
                 </div>
                 <div className="profileDetailsHeading">
-                  <h6>Monthly Dues Paied</h6>
+                  <h6>Current Balance</h6>
 
                   <div style={{ color: "white", fontSize: "25px" }}>
-                    {user.dues ? user.dues : 0} / 12
+                    {user.dues ? user.dues : 0}
                   </div>
                 </div>
               </Card>
@@ -237,23 +146,18 @@ function Profile() {
                 className="profile_heading_subtitle group"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                  <Icon
+                    path={mdiCalendarMonth}
+                    title="User Profile"
+                    size={2}
+                    horizontal
+                    vertical
+                    rotate={180}
+                    color="white"
+                  />
                 </div>
                 <div className="profileDetailsHeading">
-                  <h6> Group</h6>
+                  <h6>Monthly Dues</h6>
                   <div style={{ color: "white", fontSize: "25px" }}>
                     {user.groupNumber ? user.groupNumber : 0}
                   </div>
@@ -264,23 +168,18 @@ function Profile() {
                 className="profile_heading_subtitle"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                    />
-                  </svg>
+                  <Icon
+                    path={mdiHandCoinOutline}
+                    title="User Profile"
+                    size={2}
+                    horizontal
+                    vertical
+                    rotate={180}
+                    color="white"
+                  />
                 </div>
                 <div className="profileDetailsHeading">
-                  <h6> Soules Won</h6>
+                  <h6>Donations</h6>
                   <div style={{ color: "white", fontSize: "25px" }}>
                     {" "}
                     {user?.soulsWon ? user?.soulsWon : 0}
@@ -385,7 +284,9 @@ function Profile() {
         </Grid>
       </Box>
     </div>
-  ) : <Loading/>;
+  ) : (
+    <Loading />
+  );
 }
 
-export default Profile;
+export default Finance;
