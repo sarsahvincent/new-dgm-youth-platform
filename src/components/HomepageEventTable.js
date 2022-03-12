@@ -16,6 +16,8 @@ export default function ControlledAccordions() {
   const { allUsers } = useSelector((state) => state.users);
   const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
+
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -77,10 +79,26 @@ export default function ControlledAccordions() {
             )}
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-              feugiat. Aliquam eget maximus est, id dignissim quam.
-            </Typography>
+            <div className="AccordionDetailsBreakdown">
+              <b>BREAKDOWN</b>
+              <div>
+                {activity?.formValues.map((activity, index) => (
+                  <div key={index}>
+                    <span className="AccordionDetailsBreakdownName">
+                      {activity?.name}
+                    </span>{" "}
+                    {""}
+                    <span>Quantiy: {activity?.quantity}</span> / Unit Cost:{" "}
+                    <span> ${activity?.unitCost}</span> / Total ={" "}
+                    <span>
+                      {" "}
+                      ${activity?.quantity * 1 * (activity?.unitCost * 1)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <b>Totol: <span>{activity?.total }</span> </b>
+            </div>
           </AccordionDetails>
         </Accordion>
       ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { db } from "../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
@@ -6,12 +6,13 @@ import ButtonLoader from "./ButtonLoader";
 import { useDispatch } from "react-redux";
 import { collection, getDocs } from "firebase/firestore";
 import { getAllActivities } from "../services/redux/reducers/activitiesSlice";
+import _ from "lodash";
 
 const id = Math.random().toString(36).slice(2);
 
 const ActivityCreator = () => {
   const [formValues, setFormValues] = useState([
-    { name: "", qautity: "", unitCost: "", total: "" },
+    { name: "", quantity: "", unitCost: "", total: "" },
   ]);
   const [activites, setActivites] = React.useState([]);
   const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
@@ -20,6 +21,9 @@ const ActivityCreator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  // const [uCostTotal, setUCostTotal] = React.useState(0);
+  // const [quanttTotal, setQuantTotal] = React.useState(0);
+  const [activityTotal, setActivityTotal] = React.useState(0);
   const dispatch = useDispatch();
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -30,7 +34,7 @@ const ActivityCreator = () => {
   let addFormFields = () => {
     setFormValues([
       ...formValues,
-      { name: "", qautity: "", unitCost: "", total: "" },
+      { name: "", quantity: "", unitCost: "", total: "" },
     ]);
   };
 
@@ -40,12 +44,34 @@ const ActivityCreator = () => {
     setFormValues(newFormValues);
   };
 
+  let activityTotals = [];
+  // let quantitys = [];
+
+  const getToalUnitCosts = () => {
+    formValues.map((value) =>
+      activityTotals.push(value?.unitCost * 1 * (value?.quantity * 1))
+    );
+  };
+  // const getAllToalQaintities = () => {
+  //   formValues.map((value) => quantitys.push(value?.quantity * 1));
+  // };
+
+  const activityTotalsSum = () => {
+    return _.sum(activityTotals);
+  };
+  // const quantitysSum = () => {
+  //   return _.sum(quantitys);
+  // };
+
+  const getAllActivityTotals = () => {
+    setActivityTotal(activityTotalsSum());
+  };
   let handleSubmit = async (event) => {
     event.preventDefault();
 
     if (
       formValues[0].name === "" ||
-      formValues[0].qautity === "" ||
+      formValues[0].quantity === "" ||
       formValues[0].unitCost === "" ||
       title === ""
     ) {
@@ -62,15 +88,15 @@ const ActivityCreator = () => {
         formValues,
         title,
         createdAt: Timestamp.fromDate(new Date()),
-
         status,
+        total: activityTotal,
       });
       const data = await getDocs(activitiesCollectiion);
       setActivites(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       dispatch(getAllActivities(activites));
 
       setLoading(false);
-      setFormValues([{ name: "", qautity: "", unitCost: "", total: "" }]);
+      setFormValues([{ name: "", quantity: "", unitCost: "", total: "" }]);
       setTitle("");
       setSuccess(true);
       toast.success(`Activity Successfully Submitted!.`, {
@@ -84,15 +110,37 @@ const ActivityCreator = () => {
     }
   };
 
+  // const quantitysSum = () => {
+  //   return _.sum(quantitys);
+  // };
+
+  useEffect(() => {
+    getToalUnitCosts();
+    // getAllToalQaintities();
+    // getAllActivityTotals();
+    getAllActivityTotals();
+    // console.log("quantitys", quantitys);
+    console.log("QQQQunitCosts", activityTotalsSum());
+    console.log("activityTotal", activityTotal);
+  }, [formValues]);
+
   return (
     <form className="activityFormContainer" onSubmit={handleSubmit}>
-      <input
-        placeholder="Enter Title"
-        className="activityTitle"
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <input
+          placeholder="Enter Title"
+          className="activityTitle"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          disabled={true}
+          placeholder={`Total: ${activityTotal}`}
+          className="activityTitle"
+          type="text"
+        />
+      </div>
       {formValues.map((element, index) => (
         <div className="form-inline" key={index}>
           <input
@@ -105,10 +153,10 @@ const ActivityCreator = () => {
           />
 
           <input
-            placeholder="Quantiy"
+            placeholder="Quantity"
             type="number"
-            name="qautity"
-            value={element.qautity || ""}
+            name="quantity"
+            value={element.quantity || ""}
             onChange={(e) => handleChange(index, e)}
           />
 
@@ -126,7 +174,7 @@ const ActivityCreator = () => {
             disabled
             type="number"
             name="total"
-            value={element.qautity * element.unitCost}
+            value={element.quantity * element.unitCost}
             onChange={(e) => handleChange(index, e)}
           />
 

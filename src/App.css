@@ -78,6 +78,15 @@ section h3 {
   color: white;
 }
 
+.AccordionDetailsBreakdown b{
+  color: purple;
+}
+
+.AccordionDetailsBreakdownName{
+  color:rgb(59, 190, 7);
+  font-weight: bold;
+}
+
 /* Register */
 section .form {
   margin-top: 30px;

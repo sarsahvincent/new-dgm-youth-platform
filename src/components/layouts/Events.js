@@ -69,6 +69,8 @@ function HomePageContent() {
     setAaaApproved(approved);
   }, [activities]);
 
+
+  console.table("activities", activities)
   return (
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>Events</h3>
