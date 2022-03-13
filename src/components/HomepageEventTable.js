@@ -4,7 +4,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import ButtonLoader from "./ButtonLoader";
 import Menu from "@mui/material/Menu";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,10 +13,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { db, auth } from "../firebse";
+import { db } from "../firebse";
 import { collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { doc, setDoc, Timestamp, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function ControlledAccordions() {
   const { allUsers } = useSelector((state) => state.users);
@@ -25,7 +24,6 @@ export default function ControlledAccordions() {
   const [activities, setActivities] = React.useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [status, setStatus] = useState("");
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -42,8 +40,6 @@ export default function ControlledAccordions() {
           status,
         });
 
-        console.log("STATUSSS", status);
-
         setLoading(false);
         setSuccess(true);
 
@@ -54,10 +50,6 @@ export default function ControlledAccordions() {
         setTimeout(function () {
           window.location.reload();
         }, 4000);
-
-        // await getDoc(db, "DGM_YOUTH_Activities", id).then.apply(
-        //   (docSnap) => {}
-        // );
       } catch (err) {}
     };
 
@@ -88,7 +80,6 @@ export default function ControlledAccordions() {
               expanded={expanded === activity.id}
               onChange={handleChange(activity.id)}
             >
-              {console.log("Topactivity", activity)}
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
@@ -126,13 +117,6 @@ export default function ControlledAccordions() {
                     </span>
                   </Typography>
                 )}
-
-                {/*  <Typography sx={{ color: "red", marginLeft: 10 }}>
-              Pending{" "}
-              <span>
-                <PendingActionsIcon style={{ color: "red", fontSize: 20 }} />
-              </span>
-            </Typography> */}
               </AccordionSummary>
               <AccordionDetails>
                 <div className="AccordionDetailsBreakdown">
@@ -140,7 +124,6 @@ export default function ControlledAccordions() {
                   <div>
                     {activity?.formValues.map((activity, index) => (
                       <div key={index}>
-                        {console.log("activity", activity)}
                         <span className="AccordionDetailsBreakdownName">
                           {activity?.name}
                         </span>{" "}
@@ -164,17 +147,10 @@ export default function ControlledAccordions() {
                           sx={{ cursor: "pointer", color: "green" }}
                           {...bindTrigger(popupState)}
                         />
-                        {/* <Button
-                      variant="contained"
-                      color="success"
-                      {...bindTrigger(popupState)}
-                    >
-                      Edit
-                    </Button> */}
+
                         <Menu {...bindMenu(popupState)}>
                           <div
                             onClick={() => {
-                              // setStatus("approved");
                               updateStatus(activity?.id, "approved");
                             }}
                           >
@@ -185,7 +161,6 @@ export default function ControlledAccordions() {
 
                           <div
                             onClick={() => {
-                              // setStatus("pending");
                               updateStatus(activity?.id, "pending");
                             }}
                           >
@@ -196,7 +171,6 @@ export default function ControlledAccordions() {
 
                           <div
                             onClick={() => {
-                              // setStatus("executed");
                               updateStatus(activity?.id, "executed");
                             }}
                           >

@@ -56,7 +56,6 @@ function HomePageContent() {
       const data = await getDocs(activitiesCollectiion);
       setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
     getUsers();
   }, []);
 
@@ -170,9 +169,6 @@ function HomePageContent() {
           >
             Activities
           </h3>
-
-          {console.log("ACTITITITI", activities)}
-
           {activities.length === 0 ? (
             <div>
               <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
