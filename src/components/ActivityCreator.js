@@ -21,8 +21,6 @@ const ActivityCreator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  // const [uCostTotal, setUCostTotal] = React.useState(0);
-  // const [quanttTotal, setQuantTotal] = React.useState(0);
   const [activityTotal, setActivityTotal] = React.useState(0);
   const dispatch = useDispatch();
   let handleChange = (i, e) => {
@@ -45,23 +43,16 @@ const ActivityCreator = () => {
   };
 
   let activityTotals = [];
-  // let quantitys = [];
 
   const getToalUnitCosts = () => {
     formValues.map((value) =>
       activityTotals.push(value?.unitCost * 1 * (value?.quantity * 1))
     );
   };
-  // const getAllToalQaintities = () => {
-  //   formValues.map((value) => quantitys.push(value?.quantity * 1));
-  // };
 
   const activityTotalsSum = () => {
     return _.sum(activityTotals);
   };
-  // const quantitysSum = () => {
-  //   return _.sum(quantitys);
-  // };
 
   const getAllActivityTotals = () => {
     setActivityTotal(activityTotalsSum());
@@ -110,18 +101,9 @@ const ActivityCreator = () => {
     }
   };
 
-  // const quantitysSum = () => {
-  //   return _.sum(quantitys);
-  // };
-
   useEffect(() => {
     getToalUnitCosts();
-    // getAllToalQaintities();
-    // getAllActivityTotals();
     getAllActivityTotals();
-    // console.log("quantitys", quantitys);
-    console.log("QQQQunitCosts", activityTotalsSum());
-    console.log("activityTotal", activityTotal);
   }, [formValues]);
 
   return (

@@ -6,8 +6,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import { Box } from "@mui/system";
 import ActivityCreator from "../ActivityCreator";
 import HomepageEventTablet from "../HomepageEventTable";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ButtonLoader from "../ButtonLoader";
 import { useSelector } from "react-redux";
 import { db } from "../../firebse";
 import { collection, getDocs } from "firebase/firestore";
@@ -69,8 +69,6 @@ function HomePageContent() {
     setAaaApproved(approved);
   }, [activities]);
 
-
-  console.table("activities", activities)
   return (
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>Events</h3>
@@ -112,7 +110,9 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <AssignmentTurnedInIcon style={{ color: "white", fontSize: 30 }} />
+              <AssignmentTurnedInIcon
+                style={{ color: "white", fontSize: 30 }}
+              />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Approved</h4>
                 <h2>{allApproved}</h2>
@@ -170,7 +170,20 @@ function HomePageContent() {
           >
             Activities
           </h3>
-          <HomepageEventTablet  />
+
+          {console.log("ACTITITITI", activities)}
+
+          {activities.length === 0 ? (
+            <div>
+              <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
+              <span>
+                {" "}
+                <ButtonLoader />
+              </span>
+            </div>
+          ) : (
+            <HomepageEventTablet />
+          )}
         </div>
       </div>
     </div>

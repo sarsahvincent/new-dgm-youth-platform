@@ -67,9 +67,7 @@ function ProfileDetails() {
             avatarPath: snap.ref.fullPath,
           });
           setImg("");
-        } catch (error) {
-        
-        }
+        } catch (error) {}
       };
       uplaodImg();
     }
@@ -86,9 +84,7 @@ function ProfileDetails() {
         avatarPath: "",
       });
       window.location.reload();
-    } catch (err) {
-     
-    }
+    } catch (err) {}
   };
 
   return user ? (
