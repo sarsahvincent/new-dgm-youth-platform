@@ -6,14 +6,6 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-/* export default function BasicAlerts({ severity, message }) {
-  return (
-    <Stack sx={{ width: "30%" }} spacing={2}>
-      <Alert severity={severity}>{message}</Alert>
-    </Stack>
-  );
-} */
-
 export const SuccesAlert = ({ alertTitle, alertDescription }) => {
   return (
     <Alert

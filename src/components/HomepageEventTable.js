@@ -14,12 +14,9 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { db } from "../firebse";
-import { collection, getDocs } from "firebase/firestore";
-import { useSelector } from "react-redux";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 
 export default function ControlledAccordions() {
-  const { allUsers } = useSelector((state) => state.users);
   const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +27,6 @@ export default function ControlledAccordions() {
   };
 
   const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
-
   const updateStatus = async (id, status) => {
     setLoading(true);
 

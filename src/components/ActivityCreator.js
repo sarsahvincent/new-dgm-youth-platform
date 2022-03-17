@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { db } from "../firebse";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  Timestamp,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 import ButtonLoader from "./ButtonLoader";
 import { useDispatch } from "react-redux";
-import { collection, getDocs } from "firebase/firestore";
 import { getAllActivities } from "../services/redux/reducers/activitiesSlice";
 import _ from "lodash";
 

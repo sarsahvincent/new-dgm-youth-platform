@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -17,7 +17,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../firebse";
 import { signOut } from "firebase/auth";
 import { updateDoc, doc } from "firebase/firestore";
@@ -31,7 +30,6 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import TodayIcon from "@mui/icons-material/Today";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import GroupsIcon from "@mui/icons-material/Groups";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import CreateIcon from "@mui/icons-material/Create";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -344,23 +342,15 @@ export default function MiniDrawer({ layout }) {
             </ListItemText>
           </ListItem>
           <Divider />
-        {/*   <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <Paid style={{ color: "purple" }} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
-              <b>Finace</b>
-            </ListItemText>
-          </ListItem> */}
-            <Link to="/finance">
+          <Link to="/finance">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <Paid style={{ color: "purple" }} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
-              <b>Finace</b>
-            </ListItemText>
-          </ListItem>
+              <ListItemIcon>
+                <Paid style={{ color: "purple" }} fontSize="large" />
+              </ListItemIcon>
+              <ListItemText style={{ color: "purple" }}>
+                <b>Finace</b>
+              </ListItemText>
+            </ListItem>
           </Link>
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>

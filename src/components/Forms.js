@@ -4,7 +4,6 @@ function Forms({ getName }) {
   const [name, setName] = useState(getName === undefined ? "" : getName);
   return (
     <div>
-     
       <input
         placeholder="this is the input form"
         type="text"
