@@ -103,6 +103,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer({ layout }) {
   const location = useLocation();
+  const pathName = location.pathname;
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -249,9 +250,20 @@ export default function MiniDrawer({ layout }) {
             <List>
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
-                  <DashboardIcon style={{ color: "purple" }} fontSize="large" />
+                  <DashboardIcon
+                    style={{
+                      color: `${
+                        pathName === "/dashboard" ? "orange" : "purple"
+                      }`,
+                    }}
+                    fontSize="large"
+                  />
                 </ListItemIcon>
-                <ListItemText style={{ color: "purple" }}>
+                <ListItemText
+                  style={{
+                    color: `${pathName === "/dashboard" ? "orange" : "purple"}`,
+                  }}
+                >
                   <b>Dashboard</b>
                 </ListItemText>
               </ListItem>
@@ -263,11 +275,17 @@ export default function MiniDrawer({ layout }) {
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
                   <AccountBoxIcon
-                    style={{ color: "purple" }}
+                    style={{
+                      color: `${pathName === "/" ? "orange" : "purple"}`,
+                    }}
                     fontSize="large"
                   />
                 </ListItemIcon>
-                <ListItemText style={{ color: "purple" }}>
+                <ListItemText
+                  style={{
+                    color: `${pathName === "/" ? "orange" : "purple"}`,
+                  }}
+                >
                   <b>Profile</b>
                 </ListItemText>
               </ListItem>
@@ -277,9 +295,20 @@ export default function MiniDrawer({ layout }) {
           <Link to="/add-account">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
-                <PersonAddIcon style={{ color: "purple" }} fontSize="large" />
+                <PersonAddIcon
+                  style={{
+                    color: `${
+                      pathName === "/add-account" ? "orange" : "purple"
+                    }`,
+                  }}
+                  fontSize="large"
+                />
               </ListItemIcon>
-              <ListItemText style={{ color: "purple" }}>
+              <ListItemText
+                style={{
+                  color: `${pathName === "/add-account" ? "orange" : "purple"}`,
+                }}
+              >
                 <b>Add Acount</b>
               </ListItemText>
             </ListItem>
@@ -289,11 +318,21 @@ export default function MiniDrawer({ layout }) {
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <ManageAccountsIcon
-                  style={{ color: "purple" }}
+                  style={{
+                    color: `${
+                      pathName === "/account-management" ? "orange" : "purple"
+                    }`,
+                  }}
                   fontSize="large"
                 />
               </ListItemIcon>
-              <ListItemText style={{ color: "purple" }}>
+              <ListItemText
+                style={{
+                  color: `${
+                    pathName === "/account-management" ? "orange" : "purple"
+                  }`,
+                }}
+              >
                 <b>Converts</b>
               </ListItemText>
             </ListItem>
@@ -303,21 +342,36 @@ export default function MiniDrawer({ layout }) {
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <ContactPhoneIcon
-                  style={{ color: "purple" }}
+                  style={{
+                    color: `${pathName === "/contacts" ? "orange" : "purple"}`,
+                  }}
                   fontSize="large"
                 />
               </ListItemIcon>
-              <ListItemText style={{ color: "purple" }}>
-                <b>Contact</b>
+              <ListItemText
+                style={{
+                  color: `${pathName === "/contacts" ? "orange" : "purple"}`,
+                }}
+              >
+                <b>Contacts</b>
               </ListItemText>
             </ListItem>
           </Link>
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
-              <GroupsIcon style={{ color: "purple" }} fontSize="large" />
+              <GroupsIcon
+                style={{
+                  color: `${pathName === "/contact" ? "orange" : "purple"}`,
+                }}
+                fontSize="large"
+              />
             </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
+            <ListItemText
+              style={{
+                color: `${pathName === "/contact" ? "orange" : "purple"}`,
+              }}
+            >
               <b>Groups</b>
             </ListItemText>
           </ListItem>
@@ -325,29 +379,39 @@ export default function MiniDrawer({ layout }) {
           <Link to="/events">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
-                <TodayIcon style={{ color: "purple" }} fontSize="large" />
+                <TodayIcon
+                  style={{
+                    color: `${pathName === "/events" ? "orange" : "purple"}`,
+                  }}
+                  fontSize="large"
+                />
               </ListItemIcon>
-              <ListItemText style={{ color: "purple" }}>
+              <ListItemText
+                style={{
+                  color: `${pathName === "/events" ? "orange" : "purple"}`,
+                }}
+              >
                 <b>Events</b>
               </ListItemText>
             </ListItem>
           </Link>
-          <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <CollectionsIcon style={{ color: "purple" }} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
-              <b>Gallery</b>
-            </ListItemText>
-          </ListItem>
+
           <Divider />
           <Link to="/finance">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
-                <Paid style={{ color: "purple" }} fontSize="large" />
+                <Paid
+                  style={{
+                    color: `${pathName === "/finance" ? "orange" : "purple"}`,
+                  }}
+                  fontSize="large"
+                />
               </ListItemIcon>
-              <ListItemText style={{ color: "purple" }}>
+              <ListItemText
+                style={{
+                  color: `${pathName === "/finance" ? "orange" : "purple"}`,
+                }}
+              >
                 <b>Finace</b>
               </ListItemText>
             </ListItem>
@@ -355,18 +419,36 @@ export default function MiniDrawer({ layout }) {
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
-              <ReceiptLongIcon style={{ color: "purple" }} fontSize="large" />
+              <ReceiptLongIcon
+                style={{
+                  color: `${pathName === "/receips" ? "orange" : "purple"}`,
+                }}
+                fontSize="large"
+              />
             </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
+            <ListItemText
+              style={{
+                color: `${pathName === "/receips" ? "orange" : "purple"}`,
+              }}
+            >
               <b>Receipt</b>
             </ListItemText>
           </ListItem>
           <Divider />
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
-              <CreateIcon style={{ color: "purple" }} fontSize="large" />
+              <CreateIcon
+                style={{
+                  color: `${pathName === "/reports" ? "orange" : "purple"}`,
+                }}
+                fontSize="large"
+              />
             </ListItemIcon>
-            <ListItemText style={{ color: "purple" }}>
+            <ListItemText
+              style={{
+                color: `${pathName === "/reports" ? "orange" : "purple"}`,
+              }}
+            >
               <b>Reports</b>
             </ListItemText>
           </ListItem>
