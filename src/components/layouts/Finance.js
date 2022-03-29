@@ -7,6 +7,10 @@ import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
 import { ToastContainer, toast } from "react-toastify";
 
+import Fade from "@mui/material/Fade";
+import Zoom from "@mui/material/Zoom";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { storage, db, auth } from "../../firebse";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
@@ -42,16 +46,14 @@ import { styled } from "@mui/material/styles";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Tooltip from "@mui/material/Tooltip";
+
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 const id = Math.random().toString(36).slice(2);
 const style = {
   position: "absolute",
@@ -66,6 +68,18 @@ const style = {
   p: 4,
   pt: 1,
 };
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -80,6 +94,12 @@ function Finance() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const {
+    profileDetails: { firstName, lastName, avatarPath },
+  } = useSelector((state) => state.users);
+
+  console.log("profileDetails", firstName, lastName, avatarPath);
 
   //HOOKS TO REQUEST FOR FUNDS
   const [openRequestFundsModal, setOpenRequestFundsModal] =
@@ -100,9 +120,23 @@ function Finance() {
   const [totalDonCont, setTotalDonCon] = React.useState(0);
   const [currentBalance, setCurrentBalance] = React.useState(0);
 
+  const [allMonthlyDues, setAllMonthlyDues] = React.useState([]);
+  const [allDonationContributions, setAllDonationContributions] =
+    React.useState([]);
+
+  const dateConvertor = (timestamp) => {
+    const milliseconds = timestamp * 1000;
+
+    const dateObject = new Date(milliseconds);
+
+    return dateObject.toLocaleString("en-US", { timeZoneName: "short" }); //2019-12-9 10:30:15
+  };
+
   console.log("totalDues", totalDues);
   console.log("totalDonCont", totalDonCont);
   console.log("currentBalance", currentBalance);
+  console.log("allDonationContributions", allDonationContributions);
+  console.log("allMonthlyDues", allMonthlyDues);
 
   const handleSourceToAddFunds = (event) => {
     setSourceToAddfunds(event.target.value);
@@ -115,6 +149,11 @@ function Finance() {
   const totalDonConCollectiion = collection(
     db,
     "DGM_YOUTH_TotaldonationsContributons"
+  );
+  const allMonths = collection(db, "DGM_YOUTH_Funds_monthlyDues");
+  const allDonationAndContributions = collection(
+    db,
+    "DGM_YOUTH_Funds_donationsContributons"
   );
 
   const handleAddFunds = async (e) => {
@@ -146,12 +185,17 @@ function Finance() {
           id + amoutToAddfunds
         ),
         {
+          /* firstName, lastName, avatarPath */
           sourceToAddfunds,
           amoutToAddfunds,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt: Math.floor(Date.now() / 1000),
           status,
+          addedBy: firstName + " " + lastName,
+          picture: avatarPath,
         }
       );
+
+      // ALWAYS CREATE THIS TABLE IN THE DATABSE
 
       if (sourceToAddfunds === "donationsContributons") {
         await updateDoc(
@@ -189,6 +233,18 @@ function Finance() {
   };
 
   useEffect(() => {
+    const getAllDonationAndContributions = async () => {
+      const data = await getDocs(allDonationAndContributions);
+      setAllDonationContributions(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    };
+    const getTotalMonthlyDues = async () => {
+      const data = await getDocs(allMonths);
+      setAllMonthlyDues(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    };
     const getTotalDuesCollectiion = async () => {
       const data = await getDocs(totalDuesCollectiion);
       setTotalDues(
@@ -215,6 +271,8 @@ function Finance() {
     getTotalDuesCollectiion();
     getTotalDonCon();
     getTotalFunds();
+    getTotalMonthlyDues();
+    getAllDonationAndContributions();
   }, []);
 
   useEffect(() => {
@@ -247,6 +305,7 @@ function Finance() {
       uplaodImg();
     }
   }, [img]);
+
   const deleteImage = async () => {
     try {
       const confirm = window.confirm("Delete avatar");
@@ -400,6 +459,7 @@ function Finance() {
                   label="Enter Amount to add"
                   color="secondary"
                   fullWidth
+                  step="0.01"
                   type="number"
                   value={amoutToAddfunds}
                   onChange={(e) => {
@@ -425,7 +485,7 @@ function Finance() {
                     variant="contained"
                     endIcon={<SendIcon />}
                   >
-                    Submitvv
+                    Submit
                   </Button>
                 )}
 
@@ -496,8 +556,14 @@ function Finance() {
                 <div className="profileDetailsHeading">
                   <h6>Current Balance</h6>
 
-                  <div style={{ color: "white", fontSize: "25px" }}>
-                    {currentBalance ? currentBalance : 0}
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "25px",
+                      textAlign: "right",
+                    }}
+                  >
+                    {currentBalance ? currentBalance.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -518,7 +584,13 @@ function Finance() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Monthly Dues</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "25px",
+                      textAlign: "right",
+                    }}
+                  >
                     {totalDues ? totalDues : 0}
                   </div>
                 </div>
@@ -540,7 +612,13 @@ function Finance() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Donations / Contributons</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "25px",
+                      textAlign: "right",
+                    }}
+                  >
                     {" "}
                     {totalDonCont ? totalDonCont : 0}
                   </div>
@@ -548,97 +626,118 @@ function Finance() {
               </Card>
             </div>
 
-            <div className="main_profile_container">
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">Salutation :</h4>
-                  <h4 className="full_profile_details">{user.salutation}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">Gender :</h4>
-                  <h4 className="full_profile_details">{user.sex}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">First Name :</h4>
-                  <h4 className="full_profile_details">{user.firstName}</h4>
-                </Item>
-              </Grid>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", width: "50%" }}
+              >
+                <div className="addToFundscontainer">
+                  <Grid sx={{ marginTop: 1 }} item>
+                    a
+                    <Item className="full_profile_container">
+                      <h4 className="full_profile"> Occupation :</h4>
+                      <h4 className="full_profile_details">
+                        {user.occupation}
+                      </h4>
+                    </Item>
+                  </Grid>
+                </div>
+                <div className="addToFundscontainer">
+                  b
+                  <Grid sx={{ marginTop: 1, marginLeft: 1 }} item>
+                    <Item className="full_profile_container">
+                      <h4 className="full_profile"> Occupation :</h4>
+                      <h4 className="full_profile_details">
+                        {user.occupation}
+                      </h4>
+                    </Item>
+                  </Grid>
+                </div>
+              </div>
+              <div
+                style={{ display: "flex", alignItems: "center", width: "50%" }}
+              >
+                <div className="addToFundscontainer">
+                  Monthly Dues History
+                  {allMonthlyDues?.map((item, index) => (
+                    <LightTooltip
+                      title={
+                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                          <div></div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Added by :
+                            </span>{" "}
+                            {item?.addedBy}
+                          </div>
 
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">Last Name :</h4>
-                  <h4 className="full_profile_details">{user.lastName}</h4>
-                </Item>
-              </Grid>
+                          <div>
+                            <span style={{ color: "green" }}>Added at :</span>
+                            {dateConvertor(item?.createdAt)}
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Grid
+                        key={index}
+                        sx={{ marginTop: 1, marginLeft: 1 }}
+                        item
+                      >
+                        <Item className="full_profile_container">
+                          <h6 className="full_profile"> Amount Added:</h6>
+                          <h6 className="amoutToAddfunds">
+                            + {item?.amoutToAddfunds}
+                          </h6>
+                        </Item>
+                      </Grid>
+                    </LightTooltip>
+                  ))}
+                </div>
+                <div className="addToFundscontainer">
+                  Donations / Contributons History
+                  {allDonationContributions?.map((item, index) => (
+                    <LightTooltip
+                      title={
+                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                          <div></div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Added by :
+                            </span>{" "}
+                            {item?.addedBy}
+                          </div>
 
-              {user.middleName && (
-                <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                  <Item className="full_profile_container">
-                    <h4 className="full_profile">Middle Name :</h4>
-                    <h4 className="full_profile_details">{user.middleName}</h4>
-                  </Item>
-                </Grid>
-              )}
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Membership Status :</h4>
-                  <h4 className="full_profile_details">
-                    {user.membershipStatus}
-                  </h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">{user.occupation}</h4>
-                </Item>
-              </Grid>
-              {/*  */}
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">Address :</h4>
-                  <h4 className="full_profile_details">{user.address}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">City :</h4>
-                  <h4 className="full_profile_details">{user.city}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Emergency Contact Name:</h4>
-                  <h4 className="full_profile_details">
-                    {user.emergencyContactName}
-                  </h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Emergency Contact :</h4>
-                  <h4 className="full_profile_details">
-                    {user.emergencyContact}
-                  </h4>
-                </Item>
-              </Grid>
-
-              <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile">Baptize :</h4>
-                  <h4 className="full_profile_details">{user.baptism}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">{user.occupation}</h4>
-                </Item>
-              </Grid>
+                          <div>
+                            <span style={{ color: "green" }}>Added at :</span>
+                            {dateConvertor(item?.createdAt)}
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Grid
+                        key={index}
+                        sx={{ marginTop: 1, marginLeft: 1 }}
+                        item
+                      >
+                        <Item className="full_profile_container">
+                          <h6 className="full_profile"> Amount Added :</h6>
+                          <h6 className="amoutToAddfunds">
+                            + {item?.amoutToAddfunds}
+                          </h6>
+                        </Item>
+                      </Grid>
+                    </LightTooltip>
+                  ))}
+                </div>
+              </div>
             </div>
           </Grid>
         </Grid>
@@ -650,6 +749,5 @@ function Finance() {
     <Loading />
   );
 }
-
 
 export default Finance;

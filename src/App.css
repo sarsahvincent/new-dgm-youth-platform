@@ -211,6 +211,15 @@ h6 {
   overflow: auto;
   margin-top: 20px;
 }
+.addToFundscontainer {
+  width: 100%;
+  height: 60vh;
+  overflow: auto;
+  margin-top: 20px;
+  text-align: center;
+  color:rgb(128, 0, 128);
+  font-weight: 700;
+}
 
 .img_container {
   width: 100%;
@@ -226,6 +235,11 @@ h6 {
 .full_profile_details {
   text-align: left;
   color: purple;
+}
+.amoutToAddfunds{
+  text-align: left;
+  color: green;
+  font-weight: 700;
 }
 
 .full_profile {
