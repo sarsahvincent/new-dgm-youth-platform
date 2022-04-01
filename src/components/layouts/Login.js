@@ -70,7 +70,13 @@ function Login() {
             onChange={handleChange}
           />
         </div>
-        {error ? <p className="error">{error}</p> : null}
+        {error ? (
+          <p className="error">
+            {error === "Firebase: Error (auth/user-not-found)."
+              ? "User Does Not Exist"
+              : error}
+          </p>
+        ) : null}
         <div className="btn_container">
           <button disabled={loading} className="btn">
             {loading ? <Spinner animation="border" /> : "Login"}

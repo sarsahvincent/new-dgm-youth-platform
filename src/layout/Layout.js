@@ -466,6 +466,7 @@ export default function MiniDrawer({ layout }) {
         sx={{
           p: 1,
           height: "100vh",
+         
         }}
       >
         <DrawerHeader />

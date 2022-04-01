@@ -99,18 +99,30 @@ function Finance() {
     profileDetails: { firstName, lastName, avatarPath },
   } = useSelector((state) => state.users);
 
-  console.log("profileDetails", firstName, lastName, avatarPath);
 
   //HOOKS TO REQUEST FOR FUNDS
+
   const [openRequestFundsModal, setOpenRequestFundsModal] =
     React.useState(false);
   const handleOpenRequestFundsModal = () => setOpenRequestFundsModal(true);
-  const handleCloseRequestFundsModal = () => setOpenRequestFundsModal(false);
+
+  const handleCloseRequestFundsModal = () => {
+    setOpenRequestFundsModal(false);
+    setPurposeForRequestedAmount("");
+    setRequestedAmount("");
+  };
+
+  const [allMonthlyDuesRequested, setAllMonthlyDuesRequested] = useState([]);
+  const [allDonConRequested, setAllDonConRequested] = useState([]);
 
   //HOOKS TO ADD FUNDS
   const [openAddFundsModal, setOpenAddFundsModal] = React.useState(false);
   const handleOpenAddFundsModal = () => setOpenAddFundsModal(true);
   const handleCloseAddFundsModal = () => setOpenAddFundsModal(false);
+  const [requestedAmount, setRequestedAmount] = useState("");
+  const [purposeForRequestedAmount, setPurposeForRequestedAmount] =
+    useState("");
+  const [source, setSource] = React.useState("");
 
   const [sourceToAddfunds, setSourceToAddfunds] = React.useState("");
   const [amoutToAddfunds, setAmoutToAddfunds] = React.useState(null);
@@ -119,24 +131,20 @@ function Finance() {
   const [totalDues, setTotalDues] = React.useState(0);
   const [totalDonCont, setTotalDonCon] = React.useState(0);
   const [currentBalance, setCurrentBalance] = React.useState(0);
-
   const [allMonthlyDues, setAllMonthlyDues] = React.useState([]);
   const [allDonationContributions, setAllDonationContributions] =
     React.useState([]);
 
   const dateConvertor = (timestamp) => {
     const milliseconds = timestamp * 1000;
-
     const dateObject = new Date(milliseconds);
-
     return dateObject.toLocaleString("en-US", { timeZoneName: "short" }); //2019-12-9 10:30:15
   };
 
-  console.log("totalDues", totalDues);
-  console.log("totalDonCont", totalDonCont);
-  console.log("currentBalance", currentBalance);
-  console.log("allDonationContributions", allDonationContributions);
-  console.log("allMonthlyDues", allMonthlyDues);
+  const handleSelctSource = (event) => {
+    setSource(event.target.value);
+  };
+
 
   const handleSourceToAddFunds = (event) => {
     setSourceToAddfunds(event.target.value);
@@ -150,11 +158,117 @@ function Finance() {
     db,
     "DGM_YOUTH_TotaldonationsContributons"
   );
+
   const allMonths = collection(db, "DGM_YOUTH_Funds_monthlyDues");
+
   const allDonationAndContributions = collection(
     db,
     "DGM_YOUTH_Funds_donationsContributons"
   );
+  const allDonationAndContributionsRequests = collection(
+    db,
+    "DGM_YOUTH_Funds_donationsContributons_request"
+  );
+  const allMonthsRequests = collection(
+    db,
+    "DGM_YOUTH_Funds_monthlyDues_request"
+  );
+
+  const handleRequstFounds = async (e) => {
+    e.preventDefault();
+
+    if (
+      requestedAmount === "" ||
+      purposeForRequestedAmount === "" ||
+      source === ""
+    ) {
+      setError(true);
+      toast.error(`All fields required`, {
+        position: "top-right",
+      });
+    } else if (requestedAmount * 1 > totalDues * 1 && source === "dues") {
+      setError(true);
+      toast.error(`Amount cannot be more than  available Monthly Dues`, {
+        position: "top-right",
+      });
+    } else if (
+      requestedAmount * 1 > totalDonCont * 1 &&
+      source === "donation/contribution"
+    ) {
+      setError(true);
+      toast.error(
+        `Amount cannot be more than  available Donation/Contributions`,
+        {
+          position: "top-right",
+        }
+      );
+    } else {
+      const data = {
+        requestedAmount,
+        purposeForRequestedAmount,
+        source,
+        status: "pending",
+      };
+
+      setLoading(true);
+
+      try {
+        await setDoc(
+          doc(
+            db,
+            `${
+              source === "donation/contribution"
+                ? "DGM_YOUTH_Funds_donationsContributons_request"
+                : "DGM_YOUTH_Funds_monthlyDues_request"
+            }`,
+            id + requestedAmount
+          ),
+          {
+            /* firstName, lastName, avatarPath */
+            requestedAmount,
+            purposeForRequestedAmount,
+            source,
+            status: "pending",
+            requestedAt: Math.floor(Date.now() / 1000),
+            requestedBy: firstName + " " + lastName,
+            picture: avatarPath,
+          }
+        );
+        if (source === "donation/contribution") {
+          await updateDoc(
+            doc(
+              db,
+              "DGM_YOUTH_TotaldonationsContributons",
+              "donationsContributons"
+            ),
+            {
+              total: totalDonCont - requestedAmount * 1,
+            }
+          );
+        } else {
+          await updateDoc(
+            doc(db, "DGM_YOUTH_TotalTotalMonthlyDues", "TotalMonltyDues"),
+            {
+              total: totalDues - requestedAmount * 1,
+            }
+          );
+        }
+
+        setLoading(false);
+        setRequestedAmount("");
+        setPurposeForRequestedAmount("");
+
+        setSuccess(true);
+        toast.success(`Funds Request Success.`, {
+          position: "top-right",
+        });
+        handleCloseRequestFundsModal();
+        setTimeout(function () {
+          window.location.reload();
+        }, 4000);
+      } catch (e) {}
+    }
+  };
 
   const handleAddFunds = async (e) => {
     e.preventDefault();
@@ -239,12 +353,25 @@ function Finance() {
         data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
       );
     };
-    const getTotalMonthlyDues = async () => {
+    const getAllDonationAndContributionsRequests = async () => {
+      const data = await getDocs(allDonationAndContributionsRequests);
+      setAllDonConRequested(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    };
+    const getAllMonthlyDues = async () => {
       const data = await getDocs(allMonths);
       setAllMonthlyDues(
         data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
       );
     };
+    const getAllMonthlyDuesRequests = async () => {
+      const data = await getDocs(allMonthsRequests);
+      setAllMonthlyDuesRequested(
+        data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    };
+
     const getTotalDuesCollectiion = async () => {
       const data = await getDocs(totalDuesCollectiion);
       setTotalDues(
@@ -271,8 +398,10 @@ function Finance() {
     getTotalDuesCollectiion();
     getTotalDonCon();
     getTotalFunds();
-    getTotalMonthlyDues();
+    getAllMonthlyDues();
     getAllDonationAndContributions();
+    getAllMonthlyDuesRequests();
+    getAllDonationAndContributionsRequests();
   }, []);
 
   useEffect(() => {
@@ -342,7 +471,7 @@ function Finance() {
             >
               Request for funds
             </Typography>
-            <form action="">
+            <form onSubmit={handleRequstFounds} action="">
               <Box
                 sx={{
                   display: "flex",
@@ -355,8 +484,18 @@ function Finance() {
                   color="secondary"
                   fullWidth
                   type="number"
+                  value={requestedAmount}
+                  onChange={(e) => setRequestedAmount(e.target.value)}
                 />
               </Box>
+
+              <FormHelperText
+                style={{ color: "purple", width: "80%", marginLeft: 10 }}
+              >
+                Amout conno't be nore than available <b>Monthly Dues</b> or
+                available <b>Donations/Contributions</b>
+              </FormHelperText>
+
               <Box
                 sx={{
                   display: "flex",
@@ -369,8 +508,27 @@ function Finance() {
                   minRows={3}
                   placeholder="State purpose for fund request"
                   style={{ width: "100%", marginBottom: 20 }}
+                  value={purposeForRequestedAmount}
+                  onChange={(e) => setPurposeForRequestedAmount(e.target.value)}
                 />
               </Box>
+              <FormControl sx={{ m: 1, width: "95%" }}>
+                <InputLabel id="demo-simple-select-helper-label">
+                  Select Source
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={source}
+                  label="Select Source"
+                  onChange={handleSelctSource}
+                >
+                  <MenuItem value={"dues"}>Monthly Dues</MenuItem>
+                  <MenuItem value={"donation/contribution"}>
+                    Donations / Contributons
+                  </MenuItem>
+                </Select>
+              </FormControl>
               <div
                 style={{
                   display: "flex",
@@ -378,15 +536,21 @@ function Finance() {
                   justifyContent: "space-between",
                 }}
               >
-                <Button
-                  onClick={handleOpenRequestFundsModal}
-                  size="large"
-                  sx={{ width: "40%", background: "purple" }}
-                  variant="contained"
-                  endIcon={<SendIcon />}
-                >
-                  Submit
-                </Button>
+             
+                  {loading ? (
+                    <ButtonLoader />
+                  ) : (
+                    <Button
+                      type="submit"
+                      size="large"
+                      sx={{ width: "40%", background: "purple" }}
+                      variant="contained"
+                      endIcon={<SendIcon />}
+                    >
+                      Request
+                    </Button>
+                  )}
+             
                 <Button
                   onClick={handleCloseRequestFundsModal}
                   size="large"
@@ -591,7 +755,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {totalDues ? totalDues : 0}
+                    {totalDues ? totalDues.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -620,7 +784,7 @@ function Finance() {
                     }}
                   >
                     {" "}
-                    {totalDonCont ? totalDonCont : 0}
+                    {totalDonCont ? totalDonCont.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -634,32 +798,105 @@ function Finance() {
                 justifyContent: "space-between",
               }}
             >
+              {/* REQUEST HISTORY */}
               <div
                 style={{ display: "flex", alignItems: "center", width: "50%" }}
               >
                 <div className="addToFundscontainer">
-                  <Grid sx={{ marginTop: 1 }} item>
-                    a
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile"> Occupation :</h4>
-                      <h4 className="full_profile_details">
-                        {user.occupation}
-                      </h4>
-                    </Item>
-                  </Grid>
+                  Dues Request History
+                  {allMonthlyDuesRequested?.map((item, index) => (
+                    <LightTooltip
+                      title={
+                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                          <div></div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Requested by :
+                            </span>{" "}
+                            {item?.requestedBy}
+                          </div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Purpose :
+                            </span>{" "}
+                            {item?.purposeForRequestedAmount}
+                          </div>
+
+                          <div>
+                            <span style={{ color: "green" }}>
+                              Requested at: {""}
+                            </span>
+                            {dateConvertor(item?.requestedAt)}
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Grid
+                        key={index}
+                        sx={{ marginTop: 1, marginLeft: 1 }}
+                        item
+                      >
+                        <Item className="full_profile_container">
+                          <h6 className="full_profile"> Amount Requested:</h6>
+                          <h6 className="amoutToRequest">
+                            - {item?.requestedAmount}
+                          </h6>
+                        </Item>
+                      </Grid>
+                    </LightTooltip>
+                  ))}
                 </div>
                 <div className="addToFundscontainer">
-                  b
-                  <Grid sx={{ marginTop: 1, marginLeft: 1 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile"> Occupation :</h4>
-                      <h4 className="full_profile_details">
-                        {user.occupation}
-                      </h4>
-                    </Item>
-                  </Grid>
+                  Don. / Cont. Request History
+                  {allDonConRequested?.map((item, index) => (
+                    <LightTooltip
+                      title={
+                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                          <div></div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Requested by :
+                            </span>{" "}
+                            {item?.requestedBy}
+                          </div>
+                          <div>
+                            {" "}
+                            <span style={{ color: "green" }}>
+                              Purpose :
+                            </span>{" "}
+                            {item?.purposeForRequestedAmount}
+                          </div>
+
+                          <div>
+                            <span style={{ color: "green" }}>
+                              Requested at :
+                            </span>
+                            {dateConvertor(item?.requestedAt)}
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Grid
+                        key={index}
+                        sx={{ marginTop: 1, marginLeft: 1 }}
+                        item
+                      >
+                        <Item className="full_profile_container">
+                          <h6 className="full_profile"> Amount Requested :</h6>
+                          <h6 className="amoutToRequest">
+                            - {item?.requestedAmount}
+                          </h6>
+                        </Item>
+                      </Grid>
+                    </LightTooltip>
+                  ))}
                 </div>
               </div>
+
+              {/* ADD HISOTRY */}
               <div
                 style={{ display: "flex", alignItems: "center", width: "50%" }}
               >

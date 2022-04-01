@@ -9,6 +9,7 @@
 
 body {
   background: rgba(250, 245, 245, 0.911);
+  font-family: "Poppins","Sans-serif";
 }
 
 h2 {
@@ -145,6 +146,7 @@ h6 {
 .error {
   text-align: center;
   color: var(--color-5);
+  margin-top: 10px;
 }
 
 .homepageEventListTable {
@@ -239,6 +241,11 @@ h6 {
 .amoutToAddfunds{
   text-align: left;
   color: green;
+  font-weight: 700;
+}
+.amoutToRequest{
+  text-align: left;
+  color: red;
   font-weight: 700;
 }
 
@@ -446,10 +453,11 @@ h6 {
   display: flex;
   flex-direction: column !important;
   text-align: center;
-  align-items: center;
+  align-items: right;
 }
 .profileDetailsHeading h6 {
   color: white;
+  text-align: right;
 }
 /*Activity planner*/
 
