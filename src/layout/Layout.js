@@ -416,42 +416,27 @@ export default function MiniDrawer({ layout }) {
               </ListItemText>
             </ListItem>
           </Link>
+
           <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <ReceiptLongIcon
-                style={{
-                  color: `${pathName === "/receips" ? "orange" : "purple"}`,
-                }}
-                fontSize="large"
-              />
-            </ListItemIcon>
-            <ListItemText
-              style={{
-                color: `${pathName === "/receips" ? "orange" : "purple"}`,
-              }}
-            >
-              <b>Receipt</b>
-            </ListItemText>
-          </ListItem>
-          <Divider />
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <CreateIcon
+          <Link to="/reports">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <CreateIcon
+                  style={{
+                    color: `${pathName === "/reports" ? "orange" : "purple"}`,
+                  }}
+                  fontSize="large"
+                />
+              </ListItemIcon>
+              <ListItemText
                 style={{
                   color: `${pathName === "/reports" ? "orange" : "purple"}`,
                 }}
-                fontSize="large"
-              />
-            </ListItemIcon>
-            <ListItemText
-              style={{
-                color: `${pathName === "/reports" ? "orange" : "purple"}`,
-              }}
-            >
-              <b>Reports</b>
-            </ListItemText>
-          </ListItem>
+              >
+                <b>Reports</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
           <Divider />
         </Drawer>
       ) : null}
@@ -466,7 +451,6 @@ export default function MiniDrawer({ layout }) {
         sx={{
           p: 1,
           height: "100vh",
-         
         }}
       >
         <DrawerHeader />

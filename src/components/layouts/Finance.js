@@ -6,7 +6,6 @@ import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
 import { ToastContainer, toast } from "react-toastify";
-
 import Fade from "@mui/material/Fade";
 import Zoom from "@mui/material/Zoom";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
@@ -25,7 +24,6 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ButtonLoader from "../ButtonLoader";
-
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import {
   doc,

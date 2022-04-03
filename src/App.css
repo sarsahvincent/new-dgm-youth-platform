@@ -9,13 +9,21 @@
 
 body {
   background: rgba(250, 245, 245, 0.911);
-  font-family: "Poppins","Sans-serif";
+  font-family: "Poppins", "Sans-serif";
 }
 
 h2 {
   margin: 0px;
 }
 
+textarea {
+  border-radius: 5px;
+}
+
+input:focus,
+textarea:focus {
+  outline: none !important;
+}
 :root {
   --color-1: purple;
   --color-2: white;
@@ -79,12 +87,12 @@ section h3 {
   color: white;
 }
 
-.AccordionDetailsBreakdown b{
+.AccordionDetailsBreakdown b {
   color: purple;
 }
 
-.AccordionDetailsBreakdownName{
-  color:rgb(59, 190, 7);
+.AccordionDetailsBreakdownName {
+  color: rgb(59, 190, 7);
   font-weight: bold;
 }
 
@@ -203,7 +211,7 @@ h6 {
 
 .img_container {
   position: relative;
-  margin-right: 20px;
+  /* margin-right: 20px; */
   margin-left: 5px;
 }
 
@@ -219,7 +227,7 @@ h6 {
   overflow: auto;
   margin-top: 20px;
   text-align: center;
-  color:rgb(128, 0, 128);
+  color: rgb(128, 0, 128);
   font-weight: 700;
 }
 
@@ -238,12 +246,12 @@ h6 {
   text-align: left;
   color: purple;
 }
-.amoutToAddfunds{
+.amoutToAddfunds {
   text-align: left;
   color: green;
   font-weight: 700;
 }
-.amoutToRequest{
+.amoutToRequest {
   text-align: left;
   color: red;
   font-weight: 700;
@@ -460,6 +468,76 @@ h6 {
   text-align: right;
 }
 /*Activity planner*/
+
+
+/* REPORTS */
+
+.reportSubmitContainer{
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  width: 500px;
+  justify-content: flex-start;
+  flex:1
+
+}
+
+.reportSubmitContainer button{
+  color: white;
+  border:none;
+  background-color:green;
+  padding: 5px 20px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-weight: bold;
+  width: 50%;
+}
+.reportSubmitContainer input{
+border-radius: 5px;
+margin-bottom: 10px;
+border: 2px solid purple;
+width: 100%;
+height: 50px;
+font-size: 20px;
+color: purple;
+text-align: center;
+font-weight: bold;
+}
+.reportSubmitContainer textarea{
+width: 100%;
+border: 2px solid purple;
+padding: 5px;
+color: purple;
+}
+
+.reportSubmitContainer label{
+  color: purple;
+  font-weight: bold;
+font-size: 20px;
+
+}
+
+
+.reportsTable
+ {
+  height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  flex: 1;
+ margin-left: 50px;
+}
+
+.reportsTable::-webkit-scrollbar,
+.membersListContainer::-webkit-scrollbar {
+  display: none;
+}
+.reportsTable label{
+  color: purple;
+  font-weight: bold;
+font-size: 20px;
+text-align: center;
+}
 
 /* 
 320px — 480px: Mobile devices
@@ -736,3 +814,4 @@ h6 {
   display: flex;
   align-items: center;
 }
+

@@ -554,6 +554,7 @@ function EditProfile() {
                   autoComplete="off"
                 >
                   <TextField
+                  disabled
                     name="email"
                     id="outlined-basic"
                     label="Email *"

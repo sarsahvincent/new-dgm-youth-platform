@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import AuthProvider from "./context/auth";
 import Home from "./pages/Home";
+import Reports from "./pages/Reports";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import AddAccount from "./pages/AddAccount";
@@ -38,6 +39,9 @@ function App() {
           </Route>
           <Route exact path="/finance" element={<PrivateRoute />}>
             <Route exact path="/finance" element={<Finance />} />
+          </Route>
+          <Route exact path="/reports" element={<PrivateRoute />}>
+            <Route exact path="/reports" element={<Reports />} />
           </Route>
           <Route exact path="/profile-details/:id" element={<PrivateRoute />}>
             <Route
