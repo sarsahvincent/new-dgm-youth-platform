@@ -72,6 +72,7 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
+  
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
