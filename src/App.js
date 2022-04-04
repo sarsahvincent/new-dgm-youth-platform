@@ -13,6 +13,7 @@ import AddAccount from "./pages/AddAccount";
 import Contacts from "./pages/Contacts";
 import ProfileDetails from "./pages/ViewProfile";
 import Events from "./pages/Events";
+import Converts from "./pages/Converts";
 import EditProfile from "./pages/EditProfile";
 import Finance from "./pages/Finance";
 
@@ -49,6 +50,9 @@ function App() {
               path="/profile-details/:id"
               element={<ProfileDetails />}
             />
+          </Route>
+          <Route exact path="/new-converts-manageme" element={<PrivateRoute />}>
+            <Route exact path="/new-converts-manageme" element={<Converts />} />
           </Route>
           <Route exact path="/edit-profile/:id" element={<PrivateRoute />}>
             <Route exact path="/edit-profile/:id" element={<EditProfile />} />

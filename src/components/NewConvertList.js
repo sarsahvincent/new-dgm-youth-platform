@@ -8,9 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { db } from "../firebse";
-import { collection, getDocs } from "firebase/firestore";
-import { useDispatch } from "react-redux";
-import { getAllUsers } from "../services/redux/reducers/userSlice";
+import { collection } from "firebase/firestore";
 import UserTableAvatar from "./UserTableAvatar";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
@@ -39,13 +37,14 @@ function createData(picture, name, phone, email) {
 }
 
 export default function HomepageUserList() {
-  const [users, setUsers] = useState([]);
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const [searchResults, setSearchReults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   let rows = [];
 
-  const dispatch = useDispatch();
+  let getAllConverts = JSON.parse(localStorage.getItem("allNewConvert"))
+    ? JSON.parse(localStorage.getItem("allNewConvert"))
+    : null;
 
   rows = searchResults?.map((user) =>
     createData(
@@ -73,7 +72,7 @@ export default function HomepageUserList() {
   };
 
   useEffect(() => {
-    const filteredData = users?.filter(
+    const filteredData = getAllConverts?.filter(
       (user) =>
         user?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -81,21 +80,7 @@ export default function HomepageUserList() {
         user?.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchReults(filteredData);
-  }, [searchTerm,users]);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectiion);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    dispatch(getAllUsers(users));
-
-    getUsers();
-  }, []);
-
-  setTimeout(() => {
-    dispatch(getAllUsers(users));
-  }, 1000);
+  }, [searchTerm]);
 
   return (
     <div className="dashboard-user-search">

@@ -201,11 +201,12 @@ function AddAccount() {
                       label="Role"
                       onChange={handleChange}
                     >
-                      <MenuItem value="5">Member</MenuItem>
-                      <MenuItem value="4">Exective</MenuItem>
                       <MenuItem value="1">President</MenuItem>
                       <MenuItem value="2">Vice President</MenuItem>
+                      <MenuItem value="6">Financial Secretary</MenuItem>
                       <MenuItem value="3">Treasurer</MenuItem>
+                      <MenuItem value="4">Exective</MenuItem>
+                      <MenuItem value="5">Member</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>

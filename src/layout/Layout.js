@@ -314,13 +314,13 @@ export default function MiniDrawer({ layout }) {
             </ListItem>
           </Link>
           <Divider />
-          <Link to="/account-management">
+          <Link to="/new-converts-manageme">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <ManageAccountsIcon
                   style={{
                     color: `${
-                      pathName === "/account-management" ? "orange" : "purple"
+                      pathName === "/new-converts-manageme" ? "orange" : "purple"
                     }`,
                   }}
                   fontSize="large"
@@ -329,7 +329,7 @@ export default function MiniDrawer({ layout }) {
               <ListItemText
                 style={{
                   color: `${
-                    pathName === "/account-management" ? "orange" : "purple"
+                    pathName === "/new-converts-manageme" ? "orange" : "purple"
                   }`,
                 }}
               >
@@ -338,26 +338,7 @@ export default function MiniDrawer({ layout }) {
             </ListItem>
           </Link>
           <Divider />
-          <Link to="/contacts">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <ContactPhoneIcon
-                  style={{
-                    color: `${pathName === "/contacts" ? "orange" : "purple"}`,
-                  }}
-                  fontSize="large"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${pathName === "/contacts" ? "orange" : "purple"}`,
-                }}
-              >
-                <b>Contacts</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
-          <Divider />
+
           <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
             <ListItemIcon>
               <GroupsIcon
