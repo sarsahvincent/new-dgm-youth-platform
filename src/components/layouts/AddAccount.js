@@ -640,17 +640,19 @@ function AddAccount() {
 
           <Button
             type="submit"
-            sx={{
+            style={{
               textAlign: "center",
               height: 50,
               width: "100%",
-              mt: 4,
+              marginTop: 20,
               backgroundColor: "purple",
               fontSize: 18,
               fontWeight: "bolder",
               letterSpacing: "5px",
               borderRadius: 2,
-              marginBottom:10
+              marginBottom:10,
+             
+             
             }}
             variant="contained"
             endIcon={loading ? null : <SendIcon />}

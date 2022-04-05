@@ -2,6 +2,7 @@ import * as React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -192,7 +193,7 @@ export default function MiniDrawer({ layout }) {
                     style={{ cursor: "pointer" }}
                     onClick={handleSignout}
                   >
-                    Logout
+                    Logout <LogoutIcon />
                   </Typography>
                 </div>
               </div>
@@ -320,7 +321,9 @@ export default function MiniDrawer({ layout }) {
                 <ManageAccountsIcon
                   style={{
                     color: `${
-                      pathName === "/new-converts-manageme" ? "orange" : "purple"
+                      pathName === "/new-converts-manageme"
+                        ? "orange"
+                        : "purple"
                     }`,
                   }}
                   fontSize="large"

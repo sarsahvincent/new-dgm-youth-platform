@@ -6,6 +6,7 @@ import { auth, db } from "../../firebse";
 import { useDispatch } from "react-redux";
 import { getCurrentUserId } from "../../services/redux/reducers/userSlice";
 import { Spinner } from "react-bootstrap";
+import LoginIcon from "@mui/icons-material/Login";
 
 function Login() {
   const dispatch = useDispatch();
@@ -79,7 +80,13 @@ function Login() {
         ) : null}
         <div className="btn_container">
           <button disabled={loading} className="btn">
-            {loading ? <Spinner animation="border" /> : "Login"}
+            {loading ? (
+              <Spinner animation="border" />
+            ) : (
+              <>
+                <span>Login</span> <LoginIcon />
+              </>
+            )}
           </button>
         </div>
       </form>

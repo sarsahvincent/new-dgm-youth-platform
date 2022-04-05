@@ -76,7 +76,7 @@ function Reports() {
     }
   };
   return (
-    <div className="layout_margin d-flex justify-content-between m-2 mt-3">
+    <div className="reportSubmitContainer-main  layout_margin d-flex justify-content-between m-2 mt-3">
       <div>
         <form
           className="reportSubmitContainer"
@@ -106,7 +106,7 @@ function Reports() {
       </div>
 
       <div className="reportsTable d-flex flex-column">
-          <label  htmlFor="">Reports History</label>
+        <label htmlFor="">Reports History</label>
         <ReportTable />
       </div>
       {error && <ToastContainer />}

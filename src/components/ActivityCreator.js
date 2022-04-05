@@ -113,7 +113,10 @@ const ActivityCreator = () => {
 
   return (
     <form className="activityFormContainer" onSubmit={handleSubmit}>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div
+    
+        className="activity-container-heading"
+      >
         <input
           placeholder="Enter Title"
           className="activityTitle"

@@ -72,7 +72,6 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
-  
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
@@ -82,7 +81,7 @@ export default function HomepageUserList() {
         user?.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchReults(filteredData);
-  }, [searchTerm,users]);
+  }, [searchTerm, users]);
 
   useEffect(() => {
     const getUsers = async () => {
