@@ -97,7 +97,6 @@ function Finance() {
     profileDetails: { firstName, lastName, avatarPath },
   } = useSelector((state) => state.users);
 
-
   //HOOKS TO REQUEST FOR FUNDS
 
   const [openRequestFundsModal, setOpenRequestFundsModal] =
@@ -142,7 +141,6 @@ function Finance() {
   const handleSelctSource = (event) => {
     setSource(event.target.value);
   };
-
 
   const handleSourceToAddFunds = (event) => {
     setSourceToAddfunds(event.target.value);
@@ -534,21 +532,20 @@ function Finance() {
                   justifyContent: "space-between",
                 }}
               >
-             
-                  {loading ? (
-                    <ButtonLoader />
-                  ) : (
-                    <Button
-                      type="submit"
-                      size="large"
-                      sx={{ width: "40%", background: "purple" }}
-                      variant="contained"
-                      endIcon={<SendIcon />}
-                    >
-                      Request
-                    </Button>
-                  )}
-             
+                {loading ? (
+                  <ButtonLoader />
+                ) : (
+                  <Button
+                    type="submit"
+                    size="large"
+                    sx={{ width: "40%", background: "purple" }}
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                  >
+                    Request
+                  </Button>
+                )}
+
                 <Button
                   onClick={handleCloseRequestFundsModal}
                   size="large"
@@ -672,9 +669,11 @@ function Finance() {
           justifyContent: "space-between",
         }}
       >
-        <h3 style={{ color: "purple" }}>Finance</h3>
+        <h3 className="page-heading" style={{ color: "purple" }}>
+          Finance
+        </h3>
       </div>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box className="finance-sub-container" sx={{ flexGrow: 1 }}>
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Button
@@ -789,6 +788,7 @@ function Finance() {
             </div>
 
             <div
+              className="financial-history-summary"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -797,9 +797,7 @@ function Finance() {
               }}
             >
               {/* REQUEST HISTORY */}
-              <div
-                style={{ display: "flex", alignItems: "center", width: "50%" }}
-              >
+              <div className="financial-history-summary-item-group">
                 <div className="addToFundscontainer">
                   Dues Request History
                   {allMonthlyDuesRequested?.map((item, index) => (
@@ -895,9 +893,7 @@ function Finance() {
               </div>
 
               {/* ADD HISOTRY */}
-              <div
-                style={{ display: "flex", alignItems: "center", width: "50%" }}
-              >
+              <div className="financial-history-summary-item-group">
                 <div className="addToFundscontainer">
                   Monthly Dues History
                   {allMonthlyDues?.map((item, index) => (

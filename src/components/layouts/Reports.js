@@ -106,7 +106,7 @@ function Reports() {
       </div>
 
       <div className="reportsTable d-flex flex-column">
-        <label htmlFor="">Reports History</label>
+        <label htmlFor="">Submitted Reports</label>
         <ReportTable />
       </div>
       {error && <ToastContainer />}

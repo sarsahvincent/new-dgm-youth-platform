@@ -126,7 +126,6 @@ function HomePageContent() {
               </Paper>
             </div>
 
-            {/* ---------------------------- */}
             <div>
               <Paper
                 elevation={3}
@@ -144,7 +143,6 @@ function HomePageContent() {
               </Paper>
             </div>
 
-            {/* ---------------------------- */}
             <div>
               <Paper
                 elevation={3}
@@ -161,8 +159,7 @@ function HomePageContent() {
                 </div>
               </Paper>
             </div>
-
-            {/* ---------------------------- */}
+            {/* 
             <div>
               <Paper
                 className="dashboard_headings"
@@ -176,7 +173,7 @@ function HomePageContent() {
                   <h2>{newConvert}</h2>
                 </div>
               </Paper>
-            </div>
+            </div> */}
           </div>
         </Box>
       )}
@@ -188,13 +185,13 @@ function HomePageContent() {
           >
             All New Converts
           </h3>
-          <NewConvertList />
-        </div>  
+          <NewConvertList allNewConvert={allNewConvert} />
+        </div>
         {/* <div className="homepageEventListTable">
           <h3
             style={{ textAlign: "center", color: "purple", marginTop: "15px" }}
           >
-            Activities
+           Top Sool Winners
           </h3>
           <HomepageEventTablet />
         </div> */}

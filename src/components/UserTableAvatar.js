@@ -7,7 +7,7 @@ function UserTableAvatar({ url }) {
       <img
         src={url || Avatar}
         alt="avatar"
-        style={{ width: "30px", height: "30px", borderRadius: "50%" }}
+        style={{ width: "40px", height: "40px", borderRadius: "50%" }}
       />
     </div>
   );

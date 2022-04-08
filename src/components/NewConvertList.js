@@ -8,12 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { db } from "../firebse";
-import { collection, getDocs } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import UserTableAvatar from "./UserTableAvatar";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../services/redux/reducers/userSlice";
 
 const columns = [
   { id: "picture", label: "Picture", minWidth: 170 },
@@ -38,24 +36,12 @@ function createData(picture, name, phone, email) {
   return { picture, name, phone, email };
 }
 
-export default function HomepageUserList() {
+export default function NewConvertList({ allNewConvert }) {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const [searchResults, setSearchReults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState([]);
-  const [allNewConvert, setAllNewConvert] = useState([]);
   let rows = [];
-  const { allUsers } = useSelector((state) => state?.users);
-  let getAllConverts = JSON.parse(localStorage.getItem("allNewConvert"))
-    ? JSON.parse(localStorage.getItem("allNewConvert"))
-    : null;
 
-  let numberOfNewConvert = [];
-  console.log("search results", searchResults);
-  console.log("users", users);
-  console.log("allUsers", allUsers);
-  console.log("allNewConvert", allNewConvert);
-  const dispatch = useDispatch();
   rows = searchResults?.map((user) =>
     createData(
       <Link to={`/profile-details/${user?.uid}`}>
@@ -81,17 +67,6 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
-  const getAllNewConvert = () => {
-    const findNewConvert = allUsers?.filter(
-      (user) => user?.membershipStatus === "New Convert"
-    );
-    localStorage?.setItem("allNewConvert", JSON.stringify(findNewConvert));
-    setAllNewConvert(findNewConvert);
-    if (findNewConvert) {
-      numberOfNewConvert?.push(findNewConvert);
-    }
-  };
-
   useEffect(() => {
     const filteredData = allNewConvert?.filter(
       (user) =>
@@ -103,16 +78,6 @@ export default function HomepageUserList() {
 
     setSearchReults(filteredData);
   }, [searchTerm, allNewConvert]);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectiion);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    dispatch(getAllUsers(users));
-    getAllNewConvert();
-    getUsers();
-  }, []);
 
   return (
     <>

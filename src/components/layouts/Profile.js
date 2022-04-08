@@ -89,7 +89,9 @@ function Profile() {
           justifyContent: "space-between",
         }}
       >
-        <h3 style={{ color: "purple" }}>Profile</h3>
+        <h3 className="page-heading" style={{ color: "purple" }}>
+          Profile
+        </h3>
         <div
           style={{
             display: "flex",
@@ -104,7 +106,7 @@ function Profile() {
                   style={{
                     color: "red",
                     fontSize: 25,
-                    marginRight: 10,
+                    marginRight: 30,
                     cursor: "pointer",
                   }}
                 />
@@ -124,7 +126,7 @@ function Profile() {
           </div>
         </div>
       </div>
-      <Box sx={{ flexGrow: 1 }} className="login-profile-page">
+      <Box sx={{ flexGrow: 1 }} className="login-profile-page main-profile-page">
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Item>

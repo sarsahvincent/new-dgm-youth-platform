@@ -315,13 +315,13 @@ export default function MiniDrawer({ layout }) {
             </ListItem>
           </Link>
           <Divider />
-          <Link to="/new-converts-manageme">
+          <Link to="/new-converts-management">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <ManageAccountsIcon
                   style={{
                     color: `${
-                      pathName === "/new-converts-manageme"
+                      pathName === "/new-converts-management"
                         ? "orange"
                         : "purple"
                     }`,
@@ -332,7 +332,9 @@ export default function MiniDrawer({ layout }) {
               <ListItemText
                 style={{
                   color: `${
-                    pathName === "/new-converts-manageme" ? "orange" : "purple"
+                    pathName === "/new-converts-managementnt"
+                      ? "orange"
+                      : "purple"
                   }`,
                 }}
               >
@@ -432,9 +434,9 @@ export default function MiniDrawer({ layout }) {
             : "layoutbackround"
         }
         component="main"
-        sx={{
-          p: 1,
-          height: "100vh",
+        style={{
+        paddingBottom: "40%",
+          height: "100%",
         }}
       >
         <DrawerHeader />

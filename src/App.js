@@ -15,7 +15,7 @@ import ProfileDetails from "./pages/ViewProfile";
 import Events from "./pages/Events";
 import Converts from "./pages/Converts";
 import EditProfile from "./pages/EditProfile";
-import Finance from "./pages/Finance";
+import Finance from "./pages/FinancePage";
 
 function App() {
   return (
@@ -51,8 +51,8 @@ function App() {
               element={<ProfileDetails />}
             />
           </Route>
-          <Route exact path="/new-converts-manageme" element={<PrivateRoute />}>
-            <Route exact path="/new-converts-manageme" element={<Converts />} />
+          <Route exact path="/new-converts-management" element={<PrivateRoute />}>
+            <Route exact path="/new-converts-management" element={<Converts />} />
           </Route>
           <Route exact path="/edit-profile/:id" element={<PrivateRoute />}>
             <Route exact path="/edit-profile/:id" element={<EditProfile />} />
