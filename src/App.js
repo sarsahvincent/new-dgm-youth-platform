@@ -22,8 +22,8 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/dashboard" element={<PrivateRoute />}>
-            <Route exact path="/dashboard" element={<Home />} />
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route exact path="/" element={<Home />} />
           </Route>
           <Route exact path="/profile" element={<PrivateRoute />}>
             <Route exact path="/profile" element={<Profile />} />

@@ -26,13 +26,9 @@ import { Paid } from "@mui/icons-material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import DGMlogo from "../assets/images/dgm.jpg";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import CollectionsIcon from "@mui/icons-material/Collections";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import TodayIcon from "@mui/icons-material/Today";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CreateIcon from "@mui/icons-material/Create";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const drawerWidth = 240;
@@ -168,7 +164,7 @@ export default function MiniDrawer({ layout }) {
           ) : null}
 
           <div>
-            <Link to="/dashboard">
+            <Link to="/">
               <Typography
                 style={{
                   color: "white",
@@ -258,14 +254,14 @@ export default function MiniDrawer({ layout }) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          <Link to="/dashboard">
+          <Link to="/">
             <List>
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
                   <DashboardIcon
                     style={{
                       color: `${
-                        getPathname() === "/dashboard" ? "orange" : "purple"
+                        getPathname() === "/" ? "orange" : "purple"
                       }`,
                     }}
                     fontSize="large"
@@ -274,7 +270,7 @@ export default function MiniDrawer({ layout }) {
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/dashboard" ? "orange" : "purple"
+                      getPathname() === "/" ? "orange" : "purple"
                     }`,
                   }}
                 >
