@@ -25,7 +25,23 @@ import Tooltip from "@mui/material/Tooltip";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading";
+import { Spinner } from "react-bootstrap";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "6px",
+};
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -34,6 +50,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Profile() {
+  const [openDeleteModal, setOpendeleteModal] = React.useState(false);
+  const handleOpendeleteModal = () => setOpendeleteModal(true);
+  const handleCloseDeleteModal = () => setOpendeleteModal(false);
+  const [loading, setLoading] = useState(false);
   const [img, setImg] = useState();
   const [user, setUser] = useState();
   const dispatch = useDispatch();
@@ -46,6 +66,8 @@ function Profile() {
     });
     if (img) {
       const uplaodImg = async () => {
+        setLoading(true);
+
         const imgRef = ref(
           storage,
           `chat-app/avatar/${new Date().getTime()} - ${img.name}`
@@ -61,6 +83,7 @@ function Profile() {
             avatar: url,
             avatarPath: snap.ref.fullPath,
           });
+          setLoading(false);
           setImg("");
         } catch (error) {}
       };
@@ -68,20 +91,40 @@ function Profile() {
     }
   }, [img]);
   const deleteImage = async () => {
+    setLoading(true);
     try {
-      const confirm = window.confirm("Delete avatar");
-      if (confirm) {
-        deleteObject(ref(storage, user.avatarPath));
-      }
+      deleteObject(ref(storage, user.avatarPath));
+
       await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid), {
         avatar: "",
         avatarPath: "",
       });
+      setLoading(false);
       window.location.reload();
     } catch (err) {}
   };
   return user ? (
     <div className="layout_margin m-2 mt-3">
+      <Modal
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="delete-image-modal">
+            <button onClick={deleteImage} className="delete-image-modal-yes">
+              {loading ? <Spinner animation="border" /> : "Yes"}
+            </button>
+            <button
+              onClick={handleCloseDeleteModal}
+              className="delete-image-modal-no"
+            >
+              Cancel
+            </button>
+          </div>
+        </Box>
+      </Modal>
       <div
         style={{
           display: "flex",
@@ -126,7 +169,10 @@ function Profile() {
           </div>
         </div>
       </div>
-      <Box sx={{ flexGrow: 1 }} className="login-profile-page main-profile-page">
+      <Box
+        sx={{ flexGrow: 1 }}
+        className="login-profile-page main-profile-page"
+      >
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Item>
@@ -138,8 +184,27 @@ function Profile() {
                       <label htmlFor="photo">
                         <Camera />
                       </label>
-                      {user.avatarPath ? (
-                        <Delete deleteImage={deleteImage} />
+                      {user?.avatarPath ? (
+                        <svg
+                          onClick={handleOpendeleteModal}
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            widt: "25px",
+                            height: "25px",
+                            cursor: "pointer",
+                            color: "#f24957",
+                          }}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
                       ) : null}
                       <input
                         type="file"
@@ -151,6 +216,7 @@ function Profile() {
                     </div>
                   </div>
                 </div>
+
                 <div className="text_container">
                   <h3>
                     {user.firstName} <span>{user.lastName} </span>
@@ -353,7 +419,7 @@ function Profile() {
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
-                  <h4 className="full_profile"> Emergency Contact Name:</h4>
+                  <h4 className="full_profile"> Emeg. Cont. Name:</h4>
                   <h4 className="full_profile_details">
                     {user.emergencyContactName}
                   </h4>
@@ -384,6 +450,8 @@ function Profile() {
           </Grid>
         </Grid>
       </Box>
+
+      {loading && <Loading />}
     </div>
   ) : (
     <Loading />

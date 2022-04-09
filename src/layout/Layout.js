@@ -214,7 +214,7 @@ export default function MiniDrawer({ layout }) {
                   paddingRight: "5px",
                 }}
               >
-                <Link
+                {/* <Link
                   style={{
                     color: "white",
                     justifyContent: "space-between",
@@ -224,7 +224,7 @@ export default function MiniDrawer({ layout }) {
                   to="/register"
                 >
                   Register
-                </Link>
+                </Link> */}
 
                 <Link
                   style={{

@@ -268,6 +268,29 @@ h6 {
   font-weight: 700;
 }
 
+.delete-image-modal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete-image-modal-yes {
+  height: 40px;
+  color: white;
+  font-weight: 600;
+  width: 48%;
+  background: rgb(128, 0, 128);
+  border-radius: 6px;
+  border: none;
+}
+.delete-image-modal-no {
+  width: 48%;
+  height: 40px;
+  color: white;
+  background: red;
+  border-radius: 6px;
+  border: none;
+}
 .activity-container-heading {
   display: flex;
   align-items: center;
