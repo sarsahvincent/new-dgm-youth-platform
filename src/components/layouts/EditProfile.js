@@ -14,7 +14,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import { doc, setDoc, Timestamp, getDoc, updateDoc } from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
-import Invitee from "./Invitee";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 
@@ -210,7 +209,7 @@ function EditProfile() {
   }, []); */
 
   return (
-    <div className="layout_margin">
+    <div className="edit-profile-layout_margin">
       <h3 style={{ color: "purple" }}>Edit Account</h3>
       <form action="" className="new_member_form" onSubmit={handleSubmit}>
         <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
@@ -218,7 +217,10 @@ function EditProfile() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="salutation"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: "35ch" }}
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Salutation *
@@ -240,7 +242,10 @@ function EditProfile() {
               </div>
               <div>
                 <label htmlFor="role"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Role *
@@ -267,7 +272,10 @@ function EditProfile() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="membershipStatus"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Membership Status *
@@ -288,7 +296,10 @@ function EditProfile() {
               </div>
               <div>
                 <label htmlFor="status"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Status *
@@ -315,6 +326,7 @@ function EditProfile() {
                   <label htmlFor="firstName"></label>
                   <Box
                     component="form"
+                    className="edit-member_form-input"
                     sx={{
                       "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
@@ -336,6 +348,7 @@ function EditProfile() {
                 <label htmlFor="middleName"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -358,6 +371,7 @@ function EditProfile() {
                 <label htmlFor="lastName"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -376,7 +390,10 @@ function EditProfile() {
               </div>
               <div>
                 <label htmlFor="sex"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Gender *
@@ -399,7 +416,10 @@ function EditProfile() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="maritalStatus"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Marital Status *
@@ -422,6 +442,7 @@ function EditProfile() {
                 <label htmlFor="age"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -445,6 +466,7 @@ function EditProfile() {
                 <label htmlFor="occupation"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -465,6 +487,7 @@ function EditProfile() {
                 <label htmlFor="phone"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -490,7 +513,10 @@ function EditProfile() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="baptism"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Baptism *
@@ -513,6 +539,7 @@ function EditProfile() {
                 <label htmlFor="city"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -535,6 +562,7 @@ function EditProfile() {
                 <label htmlFor="address"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -555,6 +583,7 @@ function EditProfile() {
                 <label htmlFor="email"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -579,6 +608,7 @@ function EditProfile() {
                 <label htmlFor="emergencyContactName"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -600,6 +630,7 @@ function EditProfile() {
                 <label htmlFor="emergencyContact"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -621,7 +652,10 @@ function EditProfile() {
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="groupNumber"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Group Number
@@ -650,7 +684,10 @@ function EditProfile() {
               </div>
               <div>
                 <label htmlFor="groupRole"></label>
-                <Box sx={{ m: 0.5, width: "35ch" }}>
+                <Box
+                  sx={{ m: 0.5, width: "35ch" }}
+                  className="edit-member_form-input"
+                >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Group Role
@@ -676,6 +713,7 @@ function EditProfile() {
                 <label htmlFor="soulsWon"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -697,6 +735,7 @@ function EditProfile() {
                 <label htmlFor="dues"></label>
                 <Box
                   component="form"
+                  className="edit-member_form-input"
                   sx={{
                     "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
@@ -718,7 +757,6 @@ function EditProfile() {
 
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group">
-                <Invitee />
                 {/* <div>
                   <label htmlFor="invitee"></label>
                   <Box

@@ -25,8 +25,8 @@ function App() {
           <Route exact path="/dashboard" element={<PrivateRoute />}>
             <Route exact path="/dashboard" element={<Home />} />
           </Route>
-          <Route exact path="/" element={<PrivateRoute />}>
-            <Route exact path="/" element={<Profile />} />
+          <Route exact path="/profile" element={<PrivateRoute />}>
+            <Route exact path="/profile" element={<Profile />} />
           </Route>
           <Route exact path="/add-account" element={<PrivateRoute />}>
             <Route exact path="/add-account" element={<AddAccount />} />
@@ -51,8 +51,16 @@ function App() {
               element={<ProfileDetails />}
             />
           </Route>
-          <Route exact path="/new-converts-management" element={<PrivateRoute />}>
-            <Route exact path="/new-converts-management" element={<Converts />} />
+          <Route
+            exact
+            path="/new-converts-management"
+            element={<PrivateRoute />}
+          >
+            <Route
+              exact
+              path="/new-converts-management"
+              element={<Converts />}
+            />
           </Route>
           <Route exact path="/edit-profile/:id" element={<PrivateRoute />}>
             <Route exact path="/edit-profile/:id" element={<EditProfile />} />

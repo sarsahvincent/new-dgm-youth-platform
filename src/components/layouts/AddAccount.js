@@ -12,8 +12,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
-import Invitee from "./Invitee";
 
+const id = Math.random().toString(36).slice(2);
 function AddAccount() {
   const [data, setData] = useState({
     salutation: "",
@@ -72,63 +72,117 @@ function AddAccount() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
-    if (
-      !salutation ||
-      !firstName ||
-      !lastName ||
-      !emergencyContactName ||
-      !occupation ||
-      !maritalStatus ||
-      !age ||
-      !sex ||
-      !status ||
-      !baptism ||
-      !city ||
-      !address ||
-      !phone ||
-      !email ||
-      !emergencyContact ||
-      !password ||
-      !membershipStatus ||
-      !role
-    ) {
-      setData({ ...data, error: "Please fill all required * fields." });
-      return;
-    } else if (password !== confirmPassword) {
+
+    if (role * 1 === 5) {
+      if (
+        !salutation ||
+        !firstName ||
+        !lastName ||
+        !occupation ||
+        !maritalStatus ||
+        !age ||
+        !sex ||
+        !status ||
+        !baptism ||
+        !city ||
+        !address ||
+        !phone ||
+        !membershipStatus ||
+        !role
+      ) {
+        setData({
+          ...data,
+          error: "Please fill all required * fields.",
+        });
+        return;
+      }
+    } else if (role * 1 !== 5) {
+      if (
+        !salutation ||
+        !firstName ||
+        !lastName ||
+        !emergencyContactName ||
+        !occupation ||
+        !maritalStatus ||
+        !age ||
+        !sex ||
+        !status ||
+        !baptism ||
+        !city ||
+        !address ||
+        !phone ||
+        !email ||
+        !emergencyContact ||
+        !password ||
+        !membershipStatus ||
+        !role
+      ) {
+        setData({ ...data, error: "Please fill all required * fields." });
+        return;
+      }
+    } else if (role !== 5 && password !== confirmPassword) {
       setData({ ...data, error: "Password do not match" });
       return;
     }
 
     try {
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
-        uid: result.user.uid,
-        salutation,
-        firstName,
-        middleName,
-        lastName,
-        emergencyContactName,
-        occupation,
-        maritalStatus,
-        age,
-        sex,
-        status,
-        baptism,
-        city,
-        address,
-        email,
-        phone,
-        fullName: `${firstName} ${middleName} ${lastName} `,
-        membershipStatus,
-        role,
-        emergencyContact,
-        createdAt: Timestamp.fromDate(new Date()),
-        isOnline: true,
-      });
+      if (role * 1 === 5) {
+        await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
+          uid: id + firstName + lastName,
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          age,
+          sex,
+          status,
+          baptism,
+          city,
+          address,
+          email,
+          phone,
+          fullName: `${firstName} ${middleName} ${lastName} `,
+          membershipStatus,
+          role,
+          emergencyContact,
+          createdAt: Timestamp.fromDate(new Date()),
+          isOnline: true,
+        });
+      } else {
+        const result = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
+          uid: result.user.uid,
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          age,
+          sex,
+          status,
+          baptism,
+          city,
+          address,
+          email,
+          phone,
+          fullName: `${firstName} ${middleName} ${lastName} `,
+          membershipStatus,
+          role,
+          emergencyContact,
+          createdAt: Timestamp.fromDate(new Date()),
+          isOnline: true,
+        });
+      }
+
       setData({
         salutation: "",
         firstName: "",
@@ -161,12 +215,16 @@ function AddAccount() {
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>New Account</h3>
       <form action="" className="new_member_form" onSubmit={handleSubmit}>
-        <Paper className="firstSectionForm" elevation={1} sx={{ padding: 1, mt: 1 }}>
+        <Paper
+          className="firstSectionForm"
+          elevation={1}
+          sx={{ padding: 1, mt: 1 }}
+        >
           <div>
             <div className="new_member_form_group">
               <div>
                 <label htmlFor="salutation"></label>
-                <Box sx={{ m: 0.5, width: "35ch"}}>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Salutation *
@@ -577,6 +635,7 @@ function AddAccount() {
                   autoComplete="off"
                 >
                   <TextField
+                    disabled={role === "5"}
                     name="password"
                     id="outlined-basic"
                     label="Password *"
@@ -598,6 +657,7 @@ function AddAccount() {
                   autoComplete="off"
                 >
                   <TextField
+                    disabled={role === "5"}
                     name="confirmPassword"
                     id="outlined-basic"
                     label="Confirm Password *"
@@ -611,7 +671,6 @@ function AddAccount() {
             </div>
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group">
-                <Invitee />
                 {/* <div>
                   <label htmlFor="invitee"></label>
                   <Box
@@ -650,9 +709,7 @@ function AddAccount() {
               fontWeight: "bolder",
               letterSpacing: "5px",
               borderRadius: 2,
-              marginBottom:10,
-             
-             
+              marginBottom: 10,
             }}
             variant="contained"
             endIcon={loading ? null : <SendIcon />}

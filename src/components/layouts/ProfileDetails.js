@@ -88,7 +88,7 @@ function ProfileDetails() {
   };
 
   return user ? (
-    <div className="layout_margin m-2 mt-3">
+    <div className="layout_margin profile-detial-main-layout m-2 mt-3">
       <div
         style={{
           display: "flex",

@@ -104,7 +104,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer({ layout }) {
   const location = useLocation();
-  const pathName = location.pathname;
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -126,6 +126,17 @@ export default function MiniDrawer({ layout }) {
     await signOut(auth);
     navigate("/login");
   };
+
+  const pathname = window.location.pathname;
+
+  const getPathname = () => {
+    return pathname;
+  };
+  React.useEffect(() => {
+    getPathname();
+  }, [pathname]);
+
+  console.log("pathename", getPathname());
   return (
     <Box>
       <CssBaseline />
@@ -166,7 +177,7 @@ export default function MiniDrawer({ layout }) {
                 noWrap
                 component="div"
               >
-                <img src={DGMlogo} alt="Lgo" className="navbar_logos" />
+                <img src={DGMlogo} alt="Logo" className="navbar_logos" />
                 DGM Youth
               </Typography>
             </Link>
@@ -254,7 +265,7 @@ export default function MiniDrawer({ layout }) {
                   <DashboardIcon
                     style={{
                       color: `${
-                        pathName === "/dashboard" ? "orange" : "purple"
+                        getPathname() === "/dashboard" ? "orange" : "purple"
                       }`,
                     }}
                     fontSize="large"
@@ -262,7 +273,9 @@ export default function MiniDrawer({ layout }) {
                 </ListItemIcon>
                 <ListItemText
                   style={{
-                    color: `${pathName === "/dashboard" ? "orange" : "purple"}`,
+                    color: `${
+                      getPathname() === "/dashboard" ? "orange" : "purple"
+                    }`,
                   }}
                 >
                   <b>Dashboard</b>
@@ -271,20 +284,24 @@ export default function MiniDrawer({ layout }) {
             </List>
           </Link>
           <Divider />
-          <Link to="/">
+          <Link to="/profile">
             <List>
               <ListItem sx={{ cursor: "pointer" }}>
                 <ListItemIcon>
                   <AccountBoxIcon
                     style={{
-                      color: `${pathName === "/" ? "orange" : "purple"}`,
+                      color: `${
+                        getPathname() === "/profile" ? "orange" : "purple"
+                      }`,
                     }}
                     fontSize="large"
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
-                    color: `${pathName === "/" ? "orange" : "purple"}`,
+                    color: `${
+                      getPathname() === "/profile" ? "orange" : "purple"
+                    }`,
                   }}
                 >
                   <b>Profile</b>
@@ -299,7 +316,7 @@ export default function MiniDrawer({ layout }) {
                 <PersonAddIcon
                   style={{
                     color: `${
-                      pathName === "/add-account" ? "orange" : "purple"
+                      getPathname() === "/add-account" ? "orange" : "purple"
                     }`,
                   }}
                   fontSize="large"
@@ -307,7 +324,9 @@ export default function MiniDrawer({ layout }) {
               </ListItemIcon>
               <ListItemText
                 style={{
-                  color: `${pathName === "/add-account" ? "orange" : "purple"}`,
+                  color: `${
+                    getPathname() === "/add-account" ? "orange" : "purple"
+                  }`,
                 }}
               >
                 <b>Add Acount</b>
@@ -318,10 +337,10 @@ export default function MiniDrawer({ layout }) {
           <Link to="/new-converts-management">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
-                <ManageAccountsIcon
+                <GroupsIcon
                   style={{
                     color: `${
-                      pathName === "/new-converts-management"
+                      getPathname() === "/new-converts-management"
                         ? "orange"
                         : "purple"
                     }`,
@@ -332,7 +351,7 @@ export default function MiniDrawer({ layout }) {
               <ListItemText
                 style={{
                   color: `${
-                    pathName === "/new-converts-managementnt"
+                    getPathname() === "/new-converts-managementnt"
                       ? "orange"
                       : "purple"
                   }`,
@@ -343,38 +362,21 @@ export default function MiniDrawer({ layout }) {
             </ListItem>
           </Link>
           <Divider />
-
-          <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-            <ListItemIcon>
-              <GroupsIcon
-                style={{
-                  color: `${pathName === "/contact" ? "orange" : "purple"}`,
-                }}
-                fontSize="large"
-              />
-            </ListItemIcon>
-            <ListItemText
-              style={{
-                color: `${pathName === "/contact" ? "orange" : "purple"}`,
-              }}
-            >
-              <b>Groups</b>
-            </ListItemText>
-          </ListItem>
-          <Divider />
           <Link to="/events">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
               <ListItemIcon>
                 <TodayIcon
                   style={{
-                    color: `${pathName === "/events" ? "orange" : "purple"}`,
+                    color: `${
+                      getPathname() === "/events" ? "orange" : "purple"
+                    }`,
                   }}
                   fontSize="large"
                 />
               </ListItemIcon>
               <ListItemText
                 style={{
-                  color: `${pathName === "/events" ? "orange" : "purple"}`,
+                  color: `${getPathname() === "/events" ? "orange" : "purple"}`,
                 }}
               >
                 <b>Events</b>
@@ -388,14 +390,18 @@ export default function MiniDrawer({ layout }) {
               <ListItemIcon>
                 <Paid
                   style={{
-                    color: `${pathName === "/finance" ? "orange" : "purple"}`,
+                    color: `${
+                      getPathname() === "/finance" ? "orange" : "purple"
+                    }`,
                   }}
                   fontSize="large"
                 />
               </ListItemIcon>
               <ListItemText
                 style={{
-                  color: `${pathName === "/finance" ? "orange" : "purple"}`,
+                  color: `${
+                    getPathname() === "/finance" ? "orange" : "purple"
+                  }`,
                 }}
               >
                 <b>Finace</b>
@@ -409,14 +415,18 @@ export default function MiniDrawer({ layout }) {
               <ListItemIcon>
                 <CreateIcon
                   style={{
-                    color: `${pathName === "/reports" ? "orange" : "purple"}`,
+                    color: `${
+                      getPathname() === "/reports" ? "orange" : "purple"
+                    }`,
                   }}
                   fontSize="large"
                 />
               </ListItemIcon>
               <ListItemText
                 style={{
-                  color: `${pathName === "/reports" ? "orange" : "purple"}`,
+                  color: `${
+                    getPathname() === "/reports" ? "orange" : "purple"
+                  }`,
                 }}
               >
                 <b>Reports</b>
@@ -429,13 +439,12 @@ export default function MiniDrawer({ layout }) {
 
       <Box
         className={
-          location.pathname === "/login"
+          getPathname() === "/login"
             ? "loginLogoutbackround"
             : "layoutbackround"
         }
         component="main"
         style={{
-        paddingBottom: "40%",
           height: "100%",
         }}
       >

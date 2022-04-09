@@ -43,7 +43,7 @@ function Login() {
         error: null,
       });
       setData({ ...data, loading: true });
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setData({ ...data, error: err.message, loading: false });
     }

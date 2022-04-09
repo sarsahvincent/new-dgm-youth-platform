@@ -677,9 +677,10 @@ function Finance() {
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Button
+              style={{ marginLeft: "55px" }}
               onClick={handleOpenAddFundsModal}
               size="large"
-              sx={{ width: "100%", marginBottom: 2 }}
+              sx={{ width: "80%", marginBottom: 2 }}
               variant="contained"
               color="success"
               endIcon={<AddCircleIcon />}
@@ -687,9 +688,10 @@ function Finance() {
               Add Funds
             </Button>
             <Button
+              style={{ marginLeft: "55px" }}
               onClick={handleOpenRequestFundsModal}
               size="large"
-              sx={{ width: "100%" }}
+              sx={{ width: "80%" }}
               variant="contained"
               color="warning"
               endIcon={<IndeterminateCheckBoxIcon />}
@@ -845,7 +847,7 @@ function Finance() {
                   ))}
                 </div>
                 <div className="addToFundscontainer">
-                  Don. / Cont. Request History
+                  Don./Cont. Request History
                   {allDonConRequested?.map((item, index) => (
                     <LightTooltip
                       title={
@@ -895,7 +897,7 @@ function Finance() {
               {/* ADD HISOTRY */}
               <div className="financial-history-summary-item-group">
                 <div className="addToFundscontainer">
-                  Monthly Dues History
+                  Dues Deposite History
                   {allMonthlyDues?.map((item, index) => (
                     <LightTooltip
                       title={
@@ -932,7 +934,7 @@ function Finance() {
                   ))}
                 </div>
                 <div className="addToFundscontainer">
-                  Donations / Contributons History
+                  Don./Cont. deposite History
                   {allDonationContributions?.map((item, index) => (
                     <LightTooltip
                       title={
