@@ -100,6 +100,7 @@ function Profile() {
         avatarPath: "",
       });
       setLoading(false);
+      setOpendeleteModal(false);
       window.location.reload();
     } catch (err) {}
   };
@@ -112,6 +113,9 @@ function Profile() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <p style={{ color: "purple", textAlign: "center" }}>
+            Are you sure you want to delete this image ?
+          </p>
           <div className="delete-image-modal">
             <button onClick={deleteImage} className="delete-image-modal-yes">
               {loading ? <Spinner animation="border" /> : "Yes"}
@@ -359,26 +363,34 @@ function Profile() {
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Salutation :</h4>
-                  <h4 className="full_profile_details">{user.salutation}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.salutation ? user.salutation : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Gender :</h4>
-                  <h4 className="full_profile_details">{user.sex}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.sex ? user.sex : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">First Name :</h4>
-                  <h4 className="full_profile_details">{user.firstName}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.firstName ? user?.firstName : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
 
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Last Name :</h4>
-                  <h4 className="full_profile_details">{user.lastName}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.lastName ? user?.lastName : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
 
@@ -386,7 +398,9 @@ function Profile() {
                 <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                   <Item className="full_profile_container">
                     <h4 className="full_profile">Middle Name :</h4>
-                    <h4 className="full_profile_details">{user.middleName}</h4>
+                    <h4 className="full_profile_details">
+                      {user?.middleName ? user.middleName : "Not available"}
+                    </h4>
                   </Item>
                 </Grid>
               )}
@@ -394,34 +408,44 @@ function Profile() {
                 <Item className="full_profile_container">
                   <h4 className="full_profile"> Membership Status :</h4>
                   <h4 className="full_profile_details">
-                    {user.membershipStatus}
+                    {user?.membershipStatus
+                      ? user.membershipStatus
+                      : "Not available"}
                   </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">{user.occupation}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.occupation ? user.occupation : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               {/*  */}
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Address :</h4>
-                  <h4 className="full_profile_details">{user.address}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.address ? user.address : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">City :</h4>
-                  <h4 className="full_profile_details">{user.city}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.city ? user.city : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
-                  <h4 className="full_profile"> Emeg. Cont. Name:</h4>
+                  <h4 className="full_profile"> E. C. Name:</h4>
                   <h4 className="full_profile_details">
-                    {user.emergencyContactName}
+                    {user?.emergencyContactName
+                      ? user.emergencyContactName
+                      : "Not available"}
                   </h4>
                 </Item>
               </Grid>
@@ -429,7 +453,9 @@ function Profile() {
                 <Item className="full_profile_container">
                   <h4 className="full_profile"> Emergency Contact :</h4>
                   <h4 className="full_profile_details">
-                    {user.emergencyContact}
+                    {user?.emergencyContact
+                      ? user.emergencyContact
+                      : "Not available"}
                   </h4>
                 </Item>
               </Grid>
@@ -437,13 +463,17 @@ function Profile() {
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Baptize :</h4>
-                  <h4 className="full_profile_details">{user.baptism}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.baptism ? user.baptism : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
               <Grid sx={{ marginTop: 1 }} item>
                 <Item className="full_profile_container">
                   <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">{user.occupation}</h4>
+                  <h4 className="full_profile_details">
+                    {user?.occupation ? user.occupation : "Not available"}
+                  </h4>
                 </Item>
               </Grid>
             </div>

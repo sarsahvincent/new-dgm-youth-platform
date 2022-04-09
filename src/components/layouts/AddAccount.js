@@ -123,95 +123,94 @@ function AddAccount() {
     } else if (role !== 5 && password !== confirmPassword) {
       setData({ ...data, error: "Password do not match" });
       return;
-    }
+    } else {
+      try {
+        if (role * 1 === 5) {
+          await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
+            uid: id + firstName + lastName,
+            salutation,
+            firstName,
+            middleName,
+            lastName,
+            emergencyContactName,
+            occupation,
+            maritalStatus,
+            age,
+            sex,
+            status,
+            baptism,
+            city,
+            address,
+            email,
+            phone,
+            fullName: `${firstName} ${middleName} ${lastName} `,
+            membershipStatus,
+            role,
+            emergencyContact,
+            createdAt: Timestamp.fromDate(new Date()),
+            isOnline: true,
+          });
+        } else {
+          const result = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
+            uid: result.user.uid,
+            salutation,
+            firstName,
+            middleName,
+            lastName,
+            emergencyContactName,
+            occupation,
+            maritalStatus,
+            age,
+            sex,
+            status,
+            baptism,
+            city,
+            address,
+            email,
+            phone,
+            fullName: `${firstName} ${middleName} ${lastName} `,
+            membershipStatus,
+            role,
+            emergencyContact,
+            createdAt: Timestamp.fromDate(new Date()),
+            isOnline: true,
+          });
+        }
 
-    try {
-      if (role * 1 === 5) {
-        await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
-          uid: id + firstName + lastName,
-          salutation,
-          firstName,
-          middleName,
-          lastName,
-          emergencyContactName,
-          occupation,
-          maritalStatus,
-          age,
-          sex,
-          status,
-          baptism,
-          city,
-          address,
-          email,
-          phone,
-          fullName: `${firstName} ${middleName} ${lastName} `,
-          membershipStatus,
-          role,
-          emergencyContact,
-          createdAt: Timestamp.fromDate(new Date()),
-          isOnline: true,
+        setData({
+          salutation: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          emergencyContactName: "",
+          occupation: "",
+          maritalStatus: "",
+          age: "",
+          sex: "",
+          status: "",
+          baptism: "",
+          city: "",
+          address: "",
+          email: "",
+          phone: "",
+          membershipStatus: "",
+          role: "",
+          emergencyContact: "",
+          loading: false,
+          error: null,
         });
-      } else {
-        const result = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
-          uid: result.user.uid,
-          salutation,
-          firstName,
-          middleName,
-          lastName,
-          emergencyContactName,
-          occupation,
-          maritalStatus,
-          age,
-          sex,
-          status,
-          baptism,
-          city,
-          address,
-          email,
-          phone,
-          fullName: `${firstName} ${middleName} ${lastName} `,
-          membershipStatus,
-          role,
-          emergencyContact,
-          createdAt: Timestamp.fromDate(new Date()),
-          isOnline: true,
-        });
+        window.location.reload();
+      } catch (err) {
+        setData({ ...data, error: err.message, loading: false });
       }
-
-      setData({
-        salutation: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        emergencyContactName: "",
-        occupation: "",
-        maritalStatus: "",
-        age: "",
-        sex: "",
-        status: "",
-        baptism: "",
-        city: "",
-        address: "",
-        email: "",
-        phone: "",
-        membershipStatus: "",
-        role: "",
-        emergencyContact: "",
-        loading: false,
-        error: null,
-      });
-      window.location.reload();
-    } catch (err) {
-      setData({ ...data, error: err.message, loading: false });
     }
   };
 
-  
   return (
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>New Account</h3>

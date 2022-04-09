@@ -103,6 +103,7 @@ function ProfileDetails() {
         avatarPath: "",
       });
       setLoading(false);
+      setOpendeleteModal(false)
       window.location.reload();
     } catch (err) {}
   };
@@ -116,6 +117,9 @@ function ProfileDetails() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+        <p style={{ color: "purple", textAlign: "center" }}>
+            Are you sure you want to delete this image ?
+          </p>
           <div className="delete-image-modal">
             <button onClick={deleteImage} className="delete-image-modal-yes">
               {loading ? <Spinner animation="border" /> : "Yes"}

@@ -29,23 +29,24 @@ function Login() {
     setData({ ...data, error: null, loading: true });
     if (!email || !password) {
       setData({ ...data, error: "All fields are required." });
-    }
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      await updateDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
-        isOnline: true,
-      });
-      dispatch(getCurrentUserId(result.user.uid));
-      setData({
-        email: "",
-        password: "",
-        loading: false,
-        error: null,
-      });
-      setData({ ...data, loading: true });
-      navigate("/");
-    } catch (err) {
-      setData({ ...data, error: err.message, loading: false });
+    } else {
+      try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        await updateDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
+          isOnline: true,
+        });
+        dispatch(getCurrentUserId(result.user.uid));
+        setData({
+          email: "",
+          password: "",
+          loading: false,
+          error: null,
+        });
+        setData({ ...data, loading: true });
+        navigate("/");
+      } catch (err) {
+        setData({ ...data, error: err.message, loading: false });
+      }
     }
   };
 

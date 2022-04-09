@@ -27,14 +27,24 @@ function EditProfile() {
   const test = user?.firstName;
   const { profileDetails } = useSelector((state) => state.users);
   const [data, setData] = useState({
-    salutation: profileDetails?.salutation ? profileDetails.salutation : "",
-    firstName: profileDetails?.lastName ? profileDetails.firstName : "",
-    middleName: profileDetails?.middleName ? profileDetails.middleName : "",
-    lastName: profileDetails?.lastName ? profileDetails.lastName : "",
+    salutation: profileDetails?.salutation
+      ? profileDetails.salutation
+      : "",
+    firstName: profileDetails?.lastName
+      ? profileDetails.firstName
+      : "",
+    middleName: profileDetails?.middleName
+      ? profileDetails.middleName
+      : "",
+    lastName: profileDetails?.lastName
+      ? profileDetails.lastName
+      : "",
     emergencyContactName: profileDetails?.emergencyContactName
       ? profileDetails.emergencyContactName
       : "",
-    occupation: profileDetails?.occupation ? profileDetails.occupation : "",
+    occupation: profileDetails?.occupation
+      ? profileDetails.occupation
+      : "",
     maritalStatus: profileDetails?.maritalStatus
       ? profileDetails.maritalStatus
       : "",
@@ -54,8 +64,12 @@ function EditProfile() {
       ? profileDetails.emergencyContact
       : "",
     dues: profileDetails?.dues ? profileDetails.dues : 0,
-    groupNumber: profileDetails?.groupNumber ? profileDetails.groupNumber : "",
-    groupRole: profileDetails?.groupRole ? profileDetails.groupRole : "",
+    groupNumber: profileDetails?.groupNumber
+      ? profileDetails.groupNumber
+      : "",
+    groupRole: profileDetails?.groupRole
+      ? profileDetails.groupRole
+      : "",
     soulsWon: profileDetails?.soulsWon ? profileDetails.soulsWon : 0,
     loading: null,
     error: false,
@@ -99,7 +113,7 @@ function EditProfile() {
       !salutation ||
       !firstName ||
       !lastName ||
-      !emergencyContactName ||
+ 
       !occupation ||
       !maritalStatus ||
       !age ||
@@ -110,94 +124,92 @@ function EditProfile() {
       !address ||
       !phone ||
       !email ||
-      !emergencyContact ||
+   
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
-      return;
-    }
-    if (dues * 1 > 12) {
+    } else if (dues * 1 > 12) {
       setData({
         ...data,
         error: "Monthly dues apaied cannot be more than 12!",
       });
-      return;
+    } else {
+      setLoading(true);
+      const updateDate = async () => {
+        setLoading(true);
+        try {
+          await updateDoc(doc(db, "DGM_YOUTH_users", id), {
+            salutation,
+            firstName,
+            middleName,
+            lastName,
+            emergencyContactName,
+            occupation,
+            maritalStatus,
+            age,
+            sex,
+            status,
+            baptism,
+            membershipStatus,
+            role,
+            city,
+            address,
+            email,
+            phone,
+            emergencyContact,
+            dues,
+            groupNumber,
+            groupRole,
+            soulsWon,
+          });
+
+          await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
+            if (docSnap.exists) {
+              const data = docSnap.data();
+              setUser(data);
+              dispatch(getUserDetails(data));
+            }
+          });
+          setLoading(false);
+          setSuccess(true);
+
+          setData({
+            salutation: "",
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            emergencyContactName: "",
+            occupation: "",
+            maritalStatus: "",
+            age: "",
+            sex: "",
+            status: "",
+            baptism: "",
+            city: "",
+            address: "",
+            email: "",
+            phone: "",
+            membershipStatus: "",
+            role: "",
+            emergencyContact: "",
+            dues: "",
+            groupNumber: "",
+            groupRole: "",
+            soulsWon: "",
+            loading: false,
+            error: null,
+          });
+
+          toast.success(`Profile Successfully Updated!.`, {
+            position: "top-right",
+          });
+          setTimeout(function () {
+            navigate(`/profile-details/${id}`);
+          }, 4000);
+        } catch (e) {}
+      };
+      updateDate();
     }
-    setLoading(true);
-
-    const updateDate = async () => {
-      try {
-        await updateDoc(doc(db, "DGM_YOUTH_users", id), {
-          salutation,
-          firstName,
-          middleName,
-          lastName,
-          emergencyContactName,
-          occupation,
-          maritalStatus,
-          age,
-          sex,
-          status,
-          baptism,
-          membershipStatus,
-          role,
-          city,
-          address,
-          email,
-          phone,
-          emergencyContact,
-          dues,
-          groupNumber,
-          groupRole,
-          soulsWon,
-        });
-
-        await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
-          if (docSnap.exists) {
-            const data = docSnap.data();
-            setUser(data);
-            dispatch(getUserDetails(data));
-          }
-        });
-        setLoading(false);
-        setSuccess(true);
-
-        setData({
-          salutation: "",
-          firstName: "",
-          middleName: "",
-          lastName: "",
-          emergencyContactName: "",
-          occupation: "",
-          maritalStatus: "",
-          age: "",
-          sex: "",
-          status: "",
-          baptism: "",
-          city: "",
-          address: "",
-          email: "",
-          phone: "",
-          membershipStatus: "",
-          role: "",
-          emergencyContact: "",
-          dues: "",
-          groupNumber: "",
-          groupRole: "",
-          soulsWon: "",
-          loading: false,
-          error: null,
-        });
-
-        toast.success(`Profile Successfully Updated!.`, {
-          position: "top-right",
-        });
-        setTimeout(function () {
-          navigate(`/profile-details/${id}`);
-        }, 4000);
-      } catch (e) {}
-    };
-    updateDate();
   };
 
   /*  useEffect(() => {
