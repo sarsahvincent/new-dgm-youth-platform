@@ -364,7 +364,6 @@ function Settings() {
             <h3 style={{ color: "purple", fontWeight: "bold" }}>
               List of Departments
             </h3>
-
             <div className="all-department-container">
               {allDepartment?.map((department) => (
                 <div
