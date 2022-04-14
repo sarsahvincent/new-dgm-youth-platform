@@ -30,6 +30,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const drawerWidth = 240;
 
@@ -426,6 +427,30 @@ export default function MiniDrawer({ layout }) {
                 }}
               >
                 <b>Reports</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
+          <Divider />
+          <Link to="/settings">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <ManageAccountsIcon
+                  style={{
+                    color: `${
+                      getPathname() === "/settings" ? "orange" : "purple"
+                    }`,
+                  }}
+                  fontSize="large"
+                />
+              </ListItemIcon>
+              <ListItemText
+                style={{
+                  color: `${
+                    getPathname() === "/settings" ? "orange" : "purple"
+                  }`,
+                }}
+              >
+                <b>Settings</b>
               </ListItemText>
             </ListItem>
           </Link>

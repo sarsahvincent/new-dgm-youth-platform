@@ -321,7 +321,7 @@ function ProfileDetails() {
                   </svg>
                 </div>
                 <div className="profileDetailsHeading">
-                  <h6>Group</h6>
+                  <h6>Department</h6>
                   <div style={{ color: "white", fontSize: "25px" }}>
                     {user?.groupNumber ? user?.groupNumber : 0}
                   </div>

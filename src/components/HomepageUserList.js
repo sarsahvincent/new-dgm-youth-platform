@@ -14,6 +14,14 @@ import { getAllUsers } from "../services/redux/reducers/userSlice";
 import UserTableAvatar from "./UserTableAvatar";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import ClearIcon from "@mui/icons-material/Clear";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
 
 const columns = [
   { id: "picture", label: "Picture", minWidth: 170 },
@@ -42,6 +50,10 @@ export default function HomepageUserList() {
   const [users, setUsers] = useState([]);
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const [searchResults, setSearchReults] = useState([]);
+  const [filterBySex, setFilterBySex] = useState("");
+  const [filterByDepartment, setFilterByDepartment] = useState("");
+  const [filterByMembership, setFilterByMemberShip] = useState("");
+  const [filter, setFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   let rows = [];
 
@@ -55,8 +67,14 @@ export default function HomepageUserList() {
       <Link to={`/profile-details/${user.uid}`}>
         {user.firstName + " " + user.lastName}
       </Link>,
-      <Link to={`/profile-details/${user.uid}`}>{user.phone}</Link>,
-      <Link to={`/profile-details/${user.uid}`}>{user.email}</Link>
+      <Link to={`/profile-details/${user.uid}`}>
+        {" "}
+        <PhoneIcon /> {user.phone}
+      </Link>,
+      <Link to={`/profile-details/${user.uid}`}>
+        {" "}
+        {user.email} <EmailIcon />
+      </Link>
     )
   );
 
@@ -72,16 +90,67 @@ export default function HomepageUserList() {
     setPage(0);
   };
 
+  const clearFilters = () => {
+    setFilterBySex("");
+    setSearchTerm("");
+    setFilterByMemberShip("");
+    setFilterByDepartment("");
+  };
+
+  const handleChangeMembership = (e) => {
+    setFilterByMemberShip(e.target.value);
+    setFilterBySex("");
+    setSearchTerm("");
+
+    setFilterByDepartment("");
+  };
+  const handleChangeSex = (e) => {
+    setFilterBySex(e.target.value);
+    setSearchTerm("");
+    setFilterByMemberShip("");
+    setFilterByDepartment("");
+  };
+  const handleChangeDepartment = (e) => {
+    setFilterByDepartment(e.target.value);
+    setFilterBySex("");
+    setSearchTerm("");
+    setFilterByMemberShip("");
+  };
+
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
         user?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user?.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.email.toLowerCase().includes(searchTerm.toLowerCase())
+        user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.sex.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     setSearchReults(filteredData);
   }, [searchTerm, users]);
+
+  useEffect(() => {
+    const filteredByMale = users?.filter((user) =>
+      user.sex.includes(filterBySex)
+    );
+    const filteredByFemale = users?.filter((user) =>
+      user.sex.includes(filterBySex)
+    );
+    setSearchReults(filteredByMale);
+    setSearchReults(filteredByFemale);
+  }, [users, filterBySex]);
+
+  useEffect(() => {
+    const filteredByMemberShip = users?.filter((user) =>
+      user.membershipStatus.includes(filterByMembership)
+    );
+    const filteredByNewConvert = users?.filter((user) =>
+      user.membershipStatus.includes(filterByMembership)
+    );
+    setSearchReults(filteredByMemberShip);
+    setSearchReults(filteredByNewConvert);
+  }, [users, filterByMembership]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -99,12 +168,83 @@ export default function HomepageUserList() {
 
   return (
     <div className="dashboard-user-search">
-      <input
-        placeholder="Search by key word"
-        type="text"
-        onChange={(e) => setSearchTerm(e.target.value)}
-        value={searchTerm}
-      />
+      <div className="d-flex align-items-center justify-content-between">
+        <input
+          placeholder="Search by key word"
+          type="text"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchTerm}
+        />
+        <button onClick={clearFilters} className="clear-filter-btn">
+          Clear Filters
+          <span>
+            {" "}
+            <ClearIcon />
+          </span>
+        </button>
+      </div>
+      <div className="d-flex align-items-center justify-content-between">
+        <div>
+          <Box sx={{ m: 0.5, width: "25ch" }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Filter by Membership
+              </InputLabel>
+              <Select
+                name="salutation"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={filterByMembership}
+                label=" Filter by Membership"
+                onChange={handleChangeMembership}
+              >
+                <MenuItem value="Member">Members</MenuItem>
+                <MenuItem value="New Convert">New Convert</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
+        <div>
+          <Box sx={{ m: 0.5, width: "25ch" }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Filter by Department
+              </InputLabel>
+              <Select
+                name="salutation"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={filterByDepartment}
+                label="Filter by Department"
+                onChange={handleChangeDepartment}
+              >
+                <MenuItem value="Mr">Children</MenuItem>
+                <MenuItem value="Mrs">Singing</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
+        <div>
+          <Box sx={{ m: 0.5, width: "25ch" }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Filter by Gender
+              </InputLabel>
+              <Select
+                name="salutation"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={filterBySex}
+                label="Filter by Gender"
+                onChange={handleChangeSex}
+              >
+                <MenuItem value="Male">Males</MenuItem>
+                <MenuItem value="Female">Females</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
+      </div>
       {usersCollectiion ? (
         <div className="membersListContainer">
           <Paper sx={{ width: "100%", overflow: "hidden" }}>

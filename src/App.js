@@ -16,6 +16,8 @@ import Events from "./pages/Events";
 import Converts from "./pages/Converts";
 import EditProfile from "./pages/EditProfile";
 import Finance from "./pages/FinancePage";
+import Settings from "./pages/Settings";
+import EditSettings from "./pages/EditSettings";
 
 function App() {
   return (
@@ -41,6 +43,9 @@ function App() {
           <Route exact path="/finance" element={<PrivateRoute />}>
             <Route exact path="/finance" element={<Finance />} />
           </Route>
+          <Route exact path="/settings" element={<PrivateRoute />}>
+            <Route exact path="/settings" element={<Settings />} />
+          </Route>
           <Route exact path="/reports" element={<PrivateRoute />}>
             <Route exact path="/reports" element={<Reports />} />
           </Route>
@@ -49,6 +54,13 @@ function App() {
               exact
               path="/profile-details/:id"
               element={<ProfileDetails />}
+            />
+          </Route>
+          <Route exact path="/edit-department/:id" element={<PrivateRoute />}>
+            <Route
+              exact
+              path="/edit-department/:id"
+              element={<EditSettings />}
             />
           </Route>
           <Route

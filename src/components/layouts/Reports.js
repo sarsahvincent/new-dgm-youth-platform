@@ -42,6 +42,8 @@ function Reports() {
   };
 
   const totalDuesCollectiion = collection(db, "DGM_YOUTH_Reports");
+
+  
   const handleSubmitReport = async (e) => {
     e.preventDefault();
     if (content === "" || title === "") {
