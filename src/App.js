@@ -19,6 +19,7 @@ import Finance from "./pages/FinancePage";
 import Settings from "./pages/Settings";
 import EditSettings from "./pages/EditSettings";
 
+
 function App() {
   return (
     <AuthProvider>
