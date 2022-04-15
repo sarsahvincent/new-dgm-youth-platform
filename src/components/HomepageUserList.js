@@ -153,14 +153,6 @@ export default function HomepageUserList({ allDepartment }) {
   }, [users, filterByMembership]);
 
   useEffect(() => {
-    const filteredByDepartment = users?.filter((user) =>
-      user.groupNumber.includes(filterByDepartment)
-    );
-
-    setSearchReults(filteredByDepartment);
-  }, [users, filterByDepartment]);
-
-  useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectiion);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
