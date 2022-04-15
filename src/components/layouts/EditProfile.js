@@ -12,10 +12,19 @@ import SendIcon from "@mui/icons-material/Send";
 import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
-import { doc, setDoc, Timestamp, getDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  Timestamp,
+  getDoc,
+  updateDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
+import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -25,26 +34,20 @@ function EditProfile() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const test = user?.firstName;
+  const [departments, setDeparments] = useState([]);
+  const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
+  const { allDepartment } = useSelector((state) => state.departments);
+
   const { profileDetails } = useSelector((state) => state.users);
   const [data, setData] = useState({
-    salutation: profileDetails?.salutation
-      ? profileDetails.salutation
-      : "",
-    firstName: profileDetails?.lastName
-      ? profileDetails.firstName
-      : "",
-    middleName: profileDetails?.middleName
-      ? profileDetails.middleName
-      : "",
-    lastName: profileDetails?.lastName
-      ? profileDetails.lastName
-      : "",
+    salutation: profileDetails?.salutation ? profileDetails.salutation : "",
+    firstName: profileDetails?.lastName ? profileDetails.firstName : "",
+    middleName: profileDetails?.middleName ? profileDetails.middleName : "",
+    lastName: profileDetails?.lastName ? profileDetails.lastName : "",
     emergencyContactName: profileDetails?.emergencyContactName
       ? profileDetails.emergencyContactName
       : "",
-    occupation: profileDetails?.occupation
-      ? profileDetails.occupation
-      : "",
+    occupation: profileDetails?.occupation ? profileDetails.occupation : "",
     maritalStatus: profileDetails?.maritalStatus
       ? profileDetails.maritalStatus
       : "",
@@ -64,12 +67,8 @@ function EditProfile() {
       ? profileDetails.emergencyContact
       : "",
     dues: profileDetails?.dues ? profileDetails.dues : 0,
-    groupNumber: profileDetails?.groupNumber
-      ? profileDetails.groupNumber
-      : "",
-    groupRole: profileDetails?.groupRole
-      ? profileDetails.groupRole
-      : "",
+    groupNumber: profileDetails?.groupNumber ? profileDetails.groupNumber : "",
+    groupRole: profileDetails?.groupRole ? profileDetails.groupRole : "",
     soulsWon: profileDetails?.soulsWon ? profileDetails.soulsWon : 0,
     loading: null,
     error: false,
@@ -113,7 +112,6 @@ function EditProfile() {
       !salutation ||
       !firstName ||
       !lastName ||
- 
       !occupation ||
       !maritalStatus ||
       !age ||
@@ -124,7 +122,6 @@ function EditProfile() {
       !address ||
       !phone ||
       !email ||
-   
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
@@ -219,6 +216,20 @@ function EditProfile() {
       }
     });
   }, []); */
+
+  useEffect(() => {
+    const getAllDepartment = async () => {
+      const data = await getDocs(deparmentCollectiion);
+      setDeparments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    dispatch(getDepartments(departments));
+
+    getAllDepartment();
+  }, []);
+
+  setTimeout(() => {
+    dispatch(getDepartments(departments));
+  }, 1000);
 
   return (
     <div className="edit-profile-layout_margin">
@@ -441,7 +452,7 @@ function EditProfile() {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={maritalStatus}
-                      label="Age"
+                      label="Marital Status"
                       onChange={handleChange}
                     >
                       <MenuItem value="Single">Single</MenuItem>
@@ -670,26 +681,24 @@ function EditProfile() {
                 >
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
-                      Group Number
+                      Department
                     </InputLabel>
                     <Select
                       name="groupNumber"
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={groupNumber}
-                      label=" Group Number"
+                      label="  Department"
                       onChange={handleChange}
                     >
-                      <MenuItem value="1">1</MenuItem>
-                      <MenuItem value="2">2</MenuItem>
-                      <MenuItem value="3">3</MenuItem>
-                      <MenuItem value="4">4</MenuItem>
-                      <MenuItem value="5">5</MenuItem>
-                      <MenuItem value="6">6</MenuItem>
-                      <MenuItem value="7">7</MenuItem>
-                      <MenuItem value="8">8</MenuItem>
-                      <MenuItem value="9">9</MenuItem>
-                      <MenuItem value="10">10</MenuItem>
+                      {allDepartment?.map((department, index) => (
+                        <MenuItem
+                          key={index}
+                          value={department?.departmentName}
+                        >
+                          {department?.departmentName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>

@@ -7,17 +7,31 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { Box } from "@mui/system";
 import HomepageUserList from "../HomepageUserList";
 import HomepageEventTablet from "../HomepageEventTable";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  doc,
+  setDoc,
+  Timestamp,
+  getDoc,
+  updateDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
+import { auth, db } from "../../firebse";
+import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
   const [men, setMen] = useState([]);
   const [womem, setWomen] = useState([]);
   const [newConvert, setNewConvert] = useState([]);
-
+  const dispatch = useDispatch();
   let numberOfMen = [];
   let numberOfWomen = [];
   let numberOfNewConvert = [];
+  const { allDepartment } = useSelector((state) => state.departments);
+  const [departments, setDeparments] = useState([]);
+
+  const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
   const getAllMen = () => {
     const findMan = allUsers?.filter((user) => user.sex === "Male");
@@ -41,6 +55,19 @@ function HomePageContent() {
     }
   };
 
+  useEffect(() => {
+    const getAllDepartment = async () => {
+      const data = await getDocs(deparmentCollectiion);
+      setDeparments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    dispatch(getDepartments(departments));
+
+    getAllDepartment();
+  }, []);
+
+  setTimeout(() => {
+    dispatch(getDepartments(departments));
+  }, 1000);
   useEffect(() => {
     getAllWomen();
     setWomen(numberOfWomen[0].length);
@@ -66,7 +93,7 @@ function HomePageContent() {
         }}
       >
         <div className="dashboard_headings_main">
-          <div >
+          <div>
             <Paper
               className="dashboard_headings"
               elevation={3}
@@ -137,7 +164,7 @@ function HomePageContent() {
           >
             Members
           </h3>
-          <HomepageUserList />
+          <HomepageUserList allDepartment={allDepartment} />
         </div>
         <div className="homepageEventListTable">
           <h3

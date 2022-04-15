@@ -13,8 +13,11 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { styled } from "@mui/material/styles";
+import GroupIcon from "@mui/icons-material/Group";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -47,15 +50,26 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ProfileDetails() {
+  //HOOKS FOR CONTROLLING DELETE IMAGE MODAL
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => setOpendeleteModal(true);
   const handleCloseDeleteModal = () => setOpendeleteModal(false);
+
+  //HOOKS FOR CONTROLLING DELETE USER MODAL
+  const [openDeleteUserModal, setOpendeletUsereModal] = React.useState(false);
+  const handleOpendeleteUserModal = () => setOpendeletUsereModal(true);
+  const handleCloseDeleteUserModal = () => setOpendeletUsereModal(false);
+
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { id } = useParams();
   const [img, setImg] = useState();
   const [user, setUser] = useState();
 
+  console.log("user", user);
+  const [deleteUserId, setDeleteUserId] = useState(false);
+
+  const navigate = useNavigate();
   useEffect(() => {
     const getUsers = async () => {
       await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
@@ -93,6 +107,19 @@ function ProfileDetails() {
     }
   }, [img]);
 
+  const deletUser = async () => {
+    setLoading(true);
+    try {
+      deleteObject(ref(storage, user.avatarPath));
+
+      await deleteDoc(doc(db, "DGM_YOUTH_users", user?.uid));
+
+      setLoading(false);
+      setOpendeleteModal(false);
+      navigate("/");
+    } catch (err) {}
+  };
+
   const deleteImage = async () => {
     setLoading(true);
     try {
@@ -103,13 +130,40 @@ function ProfileDetails() {
         avatarPath: "",
       });
       setLoading(false);
-      setOpendeleteModal(false)
+      setOpendeleteModal(false);
+      navigate("/");
       window.location.reload();
     } catch (err) {}
   };
 
   return user ? (
     <div className="layout_margin profile-detial-main-layout m-2 mt-3">
+      {/* DELETE USER MODAL */}
+      <Modal
+        open={openDeleteUserModal}
+        onClose={handleCloseDeleteUserModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <p style={{ color: "purple", textAlign: "center" }}>
+            Are you sure you want to delete this user ?
+          </p>
+          <div className="delete-image-modal">
+            <button onClick={deletUser} className="delete-image-modal-yes">
+              {loading ? <Spinner animation="border" /> : "Yes"}
+            </button>
+            <button
+              onClick={handleCloseDeleteUserModal}
+              className="delete-image-modal-no"
+            >
+              Cancel
+            </button>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* DELTE IMAGE MODAL */}
       <Modal
         open={openDeleteModal}
         onClose={handleCloseDeleteModal}
@@ -117,7 +171,7 @@ function ProfileDetails() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <p style={{ color: "purple", textAlign: "center" }}>
+          <p style={{ color: "purple", textAlign: "center" }}>
             Are you sure you want to delete this image ?
           </p>
           <div className="delete-image-modal">
@@ -148,26 +202,33 @@ function ProfileDetails() {
             justifyContent: "space-around",
           }}
         >
-          <div>
-            <Tooltip title=" Delete Profile">
-              <span>
-                <DeleteIcon
-                  style={{
-                    color: "red",
-                    fontSize: 25,
-                    marginRight: 10,
-                    cursor: "pointer",
-                  }}
-                />
-              </span>
-            </Tooltip>
-          </div>
+          {auth?.currentUser?.uid !== user.uid && (
+            <div onClick={handleOpendeleteUserModal}>
+              <Tooltip title=" Delete Profile">
+                <span>
+                  <DeleteIcon
+                    style={{
+                      color: "red",
+                      fontSize: 25,
+                      marginRight: 10,
+                      cursor: "pointer",
+                    }}
+                  />
+                </span>
+              </Tooltip>
+            </div>
+          )}
+
           <div>
             <Tooltip title="Edit Profile">
               <Link to={`/edit-profile/${user.uid}`}>
                 <span>
                   <EditIcon
-                    style={{ color: "green", fontSize: 25, cursor: "pointer" }}
+                    style={{
+                      color: "green",
+                      fontSize: 25,
+                      cursor: "pointer",
+                    }}
                   />
                 </span>
               </Link>
@@ -278,20 +339,10 @@ function ProfileDetails() {
                 className="profile_heading_subtitle"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                  <MonetizationOnIcon
+                    fontSize="large"
                     className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                  />
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Monthly Dues Paied</h6>
@@ -305,20 +356,10 @@ function ProfileDetails() {
                 className="profile_heading_subtitle group"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                  <GroupIcon
+                    fontSize="large"
                     className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                  />
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Department</h6>
@@ -332,20 +373,10 @@ function ProfileDetails() {
                 className="profile_heading_subtitle"
               >
                 <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                  <PersonAddIcon
+                    fontSize="large"
                     className="profile_heading_subtitle_icon"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                    />
-                  </svg>
+                  />
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Soules Won</h6>
@@ -421,7 +452,7 @@ function ProfileDetails() {
               </Grid>
               <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                 <Item className="full_profile_container">
-                  <h4 className="full_profile"> Emeg. Cont. Name:</h4>
+                  <h4 className="full_profile"> E. C. Name:</h4>
                   <h4 className="full_profile_details">
                     {user.emergencyContactName}
                   </h4>

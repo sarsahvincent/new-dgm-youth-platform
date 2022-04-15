@@ -46,7 +46,7 @@ function createData(picture, name, phone, email) {
   return { picture, name, phone, email };
 }
 
-export default function HomepageUserList() {
+export default function HomepageUserList({ allDepartment }) {
   const [users, setUsers] = useState([]);
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const [searchResults, setSearchReults] = useState([]);
@@ -153,6 +153,14 @@ export default function HomepageUserList() {
   }, [users, filterByMembership]);
 
   useEffect(() => {
+    const filteredByDepartment = users?.filter((user) =>
+      user.groupNumber.includes(filterByDepartment)
+    );
+
+    setSearchReults(filteredByDepartment);
+  }, [users, filterByDepartment]);
+
+  useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectiion);
       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -218,8 +226,11 @@ export default function HomepageUserList() {
                 label="Filter by Department"
                 onChange={handleChangeDepartment}
               >
-                <MenuItem value="Mr">Children</MenuItem>
-                <MenuItem value="Mrs">Singing</MenuItem>
+                {allDepartment?.map((department, index) => (
+                  <MenuItem key={index} value={department?.departmentName}>
+                    {department?.departmentName}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>

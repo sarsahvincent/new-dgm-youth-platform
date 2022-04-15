@@ -61,12 +61,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 380,
   bgcolor: "background.paper",
   border: "none",
   boxShadow: 24,
   p: 4,
   borderRadius: "6px",
+  margin: "0 auto",
 };
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -76,12 +77,20 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Settings() {
+  // HOOKS FOR DELETING DEPARTMENT
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
     setOpendeleteModal(true);
   };
-
   const handleCloseDeleteModal = () => setOpendeleteModal(false);
+
+  // HOOKS FOR ADDING DEPARTMENT
+  const [openDepartmentModal, setOpenDepartmentModal] = React.useState(false);
+  const handleOpenDepartmentModal = () => {
+    setOpenDepartmentModal(true);
+  };
+  const handleCloseDepartmentModal = () => setOpenDepartmentModal(false);
+
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState();
   const [user, setUser] = useState();
@@ -100,7 +109,6 @@ function Settings() {
   } = useSelector((state) => state.users);
   const { allDepartment } = useSelector((state) => state.departments);
 
-  console.log("editDepartmentId", editDepartmentId);
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
@@ -149,6 +157,17 @@ function Settings() {
     }
   };
 
+  const deleteDepartment = async () => {
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db, "DGM_YOUTH_Departments", editDepartmentId));
+
+      setLoading(false);
+      setOpendeleteModal(false);
+      window.location.reload();
+    } catch (err) {}
+  };
+
   useEffect(() => {
     const getAllDepartment = async () => {
       const data = await getDocs(deparmentCollectiion);
@@ -185,18 +204,9 @@ function Settings() {
     });
   }, [img]);
 
-  const deleteDepartment = async () => {
-    setLoading(true);
-    try {
-      await deleteDoc(doc(db, "DGM_YOUTH_Departments", editDepartmentId));
-
-      setLoading(false);
-      setOpendeleteModal(false);
-      window.location.reload();
-    } catch (err) {}
-  };
   return user ? (
     <div className="layout_margin m-2 mt-3">
+      {/* DELETE DEPARTMENT MODAL */}
       <Modal
         open={openDeleteModal}
         onClose={handleCloseDeleteModal}
@@ -223,6 +233,141 @@ function Settings() {
           </div>
         </Box>
       </Modal>
+      {/* CREATE DEPARTMENT MODAL*/}
+      <Modal
+        open={openDepartmentModal}
+        onClose={handleCloseDepartmentModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div>
+            <Box>
+              <Typography
+                color="purple"
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Create Department
+              </Typography>
+              <form action="" onSubmit={handleUpdateDepartment}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    "& > :not(style)": { mt: 1, mb: 2 },
+                  }}
+                >
+                  <TextField
+                    label="Department Name"
+                    color="secondary"
+                    fullWidth
+                    step="0.01"
+                    type="text"
+                    value={departmentName}
+                    onChange={(e) => {
+                      setDepartmentName(e.target.value);
+                    }}
+                  />
+                </Box>
+                <FormControl sx={{ mt: 2, mb: 2, minWidth: "100%" }}>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Select a leader
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={groupLeaderName}
+                    label="Select a leader"
+                    onChange={(e) => setGroupLeaderName(e.target.value)}
+                  >
+                    {users?.map((member, index) => (
+                      <MenuItem
+                        className="d-flex align-items-center justify-content-between"
+                        key={index}
+                        value={
+                          member.firstName +
+                          "  " +
+                          member.lastName +
+                          ":" +
+                          member.phone +
+                          ":" +
+                          member.avatar
+                        }
+                      >
+                        {member.firstName + " " + member.lastName}{" "}
+                        <UserTableAvatar url={member.avatar} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ mt: 2, mb: 2, minWidth: "100%" }}>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Select Asistant Leader
+                  </InputLabel>
+                  <Select
+                    className="d-flex align-items-center justify-content-between"
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={gropAssitant}
+                    label="Select Assistant Leader"
+                    onChange={(e) => setGroupAssistant(e.target.value)}
+                  >
+                    <MenuItem value=""></MenuItem>
+                    {users?.map((member, index) => (
+                      <MenuItem
+                        className="d-flex align-items-center justify-content-between"
+                        key={index}
+                        value={
+                          member.firstName +
+                          "  " +
+                          member.lastName +
+                          ":" +
+                          member.phone +
+                          ":" +
+                          member.avatar
+                        }
+                      >
+                        {member.firstName + " " + member.lastName}
+                        <UserTableAvatar url={member.avatar} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button
+                    disabled={loading}
+                    type="submit"
+                    size="large"
+                    sx={{ width: "40%", background: "purple" }}
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    onClick={handleCloseDepartmentModal}
+                    size="large"
+                    sx={{ width: "40%", background: "red" }}
+                    variant="contained"
+                    endIcon={<CancelIcon />}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </Box>
+          </div>
+        </Box>
+      </Modal>
 
       <div
         style={{
@@ -241,123 +386,18 @@ function Settings() {
       >
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
-            <Item>
-              <div>
-                <Box>
-                  <Typography
-                    color="purple"
-                    id="transition-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    Create Department
-                  </Typography>
-                  <form action="" onSubmit={handleUpdateDepartment}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        "& > :not(style)": { mt: 1, mb: 2 },
-                      }}
-                    >
-                      <TextField
-                        label="Department Name"
-                        color="secondary"
-                        fullWidth
-                        step="0.01"
-                        type="text"
-                        value={departmentName}
-                        onChange={(e) => {
-                          setDepartmentName(e.target.value);
-                        }}
-                      />
-                    </Box>
-                    <FormControl sx={{ mt: 2, mb: 2, minWidth: "100%" }}>
-                      <InputLabel id="demo-simple-select-helper-label">
-                        Select a leader
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-helper-label"
-                        id="demo-simple-select-helper"
-                        value={groupLeaderName}
-                        label="Select a leader"
-                        onChange={(e) => setGroupLeaderName(e.target.value)}
-                      >
-                        {users?.map((member, index) => (
-                          <MenuItem
-                            className="d-flex align-items-center justify-content-between"
-                            key={index}
-                            value={
-                              member.firstName +
-                              "  " +
-                              member.lastName +
-                              ":" +
-                              member.phone +
-                              ":" +
-                              member.avatar
-                            }
-                          >
-                            {member.firstName + " " + member.lastName}{" "}
-                            <UserTableAvatar url={member.avatar} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl sx={{ mt: 2, mb: 2, minWidth: "100%" }}>
-                      <InputLabel id="demo-simple-select-helper-label">
-                        Select Asistant Leader
-                      </InputLabel>
-                      <Select
-                        className="d-flex align-items-center justify-content-between"
-                        labelId="demo-simple-select-helper-label"
-                        id="demo-simple-select-helper"
-                        value={gropAssitant}
-                        label="Select Assistant Leader"
-                        onChange={(e) => setGroupAssistant(e.target.value)}
-                      >
-                        <MenuItem value=""></MenuItem>
-                        {users?.map((member, index) => (
-                          <MenuItem
-                            className="d-flex align-items-center justify-content-between"
-                            key={index}
-                            value={
-                              member.firstName +
-                              "  " +
-                              member.lastName +
-                              ":" +
-                              member.phone +
-                              ":" +
-                              member.avatar
-                            }
-                          >
-                            {member.firstName + " " + member.lastName}
-                            <UserTableAvatar url={member.avatar} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Button
-                        type="submit"
-                        size="large"
-                        sx={{ width: "40%", background: "purple" }}
-                        variant="contained"
-                        endIcon={<SendIcon />}
-                      >
-                        Create
-                      </Button>
-                    </div>
-                  </form>
-                </Box>
-              </div>
-            </Item>
+            {/* CREATE DEPARTMENT BUTTON */}
+            <Button
+              style={{ marginLeft: "55px" }}
+              onClick={handleOpenDepartmentModal}
+              size="large"
+              sx={{ width: "80%", marginBottom: 2 }}
+              variant="contained"
+              color="success"
+              endIcon={<AddCircleIcon />}
+            >
+              Add Department
+            </Button>
           </Grid>
 
           <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
@@ -423,7 +463,7 @@ function Settings() {
                   </div>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">Name of Department :</h4>
+                      <h4 className="full_profile">Name :</h4>
                       <h4 className="full_profile_details">
                         {department?.departmentName
                           ? department.departmentName

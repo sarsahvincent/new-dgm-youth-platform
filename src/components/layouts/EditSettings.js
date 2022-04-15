@@ -116,7 +116,7 @@ function EditSetting() {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
-  const handleCreateDepartment = async (e) => {
+  const handleUpadateDepartment = async (e) => {
     e.preventDefault();
     if (
       departmentName === "" ||
@@ -264,7 +264,7 @@ function EditSetting() {
                   >
                     Edit Department
                   </Typography>
-                  <form action="" onSubmit={handleCreateDepartment}>
+                  <form action="" onSubmit={handleUpadateDepartment}>
                     <Box
                       sx={{
                         display: "flex",
@@ -357,6 +357,7 @@ function EditSetting() {
                       }}
                     >
                       <Button
+                        disabled={loading}
                         type="submit"
                         size="large"
                         sx={{ width: "40%", background: "purple" }}
