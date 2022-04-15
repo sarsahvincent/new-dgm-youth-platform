@@ -466,7 +466,7 @@ function Finance() {
               variant="h6"
               component="h2"
             >
-              Request for funds
+              Funds Withdrawal
             </Typography>
             <form onSubmit={handleRequstFounds} action="">
               <Box
@@ -477,7 +477,7 @@ function Finance() {
                 }}
               >
                 <TextField
-                  label="Enter Amount to request"
+                  label="Enter amount"
                   color="secondary"
                   fullWidth
                   type="number"
@@ -503,7 +503,7 @@ function Finance() {
                 <TextareaAutosize
                   aria-label="minimum height"
                   minRows={3}
-                  placeholder="State purpose for fund request"
+                  placeholder="State purpose"
                   style={{ width: "100%", marginBottom: 20 }}
                   value={purposeForRequestedAmount}
                   onChange={(e) => setPurposeForRequestedAmount(e.target.value)}
@@ -697,7 +697,7 @@ function Finance() {
               color="warning"
               endIcon={<IndeterminateCheckBoxIcon />}
             >
-              Request for Funds
+              Withdraw Funds
             </Button>
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
@@ -802,7 +802,7 @@ function Finance() {
               {/* REQUEST HISTORY */}
               <div className="financial-history-summary-item-group">
                 <div className="addToFundscontainer">
-                  Dues Request History
+                  Dues Withdraw History
                   {allMonthlyDuesRequested?.map((item, index) => (
                     <LightTooltip
                       title={
@@ -838,7 +838,7 @@ function Finance() {
                         item
                       >
                         <Item className="full_profile_container">
-                          <h6 className="full_profile"> Amount Requested:</h6>
+                          <h6 className="full_profile"> Amount withdrawn:</h6>
                           <h6 className="amoutToRequest">
                             - {item?.requestedAmount}
                           </h6>
@@ -848,7 +848,7 @@ function Finance() {
                   ))}
                 </div>
                 <div className="addToFundscontainer">
-                  Don./Cont. Request History
+                  Don./Cont. Withdraw History
                   {allDonConRequested?.map((item, index) => (
                     <LightTooltip
                       title={
@@ -884,7 +884,7 @@ function Finance() {
                         item
                       >
                         <Item className="full_profile_container">
-                          <h6 className="full_profile"> Amount Requested :</h6>
+                          <h6 className="full_profile"> Amount withdrawn :</h6>
                           <h6 className="amoutToRequest">
                             - {item?.requestedAmount}
                           </h6>

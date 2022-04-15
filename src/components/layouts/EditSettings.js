@@ -386,7 +386,7 @@ function EditSetting() {
                 >
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">Name of Department :</h4>
+                      <h4 className="full_profile">Name:</h4>
                       <h4 className="full_profile_details">
                         {department?.departmentName
                           ? department.departmentName
@@ -416,7 +416,7 @@ function EditSetting() {
                   </Grid>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">Asistant Leader :</h4>
+                      <h4 className="full_profile">Asistant :</h4>
                       <h4 className="full_profile_details">
                         {department?.gropAssitant
                           ? department.gropAssitant.split(":", 1)

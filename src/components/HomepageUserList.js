@@ -53,8 +53,8 @@ export default function HomepageUserList({ allDepartment }) {
   const [filterBySex, setFilterBySex] = useState("");
   const [filterByDepartment, setFilterByDepartment] = useState("");
   const [filterByMembership, setFilterByMemberShip] = useState("");
-  const [filter, setFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
   let rows = [];
 
   const dispatch = useDispatch();
@@ -69,11 +69,12 @@ export default function HomepageUserList({ allDepartment }) {
       </Link>,
       <Link to={`/profile-details/${user.uid}`}>
         {" "}
-        <PhoneIcon /> {user.phone}
+        {user?.phone ? <PhoneIcon /> : "Not available"} {user.phone}
       </Link>,
+
       <Link to={`/profile-details/${user.uid}`}>
         {" "}
-        {user.email} <EmailIcon />
+        {user.email} {user?.email ? <EmailIcon /> : "Not available"}
       </Link>
     )
   );
@@ -117,6 +118,7 @@ export default function HomepageUserList({ allDepartment }) {
     setFilterByMemberShip("");
   };
 
+
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
@@ -131,26 +133,28 @@ export default function HomepageUserList({ allDepartment }) {
   }, [searchTerm, users]);
 
   useEffect(() => {
-    const filteredByMale = users?.filter((user) =>
-      user.sex.includes(filterBySex)
+    const filteredByGender = users?.filter((user) =>
+      user?.sex.includes(filterBySex)
     );
-    const filteredByFemale = users?.filter((user) =>
-      user.sex.includes(filterBySex)
-    );
-    setSearchReults(filteredByMale);
-    setSearchReults(filteredByFemale);
+
+    setSearchReults(filteredByGender);
   }, [users, filterBySex]);
 
   useEffect(() => {
     const filteredByMemberShip = users?.filter((user) =>
-      user.membershipStatus.includes(filterByMembership)
+      user?.membershipStatus.includes(filterByMembership)
     );
-    const filteredByNewConvert = users?.filter((user) =>
-      user.membershipStatus.includes(filterByMembership)
-    );
+
     setSearchReults(filteredByMemberShip);
-    setSearchReults(filteredByNewConvert);
   }, [users, filterByMembership]);
+
+  useEffect(() => {
+    const filteredByDepartment = users?.filter((user) =>
+      user?.department.includes(filterByDepartment)
+    );
+
+    setSearchReults(filteredByDepartment);
+  }, [users, filterByDepartment]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -183,9 +187,9 @@ export default function HomepageUserList({ allDepartment }) {
           </span>
         </button>
       </div>
-      <div className="d-flex align-items-center justify-content-between">
+      <div className="d-flex align-items-center justify-content-between filter-container">
         <div>
-          <Box sx={{ m: 0.5, width: "25ch" }}>
+          <Box sx={{ m: 0.5, width: "25ch" }} className="filter-input">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Filter by Membership
@@ -205,7 +209,7 @@ export default function HomepageUserList({ allDepartment }) {
           </Box>
         </div>
         <div>
-          <Box sx={{ m: 0.5, width: "25ch" }}>
+          <Box sx={{ m: 0.5, width: "25ch" }} className="filter-input">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Filter by Department
@@ -228,7 +232,7 @@ export default function HomepageUserList({ allDepartment }) {
           </Box>
         </div>
         <div>
-          <Box sx={{ m: 0.5, width: "25ch" }}>
+          <Box sx={{ m: 0.5, width: "25ch" }} className="filter-input">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Filter by Gender

@@ -316,6 +316,16 @@ h6 {
   border-radius: 6px;
   border: none;
 }
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter-input {
+  width: 25ch;
+  margin: 5px auto;
+}
 .delete-image-modal-no {
   width: 48%;
   height: 40px;
@@ -652,6 +662,15 @@ h6 {
     margin-left: 55px;
   }
 
+  .filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+  }
+  .filter-input {
+    width:35ch !important;
+  }
   .financial-history-summary-item-group {
     width: 100%;
     display: flex;
@@ -845,6 +864,15 @@ h6 {
     width: 100% !important;
   }
 
+  .filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+  }
+  .filter-input {
+    width: 65ch !important;
+  }
   .login-profile-page {
     margin-left: 55px;
   }
@@ -934,6 +962,16 @@ h6 {
   }
   .finance-sub-container {
     margin-left: 55px;
+  }
+
+  .filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+  }
+  .filter-input {
+    width: 75ch !important;
   }
   .reportSubmitContainer {
     width: 100%;

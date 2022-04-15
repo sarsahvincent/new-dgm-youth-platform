@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -7,14 +8,19 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import { ToastContainer, toast } from "react-toastify";
 import SendIcon from "@mui/icons-material/Send";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import ButtonLoader from "../ButtonLoader";
+import Loading from "../Loading";
 
 const id = Math.random().toString(36).slice(2);
 function AddAccount() {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
   const [data, setData] = useState({
     salutation: "",
     firstName: "",
@@ -33,6 +39,7 @@ function AddAccount() {
     address: "",
     email: "",
     phone: "",
+    department: "",
     emergencyContact: "",
     password: "",
     confirmPassword: "",
@@ -61,7 +68,7 @@ function AddAccount() {
     emergencyContact,
     password,
     confirmPassword,
-    loading,
+    department,
     error,
   } = data;
 
@@ -69,119 +76,59 @@ function AddAccount() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitMember = async (e) => {
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
-
-    if (role * 1 === 5) {
-      if (
-        !salutation ||
-        !firstName ||
-        !lastName ||
-        !occupation ||
-        !maritalStatus ||
-        !age ||
-        !sex ||
-        !status ||
-        !baptism ||
-        !city ||
-        !address ||
-        !phone ||
-        !membershipStatus ||
-        !role
-      ) {
-        setData({
-          ...data,
-          error: "Please fill all required * fields.",
-        });
-        return;
-      }
-    } else if (role * 1 !== 5) {
-      if (
-        !salutation ||
-        !firstName ||
-        !lastName ||
-        !emergencyContactName ||
-        !occupation ||
-        !maritalStatus ||
-        !age ||
-        !sex ||
-        !status ||
-        !baptism ||
-        !city ||
-        !address ||
-        !phone ||
-        !email ||
-        !emergencyContact ||
-        !password ||
-        !membershipStatus ||
-        !role
-      ) {
-        setData({ ...data, error: "Please fill all required * fields." });
-        return;
-      }
-    } else if (role !== 5 && password !== confirmPassword) {
-      setData({ ...data, error: "Password do not match" });
-      return;
+    if (
+      !salutation ||
+      !firstName ||
+      !lastName ||
+      !occupation ||
+      !maritalStatus ||
+      !age ||
+      !sex ||
+      !status ||
+      !baptism ||
+      !city ||
+      !address ||
+      !membershipStatus ||
+      !role
+    ) {
+      setData({
+        ...data,
+        error: "Please fill all required * fields.",
+      });
     } else {
+      setLoading(true);
       try {
-        if (role * 1 === 5) {
-          await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
-            uid: id + firstName + lastName,
-            salutation,
-            firstName,
-            middleName,
-            lastName,
-            emergencyContactName,
-            occupation,
-            maritalStatus,
-            age,
-            sex,
-            status,
-            baptism,
-            city,
-            address,
-            email,
-            phone,
-            fullName: `${firstName} ${middleName} ${lastName} `,
-            membershipStatus,
-            role,
-            emergencyContact,
-            createdAt: Timestamp.fromDate(new Date()),
-            isOnline: true,
-          });
-        } else {
-          const result = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-          await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
-            uid: result.user.uid,
-            salutation,
-            firstName,
-            middleName,
-            lastName,
-            emergencyContactName,
-            occupation,
-            maritalStatus,
-            age,
-            sex,
-            status,
-            baptism,
-            city,
-            address,
-            email,
-            phone,
-            fullName: `${firstName} ${middleName} ${lastName} `,
-            membershipStatus,
-            role,
-            emergencyContact,
-            createdAt: Timestamp.fromDate(new Date()),
-            isOnline: true,
-          });
-        }
+        await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
+          uid: id + firstName + lastName,
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          age,
+          sex,
+          status,
+          baptism,
+          city,
+          address,
+          email,
+          phone,
+          fullName: `${firstName} ${middleName} ${lastName} `,
+          membershipStatus,
+          role,
+          department,
+          emergencyContact,
+          createdAt: Timestamp.fromDate(new Date()),
+          isOnline: true,
+        });
 
+        setLoading(false);
+        setSuccess(true);
         setData({
           salutation: "",
           firstName: "",
@@ -201,10 +148,126 @@ function AddAccount() {
           membershipStatus: "",
           role: "",
           emergencyContact: "",
+          dues: "",
+          department: "",
+          groupRole: "",
+          soulsWon: "",
           loading: false,
           error: null,
         });
-        window.location.reload();
+
+        toast.success(`Profile Creation Success.`, {
+          position: "top-right",
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
+      } catch (err) {
+        setData({ ...data, error: err.message, loading: false });
+      }
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setData({ ...data, error: null, loading: true });
+    if (
+      !salutation ||
+      !firstName ||
+      !lastName ||
+      !emergencyContactName ||
+      !occupation ||
+      !maritalStatus ||
+      !age ||
+      !sex ||
+      !status ||
+      !baptism ||
+      !city ||
+      !address ||
+      !phone ||
+      !email ||
+      !emergencyContact ||
+      !password ||
+      !membershipStatus ||
+      !role
+    ) {
+      setData({ ...data, error: "Please fill all required * fields." });
+    } else if (role !== 5 && password !== confirmPassword) {
+      setData({ ...data, error: "Password do not match" });
+    } else {
+      setLoading(true);
+      try {
+        const result = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
+          uid: result.user.uid,
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          age,
+          sex,
+          status,
+          baptism,
+          city,
+          address,
+          email,
+          phone,
+          fullName: `${firstName} ${middleName} ${lastName} `,
+          membershipStatus,
+          role,
+          department,
+          emergencyContact,
+          createdAt: Timestamp.fromDate(new Date()),
+          isOnline: true,
+        });
+
+        setLoading(false);
+        setSuccess(true);
+        setData({
+          salutation: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          emergencyContactName: "",
+          occupation: "",
+          maritalStatus: "",
+          age: "",
+          sex: "",
+          status: "",
+          baptism: "",
+          city: "",
+          address: "",
+          email: "",
+          phone: "",
+          membershipStatus: "",
+          role: "",
+          emergencyContact: "",
+          dues: "",
+          department: "",
+          groupRole: "",
+          soulsWon: "",
+          loading: false,
+          error: null,
+        });
+
+        toast.success(`Profile Creation Success.`, {
+          position: "top-right",
+        });
+
+        setTimeout(() => {
+          if (role * 1 === 5) {
+            window.location.reload();
+          } else {
+            navigate("/profile");
+          }
+        }, 4000);
       } catch (err) {
         setData({ ...data, error: err.message, loading: false });
       }
@@ -214,7 +277,11 @@ function AddAccount() {
   return (
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>New Account</h3>
-      <form action="" className="new_member_form" onSubmit={handleSubmit}>
+      <form
+        action=""
+        className="new_member_form"
+        onSubmit={role * 1 === 5 ? handleSubmitMember : handleSubmit}
+      >
         <Paper
           className="firstSectionForm"
           elevation={1}
@@ -265,6 +332,7 @@ function AddAccount() {
                       <MenuItem value="3">Treasurer</MenuItem>
                       <MenuItem value="4">Exective</MenuItem>
                       <MenuItem value="5">Member</MenuItem>
+                      <MenuItem value="7">Observer</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -415,7 +483,7 @@ function AddAccount() {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={maritalStatus}
-                      label="Age"
+                      label="Marital Status "
                       onChange={handleChange}
                     >
                       <MenuItem value="Single">Single</MenuItem>
@@ -698,6 +766,7 @@ function AddAccount() {
           {error ? <p className="error">{error}</p> : null}
 
           <Button
+            disabled={loading}
             type="submit"
             style={{
               textAlign: "center",
@@ -714,9 +783,11 @@ function AddAccount() {
             variant="contained"
             endIcon={loading ? null : <SendIcon />}
           >
-            {loading ? <ButtonLoader /> : "Register"}
+            Register
           </Button>
         </Paper>
+        {loading && <Loading />}
+        {success && <ToastContainer />}
       </form>
     </div>
   );

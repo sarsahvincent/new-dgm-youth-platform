@@ -13,14 +13,45 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { db } from "../firebse";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
+import { db } from "../firebse";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { Spinner } from "react-bootstrap";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 380,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "6px",
+  margin: "0 auto",
+};
 export default function ControlledAccordions() {
+  const [openDeleteModal, setOpendeleteModal] = React.useState(false);
+  const handleOpendeleteModal = () => {
+    setOpendeleteModal(true);
+  };
+  const handleCloseDeleteModal = () => setOpendeleteModal(false);
   const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [deleteEventId, setDeleteEventId] = useState(null);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -52,6 +83,17 @@ export default function ControlledAccordions() {
     updateDate();
   };
 
+  const deleteEvent = async () => {
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db, "DGM_YOUTH_Activities", deleteEventId));
+
+      setLoading(false);
+      setOpendeleteModal(false);
+      window.location.reload();
+    } catch (err) {}
+  };
+
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(activitiesCollectiion);
@@ -69,6 +111,33 @@ export default function ControlledAccordions() {
         <ButtonLoader />
       ) : (
         <div>
+          {/* DELETE DEPARTMENT MODAL */}
+          <Modal
+            open={openDeleteModal}
+            onClose={handleCloseDeleteModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <p style={{ color: "purple", textAlign: "center" }}>
+                Are you sure you want to delete this activity ?
+              </p>
+              <div className="delete-image-modal">
+                <button
+                  onClick={deleteEvent}
+                  className="delete-image-modal-yes"
+                >
+                  {loading ? <Spinner animation="border" /> : "Yes"}
+                </button>
+                <button
+                  onClick={handleCloseDeleteModal}
+                  className="delete-image-modal-no"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Box>
+          </Modal>
           {activities.map((activity, index) => (
             <Accordion
               key={index}
@@ -116,7 +185,31 @@ export default function ControlledAccordions() {
               </AccordionSummary>
               <AccordionDetails>
                 <div className="AccordionDetailsBreakdown">
-                  <b>BREAKDOWN</b>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div>
+                      <b>BREAKDOWN</b>
+                    </div>
+                    <div
+                      onClick={() => {
+                        handleOpendeleteModal();
+                        setDeleteEventId(activity?.id);
+                      }}
+                    >
+                      <Tooltip title=" Delete Department">
+                        <span>
+                          <DeleteIcon
+                            style={{
+                              color: "red",
+                              fontSize: 25,
+                              marginRight: 10,
+                              cursor: "pointer",
+                            }}
+                          />
+                        </span>
+                      </Tooltip>
+                    </div>
+                  </div>
+
                   <div>
                     {activity?.formValues.map((activity, index) => (
                       <div key={index}>
@@ -178,6 +271,7 @@ export default function ControlledAccordions() {
                       </React.Fragment>
                     )}
                   </PopupState>
+
                   {loading && <ButtonLoader />}
                 </div>
               </AccordionDetails>

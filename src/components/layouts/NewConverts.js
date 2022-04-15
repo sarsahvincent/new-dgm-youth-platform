@@ -29,7 +29,6 @@ function HomePageContent() {
   const [newConvert, setNewConvert] = useState([]);
   const [allNewConvert, setAllNewConvert] = useState([]);
   const dispatch = useDispatch();
-  console.log("all converts", allNewConvert);
 
   let numberOfMen = [];
   let numberOfWomen = [];

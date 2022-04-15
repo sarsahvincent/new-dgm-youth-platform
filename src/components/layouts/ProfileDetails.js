@@ -110,10 +110,12 @@ function ProfileDetails() {
   const deletUser = async () => {
     setLoading(true);
     try {
-      deleteObject(ref(storage, user.avatarPath));
-
-      await deleteDoc(doc(db, "DGM_YOUTH_users", user?.uid));
-
+      if (user.avatarPath) {
+        deleteObject(ref(storage, user.avatarPath));
+        await deleteDoc(doc(db, "DGM_YOUTH_users", user?.uid));
+      } else {
+        await deleteDoc(doc(db, "DGM_YOUTH_users", user?.uid));
+      }
       setLoading(false);
       setOpendeleteModal(false);
       navigate("/");
@@ -364,7 +366,7 @@ function ProfileDetails() {
                 <div className="profileDetailsHeading">
                   <h6>Department</h6>
                   <div style={{ color: "white", fontSize: "25px" }}>
-                    {user?.groupNumber ? user?.groupNumber : 0}
+                    {user?.department ? user?.department : "Not assigned"}
                   </div>
                 </div>
               </Card>

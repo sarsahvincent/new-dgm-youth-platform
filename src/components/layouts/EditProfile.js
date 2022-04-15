@@ -67,7 +67,7 @@ function EditProfile() {
       ? profileDetails.emergencyContact
       : "",
     dues: profileDetails?.dues ? profileDetails.dues : 0,
-    groupNumber: profileDetails?.groupNumber ? profileDetails.groupNumber : "",
+    department: profileDetails?.department ? profileDetails.department : "",
     groupRole: profileDetails?.groupRole ? profileDetails.groupRole : "",
     soulsWon: profileDetails?.soulsWon ? profileDetails.soulsWon : 0,
     loading: null,
@@ -94,7 +94,7 @@ function EditProfile() {
     phone,
     emergencyContact,
     dues,
-    groupNumber,
+    department,
     groupRole,
     soulsWon,
 
@@ -120,8 +120,8 @@ function EditProfile() {
       !baptism ||
       !city ||
       !address ||
-      !phone ||
-      !email ||
+   
+   
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
@@ -155,7 +155,7 @@ function EditProfile() {
             phone,
             emergencyContact,
             dues,
-            groupNumber,
+            department,
             groupRole,
             soulsWon,
           });
@@ -190,7 +190,7 @@ function EditProfile() {
             role: "",
             emergencyContact: "",
             dues: "",
-            groupNumber: "",
+            department: "",
             groupRole: "",
             soulsWon: "",
             loading: false,
@@ -674,7 +674,7 @@ function EditProfile() {
             </div>
             <div className="new_member_form_group">
               <div>
-                <label htmlFor="groupNumber"></label>
+                <label htmlFor="department"></label>
                 <Box
                   sx={{ m: 0.5, width: "35ch" }}
                   className="edit-member_form-input"
@@ -684,10 +684,10 @@ function EditProfile() {
                       Department
                     </InputLabel>
                     <Select
-                      name="groupNumber"
+                      name="department"
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={groupNumber}
+                      value={department}
                       label="  Department"
                       onChange={handleChange}
                     >

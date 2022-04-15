@@ -27,7 +27,6 @@ export default function ControlledAccordions() {
   };
   const reportsCollectiion = collection(db, "DGM_YOUTH_Reports");
 
-  console.log("reportsCollectiion", reports);
 
   useEffect(() => {
     const getUsers = async () => {

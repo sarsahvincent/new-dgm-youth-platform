@@ -284,8 +284,6 @@ function Profile() {
                 className="profile_heading_subtitle group"
               >
                 <div>
-         
-
                   <GroupIcon
                     fontSize="large"
                     className="profile_heading_subtitle_icon"
@@ -294,7 +292,7 @@ function Profile() {
                 <div className="profileDetailsHeading">
                   <h6> Department</h6>
                   <div style={{ color: "white", fontSize: "25px" }}>
-                    {user.groupNumber ? user.groupNumber : 0}
+                    {user.department ? user.department : "Not assigned"}
                   </div>
                 </div>
               </Card>

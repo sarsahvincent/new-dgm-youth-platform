@@ -169,6 +169,7 @@ function Settings() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const getAllDepartment = async () => {
       const data = await getDocs(deparmentCollectiion);
       setDeparments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -176,6 +177,7 @@ function Settings() {
     dispatch(getDepartments(departments));
 
     getAllDepartment();
+    setLoading(false);
   }, []);
 
   setTimeout(() => {
@@ -493,7 +495,7 @@ function Settings() {
                   </Grid>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">Asistant Leader :</h4>
+                      <h4 className="full_profile">Asistant:</h4>
                       <h4 className="full_profile_details">
                         {department?.gropAssitant
                           ? department.gropAssitant.split(":", 1)

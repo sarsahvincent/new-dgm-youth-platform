@@ -133,7 +133,6 @@ export default function MiniDrawer({ layout }) {
     getPathname();
   }, [pathname]);
 
-  console.log("pathename", getPathname());
   return (
     <Box>
       <CssBaseline />
