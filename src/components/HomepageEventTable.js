@@ -190,18 +190,19 @@ export default function ControlledAccordions() {
                       <b>BREAKDOWN</b>
                     </div>
                     <div
+                      className="edit-icon-backround"
                       onClick={() => {
                         handleOpendeleteModal();
                         setDeleteEventId(activity?.id);
                       }}
                     >
-                      <Tooltip title=" Delete Department">
+                      <Tooltip title=" Delete event">
                         <span>
                           <DeleteIcon
                             style={{
-                              color: "red",
+                              color: "white",
                               fontSize: 25,
-                              marginRight: 10,
+                          
                               cursor: "pointer",
                             }}
                           />

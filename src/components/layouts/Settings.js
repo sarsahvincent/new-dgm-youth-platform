@@ -419,6 +419,7 @@ function Settings() {
                     }}
                   >
                     <div
+                      className="edit-icon-backround"
                       onClick={() => {
                         dispatch(getCureentEditDepartment(department));
                       }}
@@ -435,7 +436,7 @@ function Settings() {
                           >
                             <EditIcon
                               style={{
-                                color: "green",
+                                color: "white",
                                 fontSize: 25,
                                 cursor: "pointer",
                               }}
@@ -445,6 +446,7 @@ function Settings() {
                       </Link>
                     </div>
                     <div
+                      className="edit-icon-backround"
                       onClick={() => {
                         setEditDepartmentId(department?.id);
                       }}
@@ -453,9 +455,9 @@ function Settings() {
                         <span onClick={handleOpendeleteModal}>
                           <DeleteIcon
                             style={{
-                              color: "red",
+                              color: "white",
                               fontSize: 25,
-                              marginRight: 10,
+
                               cursor: "pointer",
                             }}
                           />

@@ -146,12 +146,12 @@ function Profile() {
             justifyContent: "space-around",
           }}
         >
-          <div>
+          <div className="edit-icon-backround">
             <Tooltip title="Edit Profile">
               <Link to={`/edit-profile/${user.uid}`}>
                 <span>
                   <EditIcon
-                    style={{ color: "green", fontSize: 25, cursor: "pointer" }}
+                    style={{ color: "white", fontSize: 25, cursor: "pointer" }}
                   />
                 </span>
               </Link>

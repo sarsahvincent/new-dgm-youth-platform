@@ -204,15 +204,33 @@ function ProfileDetails() {
             justifyContent: "space-around",
           }}
         >
+          <div className="edit-icon-backround">
+            <Link to={`/edit-profile/${user.uid}`}>
+              <Tooltip title="Edit Profile">
+                <span>
+                  <EditIcon
+                    style={{
+                      color: "white",
+                      fontSize: 25,
+                      cursor: "pointer",
+                    }}
+                  />
+                </span>
+              </Tooltip>
+            </Link>
+          </div>
           {auth?.currentUser?.uid !== user.uid && (
-            <div onClick={handleOpendeleteUserModal}>
+            <div
+              onClick={handleOpendeleteUserModal}
+              className="edit-icon-backround"
+            >
               <Tooltip title=" Delete Profile">
                 <span>
                   <DeleteIcon
                     style={{
-                      color: "red",
+                      color: "white",
                       fontSize: 25,
-                      marginRight: 10,
+
                       cursor: "pointer",
                     }}
                   />
@@ -220,22 +238,6 @@ function ProfileDetails() {
               </Tooltip>
             </div>
           )}
-
-          <div>
-            <Tooltip title="Edit Profile">
-              <Link to={`/edit-profile/${user.uid}`}>
-                <span>
-                  <EditIcon
-                    style={{
-                      color: "green",
-                      fontSize: 25,
-                      cursor: "pointer",
-                    }}
-                  />
-                </span>
-              </Link>
-            </Tooltip>
-          </div>
         </div>
       </div>
       <Box sx={{ flexGrow: 1 }}>
