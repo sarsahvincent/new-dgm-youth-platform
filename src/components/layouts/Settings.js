@@ -401,7 +401,6 @@ function Settings() {
               Add Department
             </Button>
           </Grid>
-
           <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
             <h3 style={{ color: "purple", fontWeight: "bold" }}>
               List of Departments
