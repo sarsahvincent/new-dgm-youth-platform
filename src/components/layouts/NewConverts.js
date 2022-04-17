@@ -117,7 +117,7 @@ function HomePageContent() {
                   backgroundColor: "purple",
                 }}
               >
-                <GroupsIcon style={{ color: "white", fontSize: 40 }} />
+                <GroupsIcon style={{ color: "white", fontSize: 24 }} />
                 <div style={{ color: "white", textAlign: "right" }}>
                   <h4>Total Convert</h4>
                   <h2>{newConvert ? newConvert : 0}</h2>
@@ -134,7 +134,7 @@ function HomePageContent() {
                   backgroundColor: "purple",
                 }}
               >
-                <ManIcon style={{ color: "white", fontSize: 40 }} />
+                <ManIcon style={{ color: "white", fontSize: 24 }} />
                 <div style={{ color: "white", textAlign: "right" }}>
                   <h4>Men</h4>
                   <h2>{men ? men : 0}</h2>
@@ -151,7 +151,7 @@ function HomePageContent() {
                   backgroundColor: "purple",
                 }}
               >
-                <WomanIcon style={{ color: "white", fontSize: 40 }} />
+                <WomanIcon style={{ color: "white", fontSize: 24 }} />
                 <div style={{ color: "white", textAlign: "right" }}>
                   <h4>Women</h4>
                   <h2>{womem ? womem : 0}</h2>

@@ -75,7 +75,7 @@ const LightTooltip = styled(({ className, ...props }) => (
     backgroundColor: theme.palette.common.white,
     color: "rgba(0, 0, 0, 0.87)",
     boxShadow: theme.shadows[1],
-    fontSize: 11,
+    fontSize: 12,
   },
 }));
 
@@ -723,7 +723,7 @@ function Finance() {
                   <div
                     style={{
                       color: "white",
-                      fontSize: "25px",
+                      fontSize: "18px",
                       textAlign: "right",
                     }}
                   >
@@ -751,7 +751,7 @@ function Finance() {
                   <div
                     style={{
                       color: "white",
-                      fontSize: "25px",
+                      fontSize: "18px",
                       textAlign: "right",
                     }}
                   >
@@ -779,7 +779,7 @@ function Finance() {
                   <div
                     style={{
                       color: "white",
-                      fontSize: "25px",
+                      fontSize: "18px",
                       textAlign: "right",
                     }}
                   >
@@ -806,7 +806,7 @@ function Finance() {
                   {allMonthlyDuesRequested?.map((item, index) => (
                     <LightTooltip
                       title={
-                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                        <div style={{ fontSize: "12px", color: "purple" }}>
                           <div></div>
                           <div>
                             {" "}
@@ -852,7 +852,7 @@ function Finance() {
                   {allDonConRequested?.map((item, index) => (
                     <LightTooltip
                       title={
-                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                        <div style={{ fontSize: "12px", color: "purple" }}>
                           <div></div>
                           <div>
                             {" "}
@@ -902,7 +902,7 @@ function Finance() {
                   {allMonthlyDues?.map((item, index) => (
                     <LightTooltip
                       title={
-                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                        <div style={{ fontSize: "12px", color: "purple" }}>
                           <div></div>
                           <div>
                             {" "}
@@ -939,7 +939,7 @@ function Finance() {
                   {allDonationContributions?.map((item, index) => (
                     <LightTooltip
                       title={
-                        <div style={{ fontSize: "14PX", color: "purple" }}>
+                        <div style={{ fontSize: "12px", color: "purple" }}>
                           <div></div>
                           <div>
                             {" "}

@@ -18,6 +18,8 @@ import EditProfile from "./pages/EditProfile";
 import Finance from "./pages/FinancePage";
 import Settings from "./pages/Settings";
 import EditSettings from "./pages/EditSettings";
+import UpcomingEvent from "./pages/UpcomingEvent";
+import ProgramsAndContacts from "./pages/ProgramsAndContacts";
 
 
 function App() {
@@ -50,6 +52,9 @@ function App() {
           <Route exact path="/reports" element={<PrivateRoute />}>
             <Route exact path="/reports" element={<Reports />} />
           </Route>
+          <Route exact path="/program-contact" element={<PrivateRoute />}>
+            <Route exact path="/program-contact" element={<ProgramsAndContacts />} />
+          </Route>
           <Route exact path="/profile-details/:id" element={<PrivateRoute />}>
             <Route
               exact
@@ -80,6 +85,7 @@ function App() {
           </Route>
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/upcoming-event" element={<UpcomingEvent />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

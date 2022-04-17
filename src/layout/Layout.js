@@ -30,7 +30,9 @@ import TodayIcon from "@mui/icons-material/Today";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 
 const drawerWidth = 240;
 
@@ -148,7 +150,7 @@ export default function MiniDrawer({ layout }) {
             justifyContent: "space-between",
           }}
         >
-          {user ? (
+          {user && window.location.pathname !== "/upcoming-event" ? (
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -214,35 +216,38 @@ export default function MiniDrawer({ layout }) {
                   paddingRight: "5px",
                 }}
               >
-                {/* <Link
-                  style={{
-                    color: "white",
-                    justifyContent: "space-between",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                  }}
-                  to="/register"
-                >
-                  Register
-                </Link> */}
-
-                <Link
-                  style={{
-                    color: "white",
-                    justifyContent: "space-between",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
-                  }}
-                  to="/login"
-                >
-                  Login
-                </Link>
+                {window.location.pathname !== "/login" && (
+                  <Link
+                    style={{
+                      color: "white",
+                      justifyContent: "space-between",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                    }}
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+                )}
+                {window.location.pathname !== "/upcoming-event" && (
+                  <Link
+                    style={{
+                      color: "white",
+                      justifyContent: "space-between",
+                      paddingLeft: "5px",
+                      paddingRight: "5px",
+                    }}
+                    to="/upcoming-event"
+                  >
+                    Event
+                  </Link>
+                )}
               </div>
             )}
           </div>
         </Toolbar>
       </AppBar>
-      {user ? (
+      {user && window.location.pathname !== "/upcoming-event" ? (
         <Drawer sx={{ flexGrow: 1 }} variant="permanent" open={open}>
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
@@ -260,18 +265,14 @@ export default function MiniDrawer({ layout }) {
                 <ListItemIcon>
                   <DashboardIcon
                     style={{
-                      color: `${
-                        getPathname() === "/" ? "orange" : "purple"
-                      }`,
+                      color: `${getPathname() === "/" ? "orange" : "purple"}`,
                     }}
-                    fontSize="large"
+                    fontSize="medium"
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
-                    color: `${
-                      getPathname() === "/" ? "orange" : "purple"
-                    }`,
+                    color: `${getPathname() === "/" ? "orange" : "purple"}`,
                   }}
                 >
                   <b>Dashboard</b>
@@ -290,7 +291,7 @@ export default function MiniDrawer({ layout }) {
                         getPathname() === "/profile" ? "orange" : "purple"
                       }`,
                     }}
-                    fontSize="large"
+                    fontSize="medium"
                   />
                 </ListItemIcon>
                 <ListItemText
@@ -315,7 +316,7 @@ export default function MiniDrawer({ layout }) {
                       getPathname() === "/add-account" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -341,7 +342,7 @@ export default function MiniDrawer({ layout }) {
                         : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -367,7 +368,7 @@ export default function MiniDrawer({ layout }) {
                       getPathname() === "/events" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -390,7 +391,7 @@ export default function MiniDrawer({ layout }) {
                       getPathname() === "/finance" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -415,7 +416,7 @@ export default function MiniDrawer({ layout }) {
                       getPathname() === "/reports" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -439,7 +440,7 @@ export default function MiniDrawer({ layout }) {
                       getPathname() === "/settings" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="large"
+                  fontSize="medium"
                 />
               </ListItemIcon>
               <ListItemText
@@ -453,7 +454,55 @@ export default function MiniDrawer({ layout }) {
               </ListItemText>
             </ListItem>
           </Link>
+
           <Divider />
+          <Link to="/program-contact">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <ContactPhoneIcon
+                  style={{
+                    color: `${
+                      getPathname() === "/program-contact" ? "orange" : "purple"
+                    }`,
+                  }}
+                  fontSize="medium"
+                />
+              </ListItemIcon>
+              <ListItemText
+                style={{
+                  color: `${
+                    getPathname() === "/program-contact" ? "orange" : "purple"
+                  }`,
+                }}
+              >
+                <b>Contact</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
+          <Divider />
+          <Link to="/upcoming-event">
+            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <ListItemIcon>
+                <ConnectWithoutContactIcon
+                  style={{
+                    color: `${
+                      getPathname() === "/upcoming-event" ? "orange" : "purple"
+                    }`,
+                  }}
+                  fontSize="medium"
+                />
+              </ListItemIcon>
+              <ListItemText
+                style={{
+                  color: `${
+                    getPathname() === "/upcoming-event" ? "orange" : "purple"
+                  }`,
+                }}
+              >
+                <b>Program</b>
+              </ListItemText>
+            </ListItem>
+          </Link>
         </Drawer>
       ) : null}
 

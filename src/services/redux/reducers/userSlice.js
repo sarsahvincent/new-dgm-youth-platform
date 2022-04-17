@@ -14,6 +14,9 @@ const initialState = {
   profileDetails: localStorage.getItem("profileDetails")
     ? JSON.parse(localStorage.getItem("profileDetails"))
     : [],
+  programContacts: localStorage.getItem("programContacts")
+    ? JSON.parse(localStorage.getItem("programContacts"))
+    : [],
 };
 
 const usersSlice = createSlice({
@@ -47,6 +50,13 @@ const usersSlice = createSlice({
         JSON.stringify(state.profileDetails)
       );
     },
+    getProgramContacts(state, action) {
+      state.programContacts = action.payload;
+      localStorage.setItem(
+        "programContacts",
+        JSON.stringify(state.programContacts)
+      );
+    },
   },
 });
 
@@ -56,5 +66,6 @@ export const {
   getAllUsers,
   gitAllMales,
   getUserDetails,
+  getProgramContacts,
 } = usersSlice.actions;
 export default usersSlice.reducer;

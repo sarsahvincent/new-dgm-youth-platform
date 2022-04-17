@@ -83,7 +83,7 @@ const ActivityCreator = () => {
       await setDoc(doc(db, "DGM_YOUTH_Activities", id + title), {
         formValues,
         title,
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: Math.floor(Date.now() / 1000),
         status,
         total: activityTotal,
       });

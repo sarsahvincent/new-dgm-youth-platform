@@ -66,7 +66,6 @@ function ProfileDetails() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
 
-  console.log("user", user);
   const [deleteUserId, setDeleteUserId] = useState(false);
 
   const navigate = useNavigate();
@@ -211,7 +210,7 @@ function ProfileDetails() {
                   <EditIcon
                     style={{
                       color: "white",
-                      fontSize: 25,
+                      fontSize: 18,
                       cursor: "pointer",
                     }}
                   />
@@ -229,7 +228,7 @@ function ProfileDetails() {
                   <DeleteIcon
                     style={{
                       color: "white",
-                      fontSize: 25,
+                      fontSize: 18,
 
                       cursor: "pointer",
                     }}
@@ -350,7 +349,7 @@ function ProfileDetails() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Monthly Dues Paied</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {user.dues ? user.dues : 0} / 12
                   </div>
                 </div>
@@ -367,7 +366,7 @@ function ProfileDetails() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6>Department</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {user?.department ? user?.department : "Not assigned"}
                   </div>
                 </div>
@@ -384,7 +383,7 @@ function ProfileDetails() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Soules Won</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {" "}
                     {user?.soulsWon ? user?.soulsWon : 0}
                   </div>

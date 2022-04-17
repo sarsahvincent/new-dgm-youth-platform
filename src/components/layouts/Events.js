@@ -93,7 +93,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <EventNoteIcon style={{ color: "white", fontSize: 30 }} />
+              <EventNoteIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Total Event</h4>
                 <h2>{activities?.length}</h2>
@@ -110,7 +110,7 @@ function HomePageContent() {
               }}
             >
               <AssignmentTurnedInIcon
-                style={{ color: "white", fontSize: 30 }}
+                style={{ color: "white", fontSize: 24 }}
               />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Approved</h4>
@@ -127,7 +127,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <PendingActionsIcon style={{ color: "white", fontSize: 30 }} />
+              <PendingActionsIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Pending</h4>
                 <h2>{allPending}</h2>
@@ -144,7 +144,7 @@ function HomePageContent() {
               }}
             >
               <CheckCircleOutlineIcon
-                style={{ color: "white", fontSize: 30 }}
+                style={{ color: "white", fontSize: 24 }}
               />
               <div style={{ color: "white", textAlign: "center" }}>
                 <h4>Executed</h4>

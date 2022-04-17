@@ -57,6 +57,8 @@ function Profile() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
   const dispatch = useDispatch();
+
+  
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
@@ -151,7 +153,7 @@ function Profile() {
               <Link to={`/edit-profile/${user.uid}`}>
                 <span>
                   <EditIcon
-                    style={{ color: "white", fontSize: 25, cursor: "pointer" }}
+                    style={{ color: "white", fontSize: 18, cursor: "pointer" }}
                   />
                 </span>
               </Link>
@@ -274,7 +276,7 @@ function Profile() {
                 <div className="profileDetailsHeading">
                   <h6>Monthly Dues Paied</h6>
 
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {user.dues ? user.dues : 0} / 12
                   </div>
                 </div>
@@ -291,7 +293,7 @@ function Profile() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Department</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {user.department ? user.department : "Not assigned"}
                   </div>
                 </div>
@@ -308,7 +310,7 @@ function Profile() {
                 </div>
                 <div className="profileDetailsHeading">
                   <h6> Soules Won</h6>
-                  <div style={{ color: "white", fontSize: "25px" }}>
+                  <div style={{ color: "white", fontSize: "18px" }}>
                     {" "}
                     {user?.soulsWon ? user?.soulsWon : 0}
                   </div>

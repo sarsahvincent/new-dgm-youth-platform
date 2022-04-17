@@ -123,7 +123,7 @@ function AddAccount() {
           role,
           department,
           emergencyContact,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt: Math.floor(Date.now() / 1000),
           isOnline: true,
         });
 
@@ -224,7 +224,7 @@ function AddAccount() {
           role,
           department,
           emergencyContact,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt: Math.floor(Date.now() / 1000),
           isOnline: true,
         });
 
@@ -774,7 +774,7 @@ function AddAccount() {
               width: "100%",
               marginTop: 20,
               backgroundColor: "purple",
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: "bolder",
               letterSpacing: "5px",
               borderRadius: 2,

@@ -102,7 +102,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <GroupsIcon style={{ color: "white", fontSize: 40 }} />
+              <GroupsIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Total Youth</h4>
                 <h2>{allUsers?.length}</h2>
@@ -118,7 +118,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <ManIcon style={{ color: "white", fontSize: 40 }} />
+              <ManIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Men</h4>
                 <h2>{men}</h2>
@@ -134,7 +134,7 @@ function HomePageContent() {
                 backgroundColor: "purple",
               }}
             >
-              <WomanIcon style={{ color: "white", fontSize: 40 }} />
+              <WomanIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Women</h4>
                 <h2>{womem}</h2>
@@ -148,7 +148,7 @@ function HomePageContent() {
               elevation={3}
               sx={{ p: 1, backgroundColor: "purple" }}
             >
-              <EmojiPeopleIcon style={{ color: "white", fontSize: 40 }} />
+              <EmojiPeopleIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>New Convert</h4>
                 <h2>{newConvert}</h2>

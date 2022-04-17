@@ -812,7 +812,7 @@ function EditProfile() {
               width: "100%",
               mt: 4,
               backgroundColor: "purple",
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: "bolder",
               letterSpacing: "5px",
             }}

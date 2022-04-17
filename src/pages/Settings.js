@@ -1,9 +1,9 @@
 import React from "react";
 import Layout from "../layout/Layout";
-import SettingsPage from "../components/layouts/Settings";
+import Settings from "../components/layouts/Settings";
 
-function Settings() {
-  return <Layout layout={<SettingsPage />} />;
+function settingsPage() {
+  return <Layout layout={<Settings />} />;
 }
 
-export default Settings;
+export default settingsPage;

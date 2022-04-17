@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Img from "../../assets/images/avatar.png";
-import Camera from "../../components/svg/Camera";
-import Delete from "../../components/svg/Delete";
 import { storage, db, auth } from "../../firebse";
 import {
   ref,
@@ -20,6 +17,9 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+
+import LockResetIcon from "@mui/icons-material/LockReset";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -55,6 +55,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import UserTableAvatar from "../UserTableAvatar";
+import { LockReset } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -77,6 +78,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Settings() {
+  const auth = getAuth();
+
+  // HOOKS FOR RESETTING PASSWORD
+  const [openResetPasswordModal, setOpenResetPasswordModal] =
+    React.useState(false);
+  const handleOpenresetPasswordModal = () => {
+    setOpenResetPasswordModal(true);
+  };
+  const handleCloseResetPasswordModal = () => setOpenResetPasswordModal(false);
+
   // HOOKS FOR DELETING DEPARTMENT
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
@@ -91,6 +102,13 @@ function Settings() {
   };
   const handleCloseDepartmentModal = () => setOpenDepartmentModal(false);
 
+  // HOOKS FOR ADDING IMAGE
+  const [openImagetModal, setOpenImagetModal] = React.useState(false);
+  const handleOpenImagetModal = () => {
+    setOpenImagetModal(true);
+  };
+  const handleCloseImageModal = () => setOpenImagetModal(false);
+
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState();
   const [user, setUser] = useState();
@@ -104,6 +122,8 @@ function Settings() {
   const [gropAssitant, setGroupAssistant] = useState("");
   const dispatch = useDispatch();
   const id = Math.random().toString(36).slice(2);
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [email, setEmail] = useState("");
   const {
     profileDetails: { firstName, lastName, avatarPath },
   } = useSelector((state) => state.users);
@@ -157,6 +177,37 @@ function Settings() {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (email === "") {
+      setError(true);
+      toast.error(`Email connot be empty`, {
+        position: "top-right",
+      });
+    } else {
+      setLoading(true);
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          setOpenResetPasswordModal(false);
+          setEmail("");
+          setLoading(false);
+          setSuccess(true);
+          toast.success(`A password reset link has beem sent to ${email}.`, {
+            position: "top-right",
+          });
+        })
+        .catch((error) => {
+          setOpenResetPasswordModal(false);
+          setLoading(false);
+
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+        });
+    }
+  };
+
   const deleteDepartment = async () => {
     setLoading(true);
     try {
@@ -206,8 +257,137 @@ function Settings() {
     });
   }, [img]);
 
-  return user ? (
+  useEffect(() => {
+    if (img) {
+      const uplaodImg = async () => {
+        setLoadingImage(true);
+
+        const imgRef = ref(
+          storage,
+          `dgm-program/avatar/${new Date().getTime()} - ${img.name}`
+        );
+        try {
+          const snap = await uploadBytes(imgRef, img);
+          const url = await getDownloadURL(ref(storage, snap.ref.fullPath));
+
+          await updateDoc(
+            doc(db, "DGM_YOUTH_program_image", "DGM_YOUTH_program_image"),
+            {
+              image: url,
+              imagePath: snap.ref.fullPath,
+            }
+          );
+          setLoadingImage(false);
+          setOpenImagetModal(false);
+          setImg("");
+          setSuccess(true);
+          toast.success(`Image Upload Success.`, {
+            position: "top-right",
+          });
+        } catch (error) {}
+      };
+      uplaodImg();
+    }
+  }, [img]);
+
+  return allDepartment ? (
     <div className="layout_margin m-2 mt-3">
+      {/*RESET PASSWORD MODAL*/}
+      <Modal
+        open={openResetPasswordModal}
+        onClose={handleCloseResetPasswordModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} className="pro-image-uplaod-input">
+          <p style={{ color: "purple", textAlign: "center" }}>
+            A reset password link will be sent to the email below.
+          </p>
+          <form action="" onSubmit={handleResetPassword}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                "& > :not(style)": { mt: 1, mb: 2 },
+              }}
+            >
+              <TextField
+                label="Enter Email"
+                color="secondary"
+                fullWidth
+                step="0.01"
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </Box>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              {loading ? (
+                <Loading />
+              ) : (
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  size="large"
+                  sx={{ width: "40%", background: "purple" }}
+                  variant="contained"
+                  endIcon={<SendIcon />}
+                >
+                  Reset
+                </Button>
+              )}
+              <Button
+                disabled={loading}
+                onClick={handleCloseResetPasswordModal}
+                size="large"
+                sx={{ width: "40%", background: "red" }}
+                variant="contained"
+                endIcon={<CancelIcon />}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Box>
+      </Modal>
+      {/* AA PROGRAM MODAL */}
+      <Modal
+        open={openImagetModal}
+        onClose={handleCloseImageModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} className="pro-image-uplaod-input">
+          {loadingImage ? (
+            <p style={{ color: "purple", textAlign: "center" }}>
+              Uploading image . Please wait
+            </p>
+          ) : (
+            <p style={{ color: "purple", textAlign: "center" }}>
+              Please select and image to upload
+            </p>
+          )}
+
+          {loadingImage ? (
+            <Loading />
+          ) : (
+            <input
+              type="file"
+              accept="image/*"
+              id="photo"
+              onChange={(e) => setImg(e.target.files[0])}
+            />
+          )}
+        </Box>
+      </Modal>
       {/* DELETE DEPARTMENT MODAL */}
       <Modal
         open={openDeleteModal}
@@ -370,7 +550,6 @@ function Settings() {
           </div>
         </Box>
       </Modal>
-
       <div
         style={{
           display: "flex",
@@ -395,13 +574,49 @@ function Settings() {
               size="large"
               sx={{ width: "80%", marginBottom: 2 }}
               variant="contained"
-              color="success"
+              color="secondary"
               endIcon={<AddCircleIcon />}
             >
-              Add Department
+              ADD DEPARTMENT
             </Button>
           </Grid>
-          <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+          <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
+            {/* ADD PROGRAM IMAGE BUTTON */}
+            <Button
+              style={{ marginLeft: "55px" }}
+              onClick={handleOpenImagetModal}
+              size="large"
+              sx={{ width: "80%", marginBottom: 2 }}
+              variant="contained"
+              color="secondary"
+              endIcon={<AddCircleIcon />}
+            >
+              Add PROGRAM IMAGE
+            </Button>
+          </Grid>
+          <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
+            {/*RESET PASSWORD  BUTTON */}
+            <Button
+              style={{ marginLeft: "55px" }}
+              onClick={handleOpenresetPasswordModal}
+              size="large"
+              sx={{ width: "80%", marginBottom: 2 }}
+              variant="contained"
+              color="secondary"
+              endIcon={<LockResetIcon />}
+            >
+              RESET PASSWORD
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={8}
+            lg={9}
+            xl={9}
+            className="prog-department-container"
+          >
             <h3 style={{ color: "purple", fontWeight: "bold" }}>
               List of Departments
             </h3>
@@ -436,7 +651,7 @@ function Settings() {
                             <EditIcon
                               style={{
                                 color: "white",
-                                fontSize: 25,
+                                fontSize: 18,
                                 cursor: "pointer",
                               }}
                             />
@@ -455,7 +670,7 @@ function Settings() {
                           <DeleteIcon
                             style={{
                               color: "white",
-                              fontSize: 25,
+                              fontSize: 18,
 
                               cursor: "pointer",
                             }}
@@ -522,7 +737,7 @@ function Settings() {
       </Box>
       {error && <ToastContainer />}
       {success && <ToastContainer />}
-      {loading && <Loading />}
+      {(loading || loadingImage) && <Loading />}
     </div>
   ) : (
     <Loading />
