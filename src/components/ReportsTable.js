@@ -4,18 +4,50 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ButtonLoader from "./ButtonLoader";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 import { ToastContainer, toast } from "react-toastify";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { db } from "../firebse";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { Spinner } from "react-bootstrap";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 380,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "6px",
+  margin: "0 auto",
+};
 
 export default function ControlledAccordions() {
   const [expanded, setExpanded] = React.useState(false);
   const [reports, setReports] = React.useState([]);
   const [loading, setLoading] = useState(false);
+  const [deleteReportloading, setDeleteReportLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [deleteEventId, setDeleteEventId] = useState(null);
 
+  const [openDeleteModal, setOpendeleteModal] = React.useState(false);
+  const handleOpendeleteModal = () => {
+    setOpendeleteModal(true);
+  };
+  const handleCloseDeleteModal = () => setOpendeleteModal(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -27,6 +59,16 @@ export default function ControlledAccordions() {
   };
   const reportsCollectiion = collection(db, "DGM_YOUTH_Reports");
 
+  const deleteReport = async () => {
+    setDeleteReportLoading(true);
+    try {
+      await deleteDoc(doc(db, "DGM_YOUTH_Reports", deleteEventId));
+
+      setDeleteReportLoading(false);
+      setOpendeleteModal(false);
+      window.location.reload();
+    } catch (err) {}
+  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -45,6 +87,33 @@ export default function ControlledAccordions() {
         <ButtonLoader />
       ) : (
         <div>
+          {/* DELETE REPORT MODAL */}
+          <Modal
+            open={openDeleteModal}
+            onClose={handleCloseDeleteModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <p style={{ color: "purple", textAlign: "center" }}>
+                Are you sure you want to delete this report ?
+              </p>
+              <div className="delete-image-modal">
+                <button
+                  onClick={deleteReport}
+                  className="delete-image-modal-yes"
+                >
+                  {deleteReportloading ? <Spinner animation="border" /> : "Yes"}
+                </button>
+                <button
+                  onClick={handleCloseDeleteModal}
+                  className="delete-image-modal-no"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Box>
+          </Modal>
           {reports?.map((report, index) => (
             <Accordion
               key={index}
@@ -58,13 +127,39 @@ export default function ControlledAccordions() {
                 id={index}
                 style={{ color: "purple" }}
               >
-                <Typography sx={{ width: "100%", textAlign: "center" ,flexShrink: 0 }}>
+                <Typography
+                  sx={{ width: "100%", textAlign: "center", flexShrink: 0 }}
+                >
                   <b> {report?.title}</b>
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <div className="AccordionDetailsBreakdown">
-                  <b>Content</b>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div>
+                      <b>Content</b>
+                    </div>
+                    <div
+                      className="edit-icon-backround"
+                      onClick={() => {
+                        handleOpendeleteModal();
+                        setDeleteEventId(report?.id);
+                      }}
+                    >
+                      <Tooltip title=" Delete report">
+                        <span>
+                          <DeleteIcon
+                            style={{
+                              color: "white",
+                              fontSize: 25,
+
+                              cursor: "pointer",
+                            }}
+                          />
+                        </span>
+                      </Tooltip>
+                    </div>
+                  </div>
                   <div>
                     <p>{report?.content}</p>
                   </div>

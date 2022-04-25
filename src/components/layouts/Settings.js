@@ -132,6 +132,7 @@ function Settings() {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
+  console.log("loading ....", loading);
   const handleUpdateDepartment = async (e) => {
     e.preventDefault();
     if (

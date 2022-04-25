@@ -7,6 +7,7 @@ import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
 import { ToastContainer, toast } from "react-toastify";
 import Fade from "@mui/material/Fade";
+import { Spinner } from "react-bootstrap";
 import Zoom from "@mui/material/Zoom";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -33,6 +34,7 @@ import {
   getDocs,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import {
   ref,
@@ -98,7 +100,7 @@ function Finance() {
     profileDetails: { firstName, lastName, avatarPath },
   } = useSelector((state) => state.users);
 
-  //HOOKS TO REQUEST FOR FUNDS
+  //HOOKS TO REQUEST FOR FUNDSF
 
   const [openRequestFundsModal, setOpenRequestFundsModal] =
     React.useState(false);
@@ -132,6 +134,16 @@ function Finance() {
   const [allMonthlyDues, setAllMonthlyDues] = React.useState([]);
   const [allDonationContributions, setAllDonationContributions] =
     React.useState([]);
+
+  // HOOKS FOR DELETING FUNDS RECORDS
+  const [openDeleteModal, setOpendeleteModal] = React.useState(false);
+  const handleOpendeleteModal = () => {
+    setOpendeleteModal(true);
+  };
+  const [deleteRecordFunction, setDeleteRecordFunction] = useState("");
+  const handleCloseDeleteModal = () => setOpendeleteModal(false);
+  const [deleteRecordId, setDeleteRecordId] = useState(null);
+  const [deleteRecordLoading, setDeleteRecordLoading] = useState(false);
 
   const dateConvertor = (timestamp) => {
     const milliseconds = timestamp * 1000;
@@ -343,6 +355,17 @@ function Finance() {
     } catch (e) {}
   };
 
+  //FUCTIONS FOR DELETING RECORDS
+  const deleteDuesWithdrawHistory = async () => {
+    setDeleteRecordLoading(true);
+    try {
+      await deleteDoc(doc(db, deleteRecordFunction, deleteRecordId));
+      setDeleteRecordLoading(false);
+      setOpendeleteModal(false);
+      window.location.reload();
+    } catch (err) {}
+  };
+
   useEffect(() => {
     const getAllDonationAndContributions = async () => {
       const data = await getDocs(allDonationAndContributions);
@@ -447,6 +470,33 @@ function Finance() {
   };
   return user ? (
     <div className="layout_margin m-2 mt-3">
+      {/* DELETE Dues Withdraw History */}
+      <Modal
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <p style={{ color: "purple", textAlign: "center" }}>
+            Are you sure you want to delete this record ?
+          </p>
+          <div className="delete-image-modal">
+            <button
+              onClick={deleteDuesWithdrawHistory}
+              className="delete-image-modal-yes"
+            >
+              {deleteRecordLoading ? <Spinner animation="border" /> : "Yes"}
+            </button>
+            <button
+              onClick={handleCloseDeleteModal}
+              className="delete-image-modal-no"
+            >
+              Cancel
+            </button>
+          </div>
+        </Box>
+      </Modal>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -839,9 +889,37 @@ function Finance() {
                       >
                         <Item className="full_profile_container">
                           <h6 className="full_profile"> Amount withdrawn:</h6>
-                          <h6 className="amoutToRequest">
-                            - {item?.requestedAmount}
-                          </h6>
+
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                              <h6 className="amoutToRequest">
+                                - {item?.requestedAmount}
+                              </h6>
+                            </div>
+                            <div
+                              className="edit-icon-backround"
+                              onClick={() => {
+                                handleOpendeleteModal();
+                                setDeleteRecordId(item?.id);
+                                setDeleteRecordFunction(
+                                  "DGM_YOUTH_Funds_monthlyDues_request"
+                                );
+                              }}
+                            >
+                              <Tooltip title=" Delete record">
+                                <span>
+                                  <DeleteIcon
+                                    style={{
+                                      color: "white",
+                                      fontSize: 20,
+
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          </div>
                         </Item>
                       </Grid>
                     </LightTooltip>
@@ -885,9 +963,37 @@ function Finance() {
                       >
                         <Item className="full_profile_container">
                           <h6 className="full_profile"> Amount withdrawn :</h6>
-                          <h6 className="amoutToRequest">
-                            - {item?.requestedAmount}
-                          </h6>
+
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                              <h6 className="amoutToRequest">
+                                - {item?.requestedAmount}
+                              </h6>
+                            </div>
+                            <div
+                              className="edit-icon-backround"
+                              onClick={() => {
+                                handleOpendeleteModal();
+                                setDeleteRecordId(item?.id);
+                                setDeleteRecordFunction(
+                                  "DGM_YOUTH_Funds_donationsContributons_request"
+                                );
+                              }}
+                            >
+                              <Tooltip title=" Delete record">
+                                <span>
+                                  <DeleteIcon
+                                    style={{
+                                      color: "white",
+                                      fontSize: 20,
+
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          </div>
                         </Item>
                       </Grid>
                     </LightTooltip>
@@ -926,9 +1032,37 @@ function Finance() {
                       >
                         <Item className="full_profile_container">
                           <h6 className="full_profile"> Amount Added:</h6>
-                          <h6 className="amoutToAddfunds">
-                            + {item?.amoutToAddfunds}
-                          </h6>
+
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                              <h6 className="amoutToAddfunds">
+                                + {item?.amoutToAddfunds}
+                              </h6>
+                            </div>
+                            <div
+                              className="edit-icon-backround"
+                              onClick={() => {
+                                handleOpendeleteModal();
+                                setDeleteRecordId(item?.id);
+                                setDeleteRecordFunction(
+                                  "DGM_YOUTH_Funds_monthlyDues"
+                                );
+                              }}
+                            >
+                              <Tooltip title=" Delete record">
+                                <span>
+                                  <DeleteIcon
+                                    style={{
+                                      color: "white",
+                                      fontSize: 20,
+
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          </div>
                         </Item>
                       </Grid>
                     </LightTooltip>
@@ -963,9 +1097,37 @@ function Finance() {
                       >
                         <Item className="full_profile_container">
                           <h6 className="full_profile"> Amount Added :</h6>
-                          <h6 className="amoutToAddfunds">
-                            + {item?.amoutToAddfunds}
-                          </h6>
+
+                          <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                              <h6 className="amoutToAddfunds">
+                                + {item?.amoutToAddfunds}
+                              </h6>
+                            </div>
+                            <div
+                              className="edit-icon-backround"
+                              onClick={() => {
+                                handleOpendeleteModal();
+                                setDeleteRecordId(item?.id);
+                                setDeleteRecordFunction(
+                                  "DGM_YOUTH_Funds_donationsContributons"
+                                );
+                              }}
+                            >
+                              <Tooltip title=" Delete record">
+                                <span>
+                                  <DeleteIcon
+                                    style={{
+                                      color: "white",
+                                      fontSize: 20,
+
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          </div>
                         </Item>
                       </Grid>
                     </LightTooltip>

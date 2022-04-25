@@ -367,11 +367,13 @@ margin: 0 auto;
   color: purple;
 }
 .amoutToAddfunds {
+  margin-right: 5px;
   text-align: left;
   color: green;
   font-weight: 700;
 }
 .amoutToRequest {
+  margin-right: 5px;
   text-align: left;
   color: red;
   font-weight: 700;
