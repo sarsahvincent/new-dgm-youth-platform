@@ -6,19 +6,12 @@ import Typography from "@mui/material/Typography";
 import ButtonLoader from "./ButtonLoader";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import { ToastContainer, toast } from "react-toastify";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { ToastContainer } from "react-toastify";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { db } from "../firebse";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import {
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { Spinner } from "react-bootstrap";
 
 const style = {

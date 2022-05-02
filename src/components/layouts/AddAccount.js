@@ -738,29 +738,7 @@ function AddAccount() {
               </div>
             </div>
             {membershipStatus === "New Convert" && (
-              <div className="new_member_form_group">
-                {/* <div>
-                  <label htmlFor="invitee"></label>
-                  <Box
-                    component="form"
-                    sx={{
-                      "& > :not(style)": { m: 0.5, width: "35ch" },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                  >
-                    <TextField
-                      name="password"
-                      id="outlined-basic"
-                      label="Password *"
-                      type="password"
-                      variant="outlined"
-                      value={password}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                </div> */}
-              </div>
+              <div className="new_member_form_group"></div>
             )}
           </div>
           {error ? <p className="error">{error}</p> : null}

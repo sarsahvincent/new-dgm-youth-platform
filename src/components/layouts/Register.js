@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithphoneAndlocation } from "firebase/auth";
-import { Timestamp, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import SendIcon from "@mui/icons-material/Send";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
-import { storage, db, auth } from "../../firebse";
-
-import Loading from "../Loading";
-import { useDispatch } from "react-redux";
-import { getUserDetails } from "../../services/redux/reducers/userSlice";
+import { db } from "../../firebse";
 
 const id = Math.random().toString(36).slice(2);
 
 function Register() {
-  const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
   const [content, setContent] = useState("");
-  const [img, setImg] = useState();
-  const [user, setUser] = useState();
-  const [loadingImage, setLoadingImage] = useState(false);
-  const dispatch = useDispatch();
 
   const [data, setData] = useState({
     name: "",
@@ -78,7 +61,6 @@ function Register() {
       }
     }
   };
-
 
   return (
     <section className="login_container mt-3">

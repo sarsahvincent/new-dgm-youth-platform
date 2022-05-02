@@ -102,6 +102,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ layout }) {
+  const [loggedinUser, setLoggedinUser] = React.useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const location = useLocation();
 
   const theme = useTheme();
@@ -122,6 +127,7 @@ export default function MiniDrawer({ layout }) {
     await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser?.uid), {
       isOnline: false,
     });
+    localStorage.clear();
     await signOut(auth);
     navigate("/login");
   };
@@ -306,30 +312,37 @@ export default function MiniDrawer({ layout }) {
               </ListItem>
             </List>
           </Link>
-          <Divider />
-          <Link to="/add-account">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <PersonAddIcon
-                  style={{
-                    color: `${
-                      getPathname() === "/add-account" ? "orange" : "purple"
-                    }`,
-                  }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/add-account" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Add Acount</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+          {loggedinUser?.role * 1 === 1 ||
+          loggedinUser?.role * 1 === 2 ||
+          loggedinUser?.role * 1 === 10 ? (
+            <>
+              <Divider />
+              <Link to="/add-account">
+                <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                  <ListItemIcon>
+                    <PersonAddIcon
+                      style={{
+                        color: `${
+                          getPathname() === "/add-account" ? "orange" : "purple"
+                        }`,
+                      }}
+                      fontSize="medium"
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    style={{
+                      color: `${
+                        getPathname() === "/add-account" ? "orange" : "purple"
+                      }`,
+                    }}
+                  >
+                    <b>Add Acount</b>
+                  </ListItemText>
+                </ListItem>
+              </Link>
+            </>
+          ) : null}
+
           <Divider />
           <Link to="/new-converts-management">
             <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>

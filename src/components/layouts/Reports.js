@@ -1,49 +1,27 @@
 import React, { useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
-import tinymce from "tinymce/tinymce";
 import ReportTable from "../ReportsTable";
-import Loading from "../Loading";
 import ButtonLoader from "../ButtonLoader";
 import { ToastContainer, toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { storage, db, auth } from "../../firebse";
-import {
-  doc,
-  setDoc,
-  Timestamp,
-  collection,
-  getDocs,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
+import { useSelector } from "react-redux";
+import { db } from "../../firebse";
+import { doc, setDoc, collection } from "firebase/firestore";
 
 function Reports() {
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [limit, setLimit] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [loadEditor, setLoadEditor] = useState(true);
   const id = Math.random().toString(36).slice(2);
   const {
     profileDetails: { firstName, lastName, avatarPath },
   } = useSelector((state) => state.users);
 
-  const handleReportContent = (value) => {
-    setContent(value);
-    setLimit(false);
-  };
-
-  const totalDuesCollectiion = collection(db, "DGM_YOUTH_Reports");
-
-  
   const handleSubmitReport = async (e) => {
     e.preventDefault();
     if (content === "" || title === "") {
@@ -87,12 +65,18 @@ function Reports() {
         >
           <label htmlFor="">Report Title</label>
           <input
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <label htmlFor="">Report Content</label>
           <textarea
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
             value={content}
             onChange={(e) => setContent(e.target.value)}
             name=""
@@ -100,8 +84,14 @@ function Reports() {
             cols="30"
             rows="10"
           ></textarea>
-          <button disabled={loading} type="submit">
-            {" "}
+          <button
+            type="submit"
+            disabled={
+              loggedinUser?.role * 1 === 5 ||
+              loggedinUser?.role * 1 === 7 ||
+              loading
+            }
+          >
             {loading ? <ButtonLoader /> : " Submit Report"}
           </button>
         </form>

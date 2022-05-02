@@ -40,7 +40,8 @@ const style = {
   borderRadius: "6px",
   margin: "0 auto",
 };
-export default function ControlledAccordions() {
+export default function ControlledAccordions({ loggedinUser }) {
+  console.log("loggedinUser", loggedinUser);
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
     setOpendeleteModal(true);
@@ -51,6 +52,11 @@ export default function ControlledAccordions() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState(null);
+  const [user, setUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -188,26 +194,29 @@ export default function ControlledAccordions() {
                     <div>
                       <b>BREAKDOWN</b>
                     </div>
-                    <div
-                      className="edit-icon-backround"
-                      onClick={() => {
-                        handleOpendeleteModal();
-                        setDeleteEventId(activity?.id);
-                      }}
-                    >
-                      <Tooltip title=" Delete event">
-                        <span>
-                          <DeleteIcon
-                            style={{
-                              color: "white",
-                              fontSize: 25,
-                          
-                              cursor: "pointer",
-                            }}
-                          />
-                        </span>
-                      </Tooltip>
-                    </div>
+
+                    {user?.role * 1 === 1 || user?.role * 1 === 2 ? (
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          handleOpendeleteModal();
+                          setDeleteEventId(activity?.id);
+                        }}
+                      >
+                        <Tooltip title=" Delete event">
+                          <span>
+                            <DeleteIcon
+                              style={{
+                                color: "white",
+                                fontSize: 25,
+
+                                cursor: "pointer",
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                      </div>
+                    ) : null}
                   </div>
 
                   <div>
@@ -229,48 +238,51 @@ export default function ControlledAccordions() {
                   <b>
                     Totol: <span>{activity?.total}</span>{" "}
                   </b>
-                  <PopupState variant="popover" popupId="demo-popup-menu">
-                    {(popupState) => (
-                      <React.Fragment>
-                        <MoreVertIcon
-                          sx={{ cursor: "pointer", color: "green" }}
-                          {...bindTrigger(popupState)}
-                        />
 
-                        <Menu {...bindMenu(popupState)}>
-                          <div
-                            onClick={() => {
-                              updateStatus(activity?.id, "approved");
-                            }}
-                          >
-                            <MenuItem onClick={popupState.close}>
-                              Approve
-                            </MenuItem>
-                          </div>
+                  {user?.role * 1 === 1 || user?.role * 1 === 2 ? (
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                      {(popupState) => (
+                        <React.Fragment>
+                          <MoreVertIcon
+                            sx={{ cursor: "pointer", color: "green" }}
+                            {...bindTrigger(popupState)}
+                          />
 
-                          <div
-                            onClick={() => {
-                              updateStatus(activity?.id, "pending");
-                            }}
-                          >
-                            <MenuItem onClick={popupState.close}>
-                              Pending
-                            </MenuItem>
-                          </div>
+                          <Menu {...bindMenu(popupState)}>
+                            <div
+                              onClick={() => {
+                                updateStatus(activity?.id, "approved");
+                              }}
+                            >
+                              <MenuItem onClick={popupState.close}>
+                                Approve
+                              </MenuItem>
+                            </div>
 
-                          <div
-                            onClick={() => {
-                              updateStatus(activity?.id, "executed");
-                            }}
-                          >
-                            <MenuItem onClick={popupState.close}>
-                              Executed
-                            </MenuItem>
-                          </div>
-                        </Menu>
-                      </React.Fragment>
-                    )}
-                  </PopupState>
+                            <div
+                              onClick={() => {
+                                updateStatus(activity?.id, "pending");
+                              }}
+                            >
+                              <MenuItem onClick={popupState.close}>
+                                Pending
+                              </MenuItem>
+                            </div>
+
+                            <div
+                              onClick={() => {
+                                updateStatus(activity?.id, "executed");
+                              }}
+                            >
+                              <MenuItem onClick={popupState.close}>
+                                Executed
+                              </MenuItem>
+                            </div>
+                          </Menu>
+                        </React.Fragment>
+                      )}
+                    </PopupState>
+                  ) : null}
 
                   {loading && <ButtonLoader />}
                 </div>

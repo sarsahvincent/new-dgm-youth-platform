@@ -14,8 +14,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import {
   doc,
-  setDoc,
-  Timestamp,
   getDoc,
   updateDoc,
   getDocs,
@@ -27,6 +25,11 @@ import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 
 function EditProfile() {
+  const [loogedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -120,8 +123,6 @@ function EditProfile() {
       !baptism ||
       !city ||
       !address ||
-   
-   
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
@@ -209,14 +210,6 @@ function EditProfile() {
     }
   };
 
-  /*  useEffect(() => {
-    getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
-      if (docSnap.exists) {
-        setUser(docSnap.data());
-      }
-    });
-  }, []); */
-
   useEffect(() => {
     const getAllDepartment = async () => {
       const data = await getDocs(deparmentCollectiion);
@@ -274,6 +267,14 @@ function EditProfile() {
                       Role *
                     </InputLabel>
                     <Select
+                      disabled={
+                        loogedinUser?.role * 1 === 2 ||
+                        loogedinUser?.role * 1 === 3 ||
+                        loogedinUser?.role * 1 === 4 ||
+                        loogedinUser?.role * 1 === 5 ||
+                        loogedinUser?.role * 1 === 6 ||
+                        loogedinUser?.role * 1 === 7
+                      }
                       name="role"
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
@@ -287,6 +288,7 @@ function EditProfile() {
                       <MenuItem value="3">Treasurer</MenuItem>
                       <MenuItem value="4">Exective</MenuItem>
                       <MenuItem value="5">Member</MenuItem>
+                      <MenuItem value="7">Observer</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -777,29 +779,7 @@ function EditProfile() {
             </div>
 
             {membershipStatus === "New Convert" && (
-              <div className="new_member_form_group">
-                {/* <div>
-                  <label htmlFor="invitee"></label>
-                  <Box
-                    component="form"
-                    sx={{
-                      "& > :not(style)": { m: 0.5, width: "35ch" },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                  >
-                    <TextField
-                      name="password"
-                      id="outlined-basic"
-                      label="Password *"
-                      type="password"
-                      variant="outlined"
-                      value={password}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                </div> */}
-              </div>
+              <div className="new_member_form_group"></div>
             )}
           </div>
           {error ? <p className="error">{error}</p> : null}

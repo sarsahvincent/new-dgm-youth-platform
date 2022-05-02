@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { db } from "../firebse";
-import {
-  doc,
-  setDoc,
-  Timestamp,
-  collection,
-  getDocs,
-} from "firebase/firestore";
+import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 import ButtonLoader from "./ButtonLoader";
 import { useDispatch } from "react-redux";
 import { getAllActivities } from "../services/redux/reducers/activitiesSlice";
@@ -33,6 +27,11 @@ const ActivityCreator = () => {
     newFormValues[i][e.target.name] = e.target.value;
     setFormValues(newFormValues);
   };
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
 
   let addFormFields = () => {
     setFormValues([
@@ -113,11 +112,11 @@ const ActivityCreator = () => {
 
   return (
     <form className="activityFormContainer" onSubmit={handleSubmit}>
-      <div
-    
-        className="activity-container-heading"
-      >
+      <div className="activity-container-heading">
         <input
+          disabled={
+            loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+          }
           placeholder="Enter Title"
           className="activityTitle"
           type="text"
@@ -134,6 +133,9 @@ const ActivityCreator = () => {
       {formValues.map((element, index) => (
         <div className="form-inline" key={index}>
           <input
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
             className="itemName"
             placeholder="Name of item"
             type="text"
@@ -143,6 +145,9 @@ const ActivityCreator = () => {
           />
 
           <input
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
             placeholder="Quantity"
             type="number"
             name="quantity"
@@ -151,6 +156,9 @@ const ActivityCreator = () => {
           />
 
           <input
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
             placeholder="Unit Cost GH"
             type="number"
             name="unitCost"
@@ -181,6 +189,9 @@ const ActivityCreator = () => {
       ))}
       <div className="button-section">
         <button
+          disabled={
+            loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+          }
           className="buttonadd"
           type="button"
           onClick={() => addFormFields()}
@@ -191,7 +202,13 @@ const ActivityCreator = () => {
         {loading ? (
           <ButtonLoader />
         ) : (
-          <button className="buttonsubmit" type="submit">
+          <button
+            disabled={
+              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+            }
+            className="buttonsubmit"
+            type="submit"
+          >
             Submit
           </button>
         )}

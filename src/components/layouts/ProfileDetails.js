@@ -50,6 +50,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ProfileDetails() {
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
+
   //HOOKS FOR CONTROLLING DELETE IMAGE MODAL
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => setOpendeleteModal(true);
@@ -203,39 +209,46 @@ function ProfileDetails() {
             justifyContent: "space-around",
           }}
         >
-          <div className="edit-icon-backround">
-            <Link to={`/edit-profile/${user.uid}`}>
-              <Tooltip title="Edit Profile">
-                <span>
-                  <EditIcon
-                    style={{
-                      color: "white",
-                      fontSize: 18,
-                      cursor: "pointer",
-                    }}
-                  />
-                </span>
-              </Tooltip>
-            </Link>
-          </div>
-          {auth?.currentUser?.uid !== user.uid && (
-            <div
-              onClick={handleOpendeleteUserModal}
-              className="edit-icon-backround"
-            >
-              <Tooltip title=" Delete Profile">
-                <span>
-                  <DeleteIcon
-                    style={{
-                      color: "white",
-                      fontSize: 18,
-
-                      cursor: "pointer",
-                    }}
-                  />
-                </span>
-              </Tooltip>
+          {loggedinUser?.role * 1 !== 7 && (
+            <div className="edit-icon-backround">
+              <Link to={`/edit-profile/${user.uid}`}>
+                <Tooltip title="Edit Profile">
+                  <span>
+                    <EditIcon
+                      style={{
+                        color: "white",
+                        fontSize: 18,
+                        cursor: "pointer",
+                      }}
+                    />
+                  </span>
+                </Tooltip>
+              </Link>
             </div>
+          )}
+
+          {loggedinUser?.role * 1 === 1 && (
+            <>
+              {auth?.currentUser?.uid !== user.uid && (
+                <div
+                  onClick={handleOpendeleteUserModal}
+                  className="edit-icon-backround"
+                >
+                  <Tooltip title=" Delete Profile">
+                    <span>
+                      <DeleteIcon
+                        style={{
+                          color: "white",
+                          fontSize: 18,
+
+                          cursor: "pointer",
+                        }}
+                      />
+                    </span>
+                  </Tooltip>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -298,16 +311,18 @@ function ProfileDetails() {
                 <div className="profile_subDetails">
                   Role :
                   <span style={{ color: "purple" }}>
-                    {user.role === "1"
+                    {user.role * 1 === 1
                       ? "President"
-                      : user.role === "2"
+                      : user.role * 1 === 2
                       ? "Vice President"
-                      : user.role === "3"
+                      : user.role * 1 === 3
                       ? "Tresurer"
-                      : user.role === "4"
+                      : user.role * 1 === 4
                       ? "Executive"
-                      : user.role === "5"
+                      : user.role * 1 === 5
                       ? "Member"
+                      : user.role * 1 === 7
+                      ? "Observer"
                       : null}
                   </span>
                 </div>

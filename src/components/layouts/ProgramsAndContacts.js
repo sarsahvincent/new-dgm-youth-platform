@@ -1,42 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { storage, db, auth } from "../../firebse";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
-import SendIcon from "@mui/icons-material/Send";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { db } from "../../firebse";
+import { collection, doc, getDocs, deleteDoc } from "firebase/firestore";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../Loading";
-import {
-  getAllUsers,
-  getUserDetails,
-  getProgramContacts,
-} from "../../services/redux/reducers/userSlice";
+import { getProgramContacts } from "../../services/redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
-import UserTableAvatar from "../UserTableAvatar";
 
 const style = {
   position: "absolute",
@@ -72,14 +48,15 @@ function ProgramsAndContacts() {
     return dateObject.toLocaleString("en-US", { timeZoneName: "short" }); //2019-12-9 10:30:15
   };
   const [loading, setLoading] = useState(false);
-  const [img, setImg] = useState();
-  const [user, setUser] = useState();
-  const [users, setUsers] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [deleteContactId, setDeleteContactId] = useState(null);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const dispatch = useDispatch();
   const id = Math.random().toString(36).slice(2);
   const {
@@ -88,7 +65,6 @@ function ProgramsAndContacts() {
   const { programContacts } = useSelector((state) => state.departments);
 
   const contactCollection = collection(db, "DGM_YOUTH_contacts");
-
 
   const deleteContact = async () => {
     setLoading(true);
@@ -152,7 +128,7 @@ function ProgramsAndContacts() {
         }}
       >
         <h3 className="page-heading" style={{ color: "purple" }}>
-          Progam Management Contacs
+          Program Contacts
         </h3>
       </div>
       <Box
@@ -175,32 +151,34 @@ function ProgramsAndContacts() {
                   key={contact?.id}
                   className="main_profile_container prog-contact-list-container"
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
+                  {loggedinUser?.role * 1 === 1 && (
                     <div
-                      className="edit-icon-backround"
-                      onClick={() => {
-                        setDeleteContactId(contact?.id);
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
-                      <Tooltip title=" Delete Department">
-                        <span onClick={handleOpendeleteModal}>
-                          <DeleteIcon
-                            style={{
-                              color: "white",
-                              fontSize: 18,
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          setDeleteContactId(contact?.id);
+                        }}
+                      >
+                        <Tooltip title=" Delete Department">
+                          <span onClick={handleOpendeleteModal}>
+                            <DeleteIcon
+                              style={{
+                                color: "white",
+                                fontSize: 18,
 
-                              cursor: "pointer",
-                            }}
-                          />
-                        </span>
-                      </Tooltip>
+                                cursor: "pointer",
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
                       <h4 className="full_profile">Name :</h4>
@@ -211,7 +189,7 @@ function ProgramsAndContacts() {
                   </Grid>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">phone :</h4>
+                      <h4 className="full_profile">Phone :</h4>
                       <h4 className="full_profile_details">
                         {contact?.phone ? contact.phone : "Not available"}
                       </h4>
@@ -228,7 +206,7 @@ function ProgramsAndContacts() {
 
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
-                      <h4 className="full_profile">Send at :</h4>
+                      <h4 className="full_profile">Sent :</h4>
                       <h6 className="full_profile_details">
                         {contact?.sentAt
                           ? dateConvertor(contact.sentAt)

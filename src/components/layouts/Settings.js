@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { storage, db, auth } from "../../firebse";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
+import { storage, db } from "../../firebse";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import SendIcon from "@mui/icons-material/Send";
 import {
   collection,
@@ -18,13 +13,11 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
@@ -33,14 +26,10 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../Loading";
 import TextField from "@mui/material/TextField";
 import CancelIcon from "@mui/icons-material/Cancel";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import ButtonLoader from "../ButtonLoader";
-import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import {
   getAllUsers,
   getUserDetails,
@@ -55,7 +44,6 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import UserTableAvatar from "../UserTableAvatar";
-import { LockReset } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -78,6 +66,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Settings() {
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const auth = getAuth();
 
   // HOOKS FOR RESETTING PASSWORD
@@ -109,6 +102,7 @@ function Settings() {
   };
   const handleCloseImageModal = () => setOpenImagetModal(false);
 
+  const [loadingDepartments, setLoadingDepartments] = useState(false);
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState();
   const [user, setUser] = useState();
@@ -132,7 +126,6 @@ function Settings() {
   const usersCollectiion = collection(db, "DGM_YOUTH_users");
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
-  console.log("loading ....", loading);
   const handleUpdateDepartment = async (e) => {
     e.preventDefault();
     if (
@@ -221,7 +214,7 @@ function Settings() {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingDepartments(true);
     const getAllDepartment = async () => {
       const data = await getDocs(deparmentCollectiion);
       setDeparments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -229,7 +222,7 @@ function Settings() {
     dispatch(getDepartments(departments));
 
     getAllDepartment();
-    setLoading(false);
+    setLoadingDepartments(false);
   }, []);
 
   setTimeout(() => {
@@ -570,6 +563,13 @@ function Settings() {
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             {/* CREATE DEPARTMENT BUTTON */}
             <Button
+              disabled={
+                loggedinUser?.role * 1 === 3 ||
+                loggedinUser?.role * 1 === 4 ||
+                loggedinUser?.role * 1 === 5 ||
+                loggedinUser?.role * 1 === 6 ||
+                loggedinUser?.role * 1 === 7
+              }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenDepartmentModal}
               size="large"
@@ -584,6 +584,9 @@ function Settings() {
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             {/* ADD PROGRAM IMAGE BUTTON */}
             <Button
+              disabled={
+                loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
+              }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenImagetModal}
               size="large"
@@ -598,6 +601,14 @@ function Settings() {
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             {/*RESET PASSWORD  BUTTON */}
             <Button
+              disabled={
+                loggedinUser?.role * 1 === 2 ||
+                loggedinUser?.role * 1 === 3 ||
+                loggedinUser?.role * 1 === 4 ||
+                loggedinUser?.role * 1 === 5 ||
+                loggedinUser?.role * 1 === 6 ||
+                loggedinUser?.role * 1 === 7
+              }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenresetPasswordModal}
               size="large"
@@ -633,52 +644,86 @@ function Settings() {
                       alignItems: "center",
                     }}
                   >
-                    <div
-                      className="edit-icon-backround"
-                      onClick={() => {
-                        dispatch(getCureentEditDepartment(department));
-                      }}
-                    >
-                      <Link to={`/edit-department/${department?.id}`}>
-                        <Tooltip title="Edit Profile">
-                          <span
-                            onClick={() => {
-                              localStorage.setItem(
-                                "editDepartment",
-                                JSON.stringify(department)
-                              );
-                            }}
-                          >
-                            <EditIcon
+                    {loggedinUser?.role * 1 === 1 && (
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          dispatch(getCureentEditDepartment(department));
+                        }}
+                      >
+                        <Link to={`/edit-department/${department?.id}`}>
+                          <Tooltip title="Edit Profile">
+                            <span
+                              onClick={() => {
+                                localStorage.setItem(
+                                  "editDepartment",
+                                  JSON.stringify(department)
+                                );
+                              }}
+                            >
+                              <EditIcon
+                                style={{
+                                  color: "white",
+                                  fontSize: 18,
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </span>
+                          </Tooltip>
+                        </Link>
+                      </div>
+                    )}
+                    {loggedinUser?.role * 1 === 2 && (
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          dispatch(getCureentEditDepartment(department));
+                        }}
+                      >
+                        <Link to={`/edit-department/${department?.id}`}>
+                          <Tooltip title="Edit Profile">
+                            <span
+                              onClick={() => {
+                                localStorage.setItem(
+                                  "editDepartment",
+                                  JSON.stringify(department)
+                                );
+                              }}
+                            >
+                              <EditIcon
+                                style={{
+                                  color: "white",
+                                  fontSize: 18,
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </span>
+                          </Tooltip>
+                        </Link>
+                      </div>
+                    )}
+
+                    {loggedinUser?.role * 1 === 1 && (
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          setEditDepartmentId(department?.id);
+                        }}
+                      >
+                        <Tooltip title=" Delete Department">
+                          <span onClick={handleOpendeleteModal}>
+                            <DeleteIcon
                               style={{
                                 color: "white",
                                 fontSize: 18,
+
                                 cursor: "pointer",
                               }}
                             />
                           </span>
                         </Tooltip>
-                      </Link>
-                    </div>
-                    <div
-                      className="edit-icon-backround"
-                      onClick={() => {
-                        setEditDepartmentId(department?.id);
-                      }}
-                    >
-                      <Tooltip title=" Delete Department">
-                        <span onClick={handleOpendeleteModal}>
-                          <DeleteIcon
-                            style={{
-                              color: "white",
-                              fontSize: 18,
-
-                              cursor: "pointer",
-                            }}
-                          />
-                        </span>
-                      </Tooltip>
-                    </div>
+                      </div>
+                    )}
                   </div>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">

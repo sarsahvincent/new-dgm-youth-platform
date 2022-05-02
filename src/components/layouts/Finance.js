@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Icon from "@mdi/react";
 import { mdiCashMultiple, mdiHandCoinOutline, mdiCalendarMonth } from "@mdi/js";
-import Img from "../../assets/images/avatar.png";
-import Camera from "../../components/svg/Camera";
-import Delete from "../../components/svg/Delete";
 import { ToastContainer, toast } from "react-toastify";
 import Fade from "@mui/material/Fade";
 import { Spinner } from "react-bootstrap";
-import Zoom from "@mui/material/Zoom";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { storage, db, auth } from "../../firebse";
@@ -29,7 +24,6 @@ import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox
 import {
   doc,
   setDoc,
-  Timestamp,
   collection,
   getDocs,
   getDoc,
@@ -51,7 +45,6 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 const id = Math.random().toString(36).slice(2);
@@ -112,6 +105,11 @@ function Finance() {
     setRequestedAmount("");
   };
 
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   const [allMonthlyDuesRequested, setAllMonthlyDuesRequested] = useState([]);
   const [allDonConRequested, setAllDonConRequested] = useState([]);
 
@@ -455,19 +453,6 @@ function Finance() {
     }
   }, [img]);
 
-  const deleteImage = async () => {
-    try {
-      const confirm = window.confirm("Delete avatar");
-      if (confirm) {
-        deleteObject(ref(storage, user.avatarPath));
-      }
-      await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid), {
-        avatar: "",
-        avatarPath: "",
-      });
-      window.location.reload();
-    } catch (err) {}
-  };
   return user ? (
     <div className="layout_margin m-2 mt-3">
       {/* DELETE Dues Withdraw History */}
@@ -728,6 +713,11 @@ function Finance() {
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Button
+              disabled={
+                loggedinUser?.role * 1 === 4 ||
+                loggedinUser?.role * 1 === 5 ||
+                loggedinUser?.role * 1 === 7
+              }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenAddFundsModal}
               size="large"
@@ -739,6 +729,13 @@ function Finance() {
               Add Funds
             </Button>
             <Button
+              disabled={
+                loggedinUser?.role * 1 === 2 ||
+                loggedinUser?.role * 1 === 3 ||
+                loggedinUser?.role * 1 === 4 ||
+                loggedinUser?.role * 1 === 5 ||
+                loggedinUser?.role * 1 === 7
+              }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenRequestFundsModal}
               size="large"
@@ -896,29 +893,31 @@ function Finance() {
                                 - {item?.requestedAmount}
                               </h6>
                             </div>
-                            <div
-                              className="edit-icon-backround"
-                              onClick={() => {
-                                handleOpendeleteModal();
-                                setDeleteRecordId(item?.id);
-                                setDeleteRecordFunction(
-                                  "DGM_YOUTH_Funds_monthlyDues_request"
-                                );
-                              }}
-                            >
-                              <Tooltip title=" Delete record">
-                                <span>
-                                  <DeleteIcon
-                                    style={{
-                                      color: "white",
-                                      fontSize: 20,
+                            {loggedinUser?.role * 1 === 1 && (
+                              <div
+                                className="edit-icon-backround"
+                                onClick={() => {
+                                  handleOpendeleteModal();
+                                  setDeleteRecordId(item?.id);
+                                  setDeleteRecordFunction(
+                                    "DGM_YOUTH_Funds_monthlyDues_request"
+                                  );
+                                }}
+                              >
+                                <Tooltip title=" Delete record">
+                                  <span>
+                                    <DeleteIcon
+                                      style={{
+                                        color: "white",
+                                        fontSize: 20,
 
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </span>
-                              </Tooltip>
-                            </div>
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                            )}
                           </div>
                         </Item>
                       </Grid>
@@ -970,29 +969,32 @@ function Finance() {
                                 - {item?.requestedAmount}
                               </h6>
                             </div>
-                            <div
-                              className="edit-icon-backround"
-                              onClick={() => {
-                                handleOpendeleteModal();
-                                setDeleteRecordId(item?.id);
-                                setDeleteRecordFunction(
-                                  "DGM_YOUTH_Funds_donationsContributons_request"
-                                );
-                              }}
-                            >
-                              <Tooltip title=" Delete record">
-                                <span>
-                                  <DeleteIcon
-                                    style={{
-                                      color: "white",
-                                      fontSize: 20,
 
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </span>
-                              </Tooltip>
-                            </div>
+                            {loggedinUser?.role * 1 === 1 && (
+                              <div
+                                className="edit-icon-backround"
+                                onClick={() => {
+                                  handleOpendeleteModal();
+                                  setDeleteRecordId(item?.id);
+                                  setDeleteRecordFunction(
+                                    "DGM_YOUTH_Funds_donationsContributons_request"
+                                  );
+                                }}
+                              >
+                                <Tooltip title=" Delete record">
+                                  <span>
+                                    <DeleteIcon
+                                      style={{
+                                        color: "white",
+                                        fontSize: 20,
+
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                            )}
                           </div>
                         </Item>
                       </Grid>
@@ -1039,29 +1041,32 @@ function Finance() {
                                 + {item?.amoutToAddfunds}
                               </h6>
                             </div>
-                            <div
-                              className="edit-icon-backround"
-                              onClick={() => {
-                                handleOpendeleteModal();
-                                setDeleteRecordId(item?.id);
-                                setDeleteRecordFunction(
-                                  "DGM_YOUTH_Funds_monthlyDues"
-                                );
-                              }}
-                            >
-                              <Tooltip title=" Delete record">
-                                <span>
-                                  <DeleteIcon
-                                    style={{
-                                      color: "white",
-                                      fontSize: 20,
 
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </span>
-                              </Tooltip>
-                            </div>
+                            {loggedinUser?.role * 1 === 1 && (
+                              <div
+                                className="edit-icon-backround"
+                                onClick={() => {
+                                  handleOpendeleteModal();
+                                  setDeleteRecordId(item?.id);
+                                  setDeleteRecordFunction(
+                                    "DGM_YOUTH_Funds_monthlyDues"
+                                  );
+                                }}
+                              >
+                                <Tooltip title=" Delete record">
+                                  <span>
+                                    <DeleteIcon
+                                      style={{
+                                        color: "white",
+                                        fontSize: 20,
+
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                            )}
                           </div>
                         </Item>
                       </Grid>
@@ -1104,29 +1109,31 @@ function Finance() {
                                 + {item?.amoutToAddfunds}
                               </h6>
                             </div>
-                            <div
-                              className="edit-icon-backround"
-                              onClick={() => {
-                                handleOpendeleteModal();
-                                setDeleteRecordId(item?.id);
-                                setDeleteRecordFunction(
-                                  "DGM_YOUTH_Funds_donationsContributons"
-                                );
-                              }}
-                            >
-                              <Tooltip title=" Delete record">
-                                <span>
-                                  <DeleteIcon
-                                    style={{
-                                      color: "white",
-                                      fontSize: 20,
+                            {loggedinUser?.role * 1 === 1 && (
+                              <div
+                                className="edit-icon-backround"
+                                onClick={() => {
+                                  handleOpendeleteModal();
+                                  setDeleteRecordId(item?.id);
+                                  setDeleteRecordFunction(
+                                    "DGM_YOUTH_Funds_donationsContributons"
+                                  );
+                                }}
+                              >
+                                <Tooltip title=" Delete record">
+                                  <span>
+                                    <DeleteIcon
+                                      style={{
+                                        color: "white",
+                                        fontSize: 20,
 
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </span>
-                              </Tooltip>
-                            </div>
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                            )}
                           </div>
                         </Item>
                       </Grid>
@@ -1145,6 +1152,5 @@ function Finance() {
     <Loading />
   );
 }
-
 
 export default Finance;

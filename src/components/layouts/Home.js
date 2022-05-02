@@ -8,17 +8,11 @@ import { Box } from "@mui/system";
 import HomepageUserList from "../HomepageUserList";
 import HomepageEventTablet from "../HomepageEventTable";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  doc,
-  setDoc,
-  Timestamp,
-  getDoc,
-  updateDoc,
-  getDocs,
-  collection,
-} from "firebase/firestore";
+import { getDocs, collection, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebse";
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
+import { getUserDetails } from "../../services/redux/reducers/userSlice";
+
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
   const [men, setMen] = useState([]);
@@ -30,6 +24,7 @@ function HomePageContent() {
   let numberOfNewConvert = [];
   const { allDepartment } = useSelector((state) => state.departments);
   const [departments, setDeparments] = useState([]);
+  const [loggedinUser, setLoggedinUser] = useState();
 
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
@@ -63,6 +58,16 @@ function HomePageContent() {
     dispatch(getDepartments(departments));
 
     getAllDepartment();
+  }, []);
+
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
   }, []);
 
   setTimeout(() => {
@@ -172,7 +177,7 @@ function HomePageContent() {
           >
             Activities
           </h3>
-          <HomepageEventTablet />
+          <HomepageEventTablet loggedinUser={loggedinUser} />
         </div>
       </div>
     </div>

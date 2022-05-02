@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
-import Delete from "../../components/svg/Delete";
 import { storage, db, auth } from "../../firebse";
 import {
   ref,
@@ -20,14 +19,11 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { useDispatch } from "react-redux";
 import Loading from "../Loading";
 import { Spinner } from "react-bootstrap";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 const style = {
@@ -58,7 +54,11 @@ function Profile() {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
 
-  
+  const [loggedinUser, setLoggedinUser] = useState(
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
+      : []
+  );
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
@@ -66,6 +66,7 @@ function Profile() {
         dispatch(getUserDetails(docSnap.data()));
       }
     });
+
     if (img) {
       const uplaodImg = async () => {
         setLoading(true);
@@ -148,17 +149,23 @@ function Profile() {
             justifyContent: "space-around",
           }}
         >
-          <div className="edit-icon-backround">
-            <Tooltip title="Edit Profile">
-              <Link to={`/edit-profile/${user.uid}`}>
-                <span>
-                  <EditIcon
-                    style={{ color: "white", fontSize: 18, cursor: "pointer" }}
-                  />
-                </span>
-              </Link>
-            </Tooltip>
-          </div>
+          {loggedinUser?.role * 1 !== 7 && (
+            <div className="edit-icon-backround">
+              <Tooltip title="Edit Profile">
+                <Link to={`/edit-profile/${user.uid}`}>
+                  <span>
+                    <EditIcon
+                      style={{
+                        color: "white",
+                        fontSize: 18,
+                        cursor: "pointer",
+                      }}
+                    />
+                  </span>
+                </Link>
+              </Tooltip>
+            </div>
+          )}
         </div>
       </div>
       <Box
@@ -172,40 +179,42 @@ function Profile() {
                 <div className="img_container">
                   <img src={user?.avatar || Img} alt="profle" />
                   <div className="overlay">
-                    <div>
-                      <label htmlFor="photo">
-                        <Camera />
-                      </label>
-                      {user?.avatarPath ? (
-                        <svg
-                          onClick={handleOpendeleteModal}
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{
-                            widt: "25px",
-                            height: "25px",
-                            cursor: "pointer",
-                            color: "#f24957",
-                          }}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      ) : null}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        id="photo"
-                        onChange={(e) => setImg(e.target.files[0])}
-                      />
-                    </div>
+                    {loggedinUser?.role * 1 === 1 && (
+                      <div>
+                        <label htmlFor="photo">
+                          <Camera />
+                        </label>
+                        {user?.avatarPath ? (
+                          <svg
+                            onClick={handleOpendeleteModal}
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{
+                              widt: "25px",
+                              height: "25px",
+                              cursor: "pointer",
+                              color: "#f24957",
+                            }}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        ) : null}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          id="photo"
+                          onChange={(e) => setImg(e.target.files[0])}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -234,6 +243,8 @@ function Profile() {
                       ? "Executive"
                       : user.role === "5"
                       ? "Member"
+                      : user.role === "7"
+                      ? "Observer"
                       : null}
                   </span>
                 </div>

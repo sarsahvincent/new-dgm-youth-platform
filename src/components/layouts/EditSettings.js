@@ -1,57 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Img from "../../assets/images/avatar.png";
-import Camera from "../svg/Camera";
-import Delete from "../svg/Delete";
 import { storage, db, auth } from "../../firebse";
 import { useNavigate } from "react-router-dom";
-
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject,
-} from "firebase/storage";
+import { ref, deleteObject } from "firebase/storage";
 import SendIcon from "@mui/icons-material/Send";
-
-import GroupIcon from "@mui/icons-material/Group";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
   collection,
   doc,
   getDoc,
   getDocs,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../Loading";
 import TextField from "@mui/material/TextField";
-import CancelIcon from "@mui/icons-material/Cancel";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
   getAllUsers,
   getUserDetails,
 } from "../../services/redux/reducers/userSlice";
-import {
-  getDepartments,
-  getCureentEditDepartment,
-} from "../../services/redux/reducers/departmentSlice";
+import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
@@ -88,7 +62,6 @@ function EditSetting() {
   const [user, setUser] = useState();
   const [users, setUsers] = useState([]);
   const [departments, setDeparments] = useState([]);
-  const [edit, setEdit] = useState(false);
   const [getEditDepartment, setEditDepartment] = useState(
     JSON.parse(localStorage.getItem("editDepartment"))
       ? JSON.parse(localStorage.getItem("editDepartment"))
