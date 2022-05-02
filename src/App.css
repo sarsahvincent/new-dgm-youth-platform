@@ -119,6 +119,10 @@ section .form {
   text-align: center;
 }
 
+.css-n13k7l-MuiDrawer-docked .MuiDrawer-paper {
+  width: 50px !important;
+}
+
 .btn {
   padding: 10px;
   border-radius: 5px;

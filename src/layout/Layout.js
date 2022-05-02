@@ -254,7 +254,7 @@ export default function MiniDrawer({ layout }) {
         </Toolbar>
       </AppBar>
       {user && window.location.pathname !== "/upcoming-event" ? (
-        <Drawer sx={{ flexGrow: 1 }} variant="permanent" open={open}>
+        <Drawer className="left-drawer-width" sx={{ flexGrow: 1 }} variant="permanent" open={open}>
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
