@@ -6,4 +6,5 @@ function Contacts() {
   return <Layout layout={<ContactsPage />} />;
 }
 
+
 export default Contacts;
