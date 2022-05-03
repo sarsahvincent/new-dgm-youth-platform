@@ -171,7 +171,6 @@ export default function MiniDrawer({ layout }) {
               <MenuIcon />
             </IconButton>
           ) : null}
-
           <div>
             <Link to="/">
               <Typography
