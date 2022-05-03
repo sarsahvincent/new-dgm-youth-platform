@@ -34,7 +34,7 @@ textarea:focus {
 }
 
 .css-n13k7l-MuiDrawer-docked .MuiDrawer-paper {
-  width: 60px !important;
+  width: 50px !important;
 }
 
 /* Navbar */
@@ -56,6 +56,7 @@ nav a {
   color: var(--color-2);
   text-decoration: none !important;
 }
+
 
 nav div a {
   margin-right: 20px;
@@ -212,8 +213,8 @@ h6 {
   align-items: center;
   justify-content: center;
 }
-.pro-image-uplaod-input input{
-margin: 0 auto;
+.pro-image-uplaod-input input {
+  margin: 0 auto;
 }
 .program-image img {
   background-repeat: no-repeat;

@@ -34,7 +34,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 
-const drawerWidth = 240;
+const drawerWidth = "50px";
 
 const openedMixin = (theme) => ({
   width: drawerWidth,

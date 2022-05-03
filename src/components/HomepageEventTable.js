@@ -41,7 +41,6 @@ const style = {
   margin: "0 auto",
 };
 export default function ControlledAccordions({ loggedinUser }) {
-  console.log("loggedinUser", loggedinUser);
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
     setOpendeleteModal(true);
