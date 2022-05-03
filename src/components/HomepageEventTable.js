@@ -40,6 +40,7 @@ const style = {
   borderRadius: "6px",
   margin: "0 auto",
 };
+
 export default function ControlledAccordions({ loggedinUser }) {
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
