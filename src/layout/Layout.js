@@ -167,6 +167,7 @@ export default function MiniDrawer({ layout }) {
                 ...(open && { display: "none" }),
               }}
             >
+              
               <MenuIcon />
             </IconButton>
           ) : null}
