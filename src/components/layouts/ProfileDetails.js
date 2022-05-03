@@ -259,42 +259,45 @@ function ProfileDetails() {
               <div className="profile_container">
                 <div className="img_container">
                   <img src={user?.avatar || Img} alt="profle" />
-                  <div className="overlay">
-                    <div>
-                      <label htmlFor="photo">
-                        <Camera />
-                      </label>
-                      {user?.avatarPath ? (
-                        <svg
-                          onClick={handleOpendeleteModal}
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{
-                            widt: "25px",
-                            height: "25px",
-                            cursor: "pointer",
-                            color: "#f24957",
-                          }}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      ) : null}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        id="photo"
-                        onChange={(e) => setImg(e.target.files[0])}
-                      />
+
+                  {loggedinUser?.role * 1 === 1 && (
+                    <div className="overlay">
+                      <div>
+                        <label htmlFor="photo">
+                          <Camera />
+                        </label>
+                        {user?.avatarPath ? (
+                          <svg
+                            onClick={handleOpendeleteModal}
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{
+                              widt: "25px",
+                              height: "25px",
+                              cursor: "pointer",
+                              color: "#f24957",
+                            }}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        ) : null}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          id="photo"
+                          onChange={(e) => setImg(e.target.files[0])}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
                 <div className="text_container">
                   <h3>
