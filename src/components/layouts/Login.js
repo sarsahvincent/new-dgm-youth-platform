@@ -8,7 +8,6 @@ import { getCurrentUserId } from "../../services/redux/reducers/userSlice";
 import { Spinner } from "react-bootstrap";
 import LoginIcon from "@mui/icons-material/Login";
 
-
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,7 +76,9 @@ function Login() {
           <p className="error">
             {error === "Firebase: Error (auth/user-not-found)."
               ? "User Does Not Exist"
-              : error}
+              : error === "Firebase: Error (auth/timeout)."
+              ? "Network  error! Please try again"
+              : Error}
           </p>
         ) : null}
         <div className="btn_container">
