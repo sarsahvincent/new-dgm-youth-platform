@@ -7,6 +7,8 @@ import { db } from "../../firebse";
 import { doc, setDoc, collection } from "firebase/firestore";
 
 function Reports() {
+  const time = new Date().getTime()
+
   const [loggedinUser, setLoggedinUser] = useState(
     localStorage.getItem("loggedinUser")
       ? JSON.parse(localStorage.getItem("loggedinUser"))
@@ -35,7 +37,7 @@ function Reports() {
         await setDoc(doc(db, "DGM_YOUTH_Reports", id), {
           title,
           content,
-          createdAt: Math.floor(Date.now() / 1000),
+          createdAt: time,
           createdBy: firstName + " " + lastName,
         });
 

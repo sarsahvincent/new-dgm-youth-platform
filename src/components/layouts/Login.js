@@ -45,7 +45,14 @@ function Login() {
         setData({ ...data, loading: true });
         navigate("/");
       } catch (err) {
-        setData({ ...data, error: err.message, loading: false });
+        setData({
+          ...data,
+          error:
+            err.message === "Firebase: Error (auth/user-not-found)."
+              ? "Invalid emaial or password"
+              : err.message,
+          loading: false,
+        });
       }
     }
   };

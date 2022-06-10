@@ -264,6 +264,7 @@ function Settings() {
           const snap = await uploadBytes(imgRef, img);
           const url = await getDownloadURL(ref(storage, snap.ref.fullPath));
 
+          console.log("url", url, "imagePath", snap.ref.fullPath);
           await updateDoc(
             doc(db, "DGM_YOUTH_program_image", "DGM_YOUTH_program_image"),
             {

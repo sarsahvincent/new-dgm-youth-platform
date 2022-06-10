@@ -2,6 +2,8 @@ import * as React from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -35,6 +37,17 @@ import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 
 const drawerWidth = "50px";
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -167,8 +180,7 @@ export default function MiniDrawer({ layout }) {
                 ...(open && { display: "none" }),
               }}
             >
-              
-              <MenuIcon />
+              {/* <MenuIcon /> */}
             </IconButton>
           ) : null}
           <div>
@@ -254,7 +266,12 @@ export default function MiniDrawer({ layout }) {
         </Toolbar>
       </AppBar>
       {user && window.location.pathname !== "/upcoming-event" ? (
-        <Drawer className="left-drawer-width" sx={{ flexGrow: 1 }} variant="permanent" open={open}>
+        <Drawer
+          className="left-drawer-width"
+          sx={{ flexGrow: 1 }}
+          variant="permanent"
+          open={open}
+        >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
@@ -265,65 +282,40 @@ export default function MiniDrawer({ layout }) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          <Link to="/">
-            <List>
-              <ListItem sx={{ cursor: "pointer" }}>
-                <ListItemIcon>
-                  <DashboardIcon
+
+          <LightTooltip title="Dashboard">
+            <Link to="/">
+              <List>
+                <ListItem sx={{ cursor: "pointer" }}>
+                  <ListItemIcon>
+                    <DashboardIcon
+                      style={{
+                        color: `${getPathname() === "/" ? "orange" : "purple"}`,
+                      }}
+                      fontSize="medium"
+                    />
+                  </ListItemIcon>
+                  <ListItemText
                     style={{
                       color: `${getPathname() === "/" ? "orange" : "purple"}`,
                     }}
-                    fontSize="medium"
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  style={{
-                    color: `${getPathname() === "/" ? "orange" : "purple"}`,
-                  }}
-                >
-                  <b>Dashboard</b>
-                </ListItemText>
-              </ListItem>
-            </List>
-          </Link>
+                  >
+                    <b>Dashboard</b>
+                  </ListItemText>
+                </ListItem>
+              </List>
+            </Link>
+          </LightTooltip>
           <Divider />
-          <Link to="/profile">
-            <List>
-              <ListItem sx={{ cursor: "pointer" }}>
-                <ListItemIcon>
-                  <AccountBoxIcon
-                    style={{
-                      color: `${
-                        getPathname() === "/profile" ? "orange" : "purple"
-                      }`,
-                    }}
-                    fontSize="medium"
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  style={{
-                    color: `${
-                      getPathname() === "/profile" ? "orange" : "purple"
-                    }`,
-                  }}
-                >
-                  <b>Profile</b>
-                </ListItemText>
-              </ListItem>
-            </List>
-          </Link>
-          {loggedinUser?.role * 1 === 1 ||
-          loggedinUser?.role * 1 === 2 ||
-          loggedinUser?.role * 1 === 10 ? (
-            <>
-              <Divider />
-              <Link to="/add-account">
-                <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title="Profile">
+            <Link to="/profile">
+              <List>
+                <ListItem sx={{ cursor: "pointer" }}>
                   <ListItemIcon>
-                    <PersonAddIcon
+                    <AccountBoxIcon
                       style={{
                         color: `${
-                          getPathname() === "/add-account" ? "orange" : "purple"
+                          getPathname() === "/profile" ? "orange" : "purple"
                         }`,
                       }}
                       fontSize="medium"
@@ -332,190 +324,245 @@ export default function MiniDrawer({ layout }) {
                   <ListItemText
                     style={{
                       color: `${
-                        getPathname() === "/add-account" ? "orange" : "purple"
+                        getPathname() === "/profile" ? "orange" : "purple"
                       }`,
                     }}
                   >
-                    <b>Add Acount</b>
+                    <b>Profile</b>
                   </ListItemText>
                 </ListItem>
-              </Link>
+              </List>
+            </Link>
+          </LightTooltip>
+          {loggedinUser?.role * 1 === 1 ||
+          loggedinUser?.role * 1 === 2 ||
+          loggedinUser?.role * 1 === 10 ? (
+            <>
+              <Divider />
+              <LightTooltip title="Add Account">
+                <Link to="/add-account">
+                  <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                    <ListItemIcon>
+                      <PersonAddIcon
+                        style={{
+                          color: `${
+                            getPathname() === "/add-account"
+                              ? "orange"
+                              : "purple"
+                          }`,
+                        }}
+                        fontSize="medium"
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      style={{
+                        color: `${
+                          getPathname() === "/add-account" ? "orange" : "purple"
+                        }`,
+                      }}
+                    >
+                      <b>Add Acount</b>
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              </LightTooltip>
             </>
           ) : null}
 
           <Divider />
-          <Link to="/new-converts-management">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <GroupsIcon
+          <LightTooltip title="Convert">
+            <Link to="/new-converts-management">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <GroupsIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/new-converts-management"
+                          ? "orange"
+                          : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/new-converts-management"
+                      getPathname() === "/new-converts-managementnt"
                         ? "orange"
                         : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/new-converts-managementnt"
-                      ? "orange"
-                      : "purple"
-                  }`,
-                }}
-              >
-                <b>Converts</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Converts</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
           <Divider />
-          <Link to="/events">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <TodayIcon
+          <LightTooltip title="Events">
+            <Link to="/events">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <TodayIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/events" ? "orange" : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/events" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${getPathname() === "/events" ? "orange" : "purple"}`,
-                }}
-              >
-                <b>Events</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Events</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
 
           <Divider />
-          <Link to="/finance">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <Paid
+          <LightTooltip title="Finance">
+            <Link to="/finance">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <Paid
+                    style={{
+                      color: `${
+                        getPathname() === "/finance" ? "orange" : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/finance" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/finance" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Finace</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Finace</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
 
           <Divider />
-          <Link to="/reports">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <CreateIcon
+          <LightTooltip title="Reports">
+            <Link to="/reports">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <CreateIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/reports" ? "orange" : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/reports" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/reports" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Reports</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Reports</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
           <Divider />
-          <Link to="/settings">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <ManageAccountsIcon
+          <LightTooltip title="Settings">
+            <Link to="/settings">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <ManageAccountsIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/settings" ? "orange" : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/settings" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/settings" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Settings</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Settings</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
 
           <Divider />
-          <Link to="/program-contact">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <ContactPhoneIcon
+
+          <LightTooltip title="Contacts">
+            <Link to="/program-contact">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <ContactPhoneIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/program-contact"
+                          ? "orange"
+                          : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/program-contact" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/program-contact" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Contact</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Contact</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
           <Divider />
-          <Link to="/upcoming-event">
-            <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
-              <ListItemIcon>
-                <ConnectWithoutContactIcon
+          <LightTooltip title="Program">
+            <Link to="/upcoming-event">
+              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+                <ListItemIcon>
+                  <ConnectWithoutContactIcon
+                    style={{
+                      color: `${
+                        getPathname() === "/upcoming-event"
+                          ? "orange"
+                          : "purple"
+                      }`,
+                    }}
+                    fontSize="medium"
+                  />
+                </ListItemIcon>
+                <ListItemText
                   style={{
                     color: `${
                       getPathname() === "/upcoming-event" ? "orange" : "purple"
                     }`,
                   }}
-                  fontSize="medium"
-                />
-              </ListItemIcon>
-              <ListItemText
-                style={{
-                  color: `${
-                    getPathname() === "/upcoming-event" ? "orange" : "purple"
-                  }`,
-                }}
-              >
-                <b>Program</b>
-              </ListItemText>
-            </ListItem>
-          </Link>
+                >
+                  <b>Program</b>
+                </ListItemText>
+              </ListItem>
+            </Link>
+          </LightTooltip>
         </Drawer>
       ) : null}
 

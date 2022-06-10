@@ -59,7 +59,7 @@ export default function HomepageUserList({ allDepartment }) {
 
   const dispatch = useDispatch();
 
-  rows = searchResults?.map((user) =>
+  rows = searchResults?.map((user, index) =>
     createData(
       <Link to={`/profile-details/${user.uid}`}>
         <UserTableAvatar url={user.avatar} />
@@ -71,7 +71,6 @@ export default function HomepageUserList({ allDepartment }) {
         {" "}
         {user?.phone ? <PhoneIcon /> : "Not available"} {user.phone}
       </Link>,
-
       <Link to={`/profile-details/${user.uid}`}>
         {" "}
         {user.email} {user?.email ? <EmailIcon /> : "Not available"}
@@ -118,15 +117,14 @@ export default function HomepageUserList({ allDepartment }) {
     setFilterByMemberShip("");
   };
 
-
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
-        user?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.sex.toLowerCase().includes(searchTerm.toLowerCase())
+        user?.firstName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+        user?.lastName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+        user?.phone?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+        user?.email?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+        user?.sex?.toLowerCase()?.includes(searchTerm?.toLowerCase())
     );
 
     setSearchReults(filteredData);
@@ -134,7 +132,7 @@ export default function HomepageUserList({ allDepartment }) {
 
   useEffect(() => {
     const filteredByGender = users?.filter((user) =>
-      user?.sex.includes(filterBySex)
+      user?.sex?.includes(filterBySex)
     );
 
     setSearchReults(filteredByGender);
@@ -142,7 +140,7 @@ export default function HomepageUserList({ allDepartment }) {
 
   useEffect(() => {
     const filteredByMemberShip = users?.filter((user) =>
-      user?.membershipStatus.includes(filterByMembership)
+      user?.membershipStatus?.includes(filterByMembership)
     );
 
     setSearchReults(filteredByMemberShip);
@@ -150,7 +148,7 @@ export default function HomepageUserList({ allDepartment }) {
 
   useEffect(() => {
     const filteredByDepartment = users?.filter((user) =>
-      user?.department.includes(filterByDepartment)
+      user?.department?.includes(filterByDepartment)
     );
 
     setSearchReults(filteredByDepartment);
@@ -159,7 +157,7 @@ export default function HomepageUserList({ allDepartment }) {
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectiion);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setUsers(data?.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     dispatch(getAllUsers(users));
 

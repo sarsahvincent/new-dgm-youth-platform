@@ -423,26 +423,28 @@ function Finance() {
   }, []);
 
   useEffect(() => {
-    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
-      if (docSnap.exists) {
-        setUser(docSnap.data());
-        dispatch(getUserDetails(docSnap.data()));
+    getDoc(doc(db, "DGM_YOUTH_users", auth?.currentUser?.uid)).then(
+      (docSnap) => {
+        if (docSnap.exists) {
+          setUser(docSnap.data());
+          dispatch(getUserDetails(docSnap.data()));
+        }
       }
-    });
+    );
     if (img) {
       const uplaodImg = async () => {
         const imgRef = ref(
           storage,
-          `chat-app/avatar/${new Date().getTime()} - ${img.name}`
+          `chat-app/avatar/${new Date().getTime()} - ${img?.name}`
         );
         try {
-          if (user.avatarPath) {
-            await deleteObject(ref(storage, user.avatarPath));
+          if (user?.avatarPath) {
+            await deleteObject(ref(storage, user?.avatarPath));
           }
           const snap = await uploadBytes(imgRef, img);
-          const url = await getDownloadURL(ref(storage, snap.ref.fullPath));
+          const url = await getDownloadURL(ref(storage, snap?.ref.fullPath));
 
-          await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid), {
+          await updateDoc(doc(db, "DGM_YOUTH_users", auth?.currentUser.uid), {
             avatar: url,
             avatarPath: snap.ref.fullPath,
           });
@@ -774,7 +776,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {currentBalance ? currentBalance.toFixed(2) : 0}
+                    {currentBalance ? currentBalance?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -802,7 +804,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {totalDues ? totalDues.toFixed(2) : 0}
+                    {totalDues ? totalDues?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -830,8 +832,8 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {" "}
-                    {totalDonCont ? totalDonCont.toFixed(2) : 0}
+                    
+                    {totalDonCont ? totalDonCont?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>

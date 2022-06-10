@@ -9,6 +9,8 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
+import Moment from "react-moment";
+
 import GroupIcon from "@mui/icons-material/Group";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -220,13 +222,14 @@ function Profile() {
 
                 <div className="text_container">
                   <h3>
-                    {user.firstName} <span>{user.lastName} </span>
+                    {user?.firstName} <span>{user?.lastName} </span>
                   </h3>
-                  <p>{user.email}</p>
+                  <p>{user?.email}</p>
                   <hr />
                   <small>
-                    Joined on : {user.createdAt?.toDate().toDateString()}
+                  Joined on :<Moment fromNow>{user?.createdAt}</Moment>
                   </small>
+                 
                 </div>
               </div>
               <div>
@@ -245,6 +248,8 @@ function Profile() {
                       ? "Member"
                       : user.role === "7"
                       ? "Observer"
+                      : user.role === "6"
+                      ? "Financial Secretary"
                       : null}
                   </span>
                 </div>

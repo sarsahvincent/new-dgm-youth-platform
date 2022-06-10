@@ -17,6 +17,7 @@ import ButtonLoader from "../ButtonLoader";
 import Loading from "../Loading";
 
 const id = Math.random().toString(36).slice(2);
+const time = new Date().getTime()
 function AddAccount() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -123,7 +124,7 @@ function AddAccount() {
           role,
           department,
           emergencyContact,
-          createdAt: Math.floor(Date.now() / 1000),
+          createdAt: Date.now(),
           isOnline: true,
         });
 
@@ -224,7 +225,7 @@ function AddAccount() {
           role,
           department,
           emergencyContact,
-          createdAt: Math.floor(Date.now() / 1000),
+          createdAt: time,
           isOnline: true,
         });
 

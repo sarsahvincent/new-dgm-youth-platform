@@ -13,6 +13,7 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
+import Moment from "react-moment";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { styled } from "@mui/material/styles";
 import GroupIcon from "@mui/icons-material/Group";
@@ -72,6 +73,8 @@ function ProfileDetails() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
 
+  console.log("createdAt", user?.createdAt);
+
   const [deleteUserId, setDeleteUserId] = useState(false);
 
   const navigate = useNavigate();
@@ -91,7 +94,7 @@ function ProfileDetails() {
         setLoading(true);
         const imgRef = ref(
           storage,
-          `chat-app/avatar/${new Date().getTime()} - ${img.name}`
+          `dgm-users/avatar/${new Date().getTime()} - ${img.name}`
         );
 
         try {
@@ -303,10 +306,14 @@ function ProfileDetails() {
                   <h3>
                     {user.firstName} <span>{user.lastName} </span>
                   </h3>
-                  <p>{user.email}</p>
+                  <p>{user.email} </p>
                   <hr />
+                  {console.log("user", user)}
                   <small>
-                    Joined on : {user.createdAt?.toDate().toDateString()}
+                    Joined on :{" "}
+                    <Moment fromNow>
+                      {user?.createdAt}
+                    </Moment>
                   </small>
                 </div>
               </div>
@@ -324,6 +331,8 @@ function ProfileDetails() {
                       ? "Executive"
                       : user.role * 1 === 5
                       ? "Member"
+                      : user.role * 1 === 6
+                      ? "Financial Secretary"
                       : user.role * 1 === 7
                       ? "Observer"
                       : null}

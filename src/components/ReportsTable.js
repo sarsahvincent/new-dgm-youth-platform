@@ -12,6 +12,8 @@ import { db } from "../firebse";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import Moment from "react-moment";
+
 import { Spinner } from "react-bootstrap";
 
 const style = {
@@ -162,7 +164,10 @@ export default function ControlledAccordions() {
                   <br />
                   <b>
                     Submitted at:{" "}
-                    <span>{dateConvertor(report?.createdAt)}</span>{" "}
+                    <span>
+                      {" "}
+                      <Moment fromNow>{report?.createdAt}</Moment>
+                    </span>{" "}
                   </b>
 
                   {loading && <ButtonLoader />}
