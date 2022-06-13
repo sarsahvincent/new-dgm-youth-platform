@@ -264,7 +264,6 @@ function Settings() {
           const snap = await uploadBytes(imgRef, img);
           const url = await getDownloadURL(ref(storage, snap.ref.fullPath));
 
-          console.log("url", url, "imagePath", snap.ref.fullPath);
           await updateDoc(
             doc(db, "DGM_YOUTH_program_image", "DGM_YOUTH_program_image"),
             {
@@ -645,7 +644,8 @@ function Settings() {
                       alignItems: "center",
                     }}
                   >
-                    {loggedinUser?.role * 1 === 1 && (
+                    {/* {loggedinUser?.role * 1 === 1 ||
+                    loggedinUser?.role * 1 === 0 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -673,8 +673,10 @@ function Settings() {
                           </Tooltip>
                         </Link>
                       </div>
-                    )}
-                    {loggedinUser?.role * 1 === 2 && (
+                    ) : null} */}
+                    {loggedinUser?.role * 1 === 2 ||
+                    loggedinUser?.role * 1 === 1 ||
+                    loggedinUser?.role * 1 === 0 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -682,7 +684,7 @@ function Settings() {
                         }}
                       >
                         <Link to={`/edit-department/${department?.id}`}>
-                          <Tooltip title="Edit Profile">
+                          <Tooltip title="Edit Deparment">
                             <span
                               onClick={() => {
                                 localStorage.setItem(
@@ -702,9 +704,10 @@ function Settings() {
                           </Tooltip>
                         </Link>
                       </div>
-                    )}
+                    ) : null}
 
-                    {loggedinUser?.role * 1 === 1 && (
+                    {loggedinUser?.role * 1 === 1 ||
+                    loggedinUser?.role * 1 === 0 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -724,7 +727,7 @@ function Settings() {
                           </span>
                         </Tooltip>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">

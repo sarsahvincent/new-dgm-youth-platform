@@ -832,7 +832,6 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    
                     {totalDonCont ? totalDonCont?.toFixed(2) : 0}
                   </div>
                 </div>
@@ -895,7 +894,8 @@ function Finance() {
                                 - {item?.requestedAmount}
                               </h6>
                             </div>
-                            {loggedinUser?.role * 1 === 1 && (
+                            {loggedinUser?.role * 1 === 1 ||
+                            loggedinUser?.role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -919,7 +919,7 @@ function Finance() {
                                   </span>
                                 </Tooltip>
                               </div>
-                            )}
+                            ) : null}
                           </div>
                         </Item>
                       </Grid>
@@ -972,7 +972,8 @@ function Finance() {
                               </h6>
                             </div>
 
-                            {loggedinUser?.role * 1 === 1 && (
+                            {loggedinUser?.role * 1 === 1 ||
+                            loggedinUser?.role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -996,7 +997,7 @@ function Finance() {
                                   </span>
                                 </Tooltip>
                               </div>
-                            )}
+                            ) : null}
                           </div>
                         </Item>
                       </Grid>
@@ -1044,7 +1045,8 @@ function Finance() {
                               </h6>
                             </div>
 
-                            {loggedinUser?.role * 1 === 1 && (
+                            {loggedinUser?.role * 1 === 1 ||
+                            loggedinUser?.role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -1068,7 +1070,7 @@ function Finance() {
                                   </span>
                                 </Tooltip>
                               </div>
-                            )}
+                            ) : null}
                           </div>
                         </Item>
                       </Grid>
@@ -1111,7 +1113,8 @@ function Finance() {
                                 + {item?.amoutToAddfunds}
                               </h6>
                             </div>
-                            {loggedinUser?.role * 1 === 1 && (
+                            {loggedinUser?.role * 1 === 1 ||
+                            loggedinUser?.role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -1135,7 +1138,7 @@ function Finance() {
                                   </span>
                                 </Tooltip>
                               </div>
-                            )}
+                            ) : null}
                           </div>
                         </Item>
                       </Grid>

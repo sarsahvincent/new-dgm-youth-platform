@@ -195,7 +195,9 @@ export default function ControlledAccordions({ loggedinUser }) {
                       <b>BREAKDOWN</b>
                     </div>
 
-                    {user?.role * 1 === 1 || user?.role * 1 === 2 ? (
+                    {user?.role * 1 === 0 ||
+                    user?.role * 1 === 1 ||
+                    user?.role * 1 === 2 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -239,7 +241,9 @@ export default function ControlledAccordions({ loggedinUser }) {
                     Totol: <span>{activity?.total}</span>{" "}
                   </b>
 
-                  {user?.role * 1 === 1 || user?.role * 1 === 2 ? (
+                  {user?.role * 1 === 1 ||
+                  user?.role * 1 === 2 ||
+                  user?.role * 1 === 0 ? (
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (
                         <React.Fragment>

@@ -151,7 +151,8 @@ function ProgramsAndContacts() {
                   key={contact?.id}
                   className="main_profile_container prog-contact-list-container"
                 >
-                  {loggedinUser?.role * 1 === 1 && (
+                  {loggedinUser?.role * 1 === 1 ||
+                  loggedinUser?.role * 1 === 0 ? (
                     <div
                       style={{
                         display: "flex",
@@ -178,7 +179,7 @@ function ProgramsAndContacts() {
                         </Tooltip>
                       </div>
                     </div>
-                  )}
+                  ) : null}
                   <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
                     <Item className="full_profile_container">
                       <h4 className="full_profile">Name :</h4>

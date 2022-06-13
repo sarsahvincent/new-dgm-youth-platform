@@ -73,10 +73,6 @@ function ProfileDetails() {
   const [img, setImg] = useState();
   const [user, setUser] = useState();
 
-  console.log("createdAt", user?.createdAt);
-
-  const [deleteUserId, setDeleteUserId] = useState(false);
-
   const navigate = useNavigate();
   useEffect(() => {
     const getUsers = async () => {
@@ -212,45 +208,54 @@ function ProfileDetails() {
             justifyContent: "space-around",
           }}
         >
-          {loggedinUser?.role * 1 !== 7 && (
-            <div className="edit-icon-backround">
-              <Link to={`/edit-profile/${user.uid}`}>
-                <Tooltip title="Edit Profile">
-                  <span>
-                    <EditIcon
-                      style={{
-                        color: "white",
-                        fontSize: 18,
-                        cursor: "pointer",
-                      }}
-                    />
-                  </span>
-                </Tooltip>
-              </Link>
-            </div>
-          )}
-
-          {loggedinUser?.role * 1 === 1 && (
+          {user?.role * 1 === 0 ? null : (
             <>
-              {auth?.currentUser?.uid !== user.uid && (
-                <div
-                  onClick={handleOpendeleteUserModal}
-                  className="edit-icon-backround"
-                >
-                  <Tooltip title=" Delete Profile">
-                    <span>
-                      <DeleteIcon
-                        style={{
-                          color: "white",
-                          fontSize: 18,
-
-                          cursor: "pointer",
-                        }}
-                      />
-                    </span>
-                  </Tooltip>
+              {loggedinUser?.role * 1 === 7 ||
+              loggedinUser?.role * 1 === 0 ? null : (
+                <div className="edit-icon-backround">
+                  <Link to={`/edit-profile/${user.uid}`}>
+                    <Tooltip title="Edit Profile">
+                      <span>
+                        <EditIcon
+                          style={{
+                            color: "white",
+                            fontSize: 18,
+                            cursor: "pointer",
+                          }}
+                        />
+                      </span>
+                    </Tooltip>
+                  </Link>
                 </div>
               )}
+            </>
+          )}
+
+          {user?.role * 1 === 0 ? null : (
+            <>
+              {loggedinUser?.role * 1 === 1 || loggedinUser?.role * 1 === 0 ? (
+                <>
+                  {auth?.currentUser?.uid !== user.uid && (
+                    <div
+                      onClick={handleOpendeleteUserModal}
+                      className="edit-icon-backround"
+                    >
+                      <Tooltip title=" Delete Profile">
+                        <span>
+                          <DeleteIcon
+                            style={{
+                              color: "white",
+                              fontSize: 18,
+
+                              cursor: "pointer",
+                            }}
+                          />
+                        </span>
+                      </Tooltip>
+                    </div>
+                  )}
+                </>
+              ) : null}
             </>
           )}
         </div>
@@ -262,44 +267,48 @@ function ProfileDetails() {
               <div className="profile_container">
                 <div className="img_container">
                   <img src={user?.avatar || Img} alt="profle" />
-
-                  {loggedinUser?.role * 1 === 1 && (
-                    <div className="overlay">
-                      <div>
-                        <label htmlFor="photo">
-                          <Camera />
-                        </label>
-                        {user?.avatarPath ? (
-                          <svg
-                            onClick={handleOpendeleteModal}
-                            xmlns="http://www.w3.org/2000/svg"
-                            style={{
-                              widt: "25px",
-                              height: "25px",
-                              cursor: "pointer",
-                              color: "#f24957",
-                            }}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  {user?.role * 1 === 0 ? null : (
+                    <>
+                      {loggedinUser?.role * 1 === 1 ||
+                      loggedinUser?.role * 1 === 0 ? (
+                        <div className="overlay">
+                          <div>
+                            <label htmlFor="photo">
+                              <Camera />
+                            </label>
+                            {user?.avatarPath ? (
+                              <svg
+                                onClick={handleOpendeleteModal}
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{
+                                  widt: "25px",
+                                  height: "25px",
+                                  cursor: "pointer",
+                                  color: "#f24957",
+                                }}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                            ) : null}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              style={{ display: "none" }}
+                              id="photo"
+                              onChange={(e) => setImg(e.target.files[0])}
                             />
-                          </svg>
-                        ) : null}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          style={{ display: "none" }}
-                          id="photo"
-                          onChange={(e) => setImg(e.target.files[0])}
-                        />
-                      </div>
-                    </div>
+                          </div>
+                        </div>
+                      ) : null}
+                    </>
                   )}
                 </div>
                 <div className="text_container">
@@ -310,10 +319,7 @@ function ProfileDetails() {
                   <hr />
                   {console.log("user", user)}
                   <small>
-                    Joined on :{" "}
-                    <Moment fromNow>
-                      {user?.createdAt}
-                    </Moment>
+                    Joined on : <Moment fromNow>{user?.createdAt}</Moment>
                   </small>
                 </div>
               </div>
@@ -321,7 +327,9 @@ function ProfileDetails() {
                 <div className="profile_subDetails">
                   Role :
                   <span style={{ color: "purple" }}>
-                    {user.role * 1 === 1
+                    {user.role * 1 === 0
+                      ? "ADMIN"
+                      : user.role * 1 === 1
                       ? "President"
                       : user.role * 1 === 2
                       ? "Vice President"
