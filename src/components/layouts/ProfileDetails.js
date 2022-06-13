@@ -322,7 +322,6 @@ function ProfileDetails() {
                   </h3>
                   <p>{user.email} </p>
                   <hr />
-                  {console.log("user", user)}
                   <small>
                     Joined on : <Moment fromNow>{user?.createdAt}</Moment>
                   </small>
