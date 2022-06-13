@@ -24,6 +24,7 @@ input:focus,
 textarea:focus {
   outline: none !important;
 }
+
 :root {
   --color-1: purple;
   --color-2: white;
