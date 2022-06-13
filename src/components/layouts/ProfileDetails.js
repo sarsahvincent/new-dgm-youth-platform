@@ -210,27 +210,32 @@ function ProfileDetails() {
         >
           {user?.role * 1 === 0 ? null : (
             <>
-              {loggedinUser?.role * 1 === 7 ||
-              loggedinUser?.role * 1 === 0 ? null : (
-                <div className="edit-icon-backround">
-                  <Link to={`/edit-profile/${user.uid}`}>
-                    <Tooltip title="Edit Profile">
-                      <span>
-                        <EditIcon
-                          style={{
-                            color: "white",
-                            fontSize: 18,
-                            cursor: "pointer",
-                          }}
-                        />
-                      </span>
-                    </Tooltip>
-                  </Link>
-                </div>
-              )}
+              {loggedinUser?.role * 1 === 1 || loggedinUser?.role * 1 === 0 ? (
+                <>
+                  {auth?.currentUser?.uid !== user.uid && (
+                    <div
+                      onClick={handleOpendeleteUserModal}
+                      className="edit-icon-backround"
+                    >
+                      <Link to={`/edit-profile/${user.uid}`}>
+                        <Tooltip title="Edit Profile">
+                          <span>
+                            <EditIcon
+                              style={{
+                                color: "white",
+                                fontSize: 18,
+                                cursor: "pointer",
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                      </Link>
+                    </div>
+                  )}
+                </>
+              ) : null}
             </>
           )}
-
           {user?.role * 1 === 0 ? null : (
             <>
               {loggedinUser?.role * 1 === 1 || loggedinUser?.role * 1 === 0 ? (
