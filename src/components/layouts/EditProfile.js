@@ -24,6 +24,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 
+
 function EditProfile() {
   const [loogedinUser, setLoggedinUser] = useState(
     localStorage.getItem("loggedinUser")
