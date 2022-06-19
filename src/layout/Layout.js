@@ -116,8 +116,8 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer({ layout }) {
   const [loggedinUser, setLoggedinUser] = React.useState(
-    localStorage?.getItem("loggedinUser")
-      ? JSON.parse(localStorage?.getItem("loggedinUser"))
+    localStorage.getItem("loggedinUser")
+      ? JSON.parse(localStorage.getItem("loggedinUser"))
       : []
   );
   const location = useLocation();
@@ -336,6 +336,7 @@ export default function MiniDrawer({ layout }) {
           </LightTooltip>
           {loggedinUser?.role * 1 === 1 ||
           loggedinUser?.role * 1 === 2 ||
+          loggedinUser?.role * 1 === 0 ||
           loggedinUser?.role * 1 === 10 ? (
             <>
               <Divider />
