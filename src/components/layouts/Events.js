@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
@@ -14,6 +14,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 function HomePageContent() {
   const { allUsers } = useSelector((state) => state.users);
+  const [loading, setLoading] = useState(false);
   const [activities, setActivities] = React.useState([]);
   const [allPending, setAllPending] = React.useState([]);
   const [allApproved, setAaaApproved] = React.useState([]);
@@ -53,8 +54,10 @@ function HomePageContent() {
 
   useEffect(() => {
     const getUsers = async () => {
+      setLoading(true);
       const data = await getDocs(activitiesCollectiion);
       setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoading(false);
     };
     getUsers();
   }, []);
@@ -169,13 +172,17 @@ function HomePageContent() {
           >
             Activities
           </h3>
-          {activities.length === 0 ? (
+          {loading ? (
             <div>
               <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
               <span>
                 {" "}
                 <ButtonLoader />
               </span>
+            </div>
+          ) : activities.length === 0 || !activities ? (
+            <div>
+              <h4 style={{ color: "purple" }}>No activities found</h4>
             </div>
           ) : (
             <HomepageEventTablet />

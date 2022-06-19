@@ -733,7 +733,6 @@ function Finance() {
             <Button
               disabled={
                 loggedinUser?.role * 1 === 2 ||
-                loggedinUser?.role * 1 === 3 ||
                 loggedinUser?.role * 1 === 4 ||
                 loggedinUser?.role * 1 === 5 ||
                 loggedinUser?.role * 1 === 7

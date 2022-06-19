@@ -47,10 +47,7 @@ function Login() {
       } catch (err) {
         setData({
           ...data,
-          error:
-            err.message === "Firebase: Error (auth/user-not-found)."
-              ? "Invalid emaial or password"
-              : err.message,
+          error: err.messag,
           loading: false,
         });
       }

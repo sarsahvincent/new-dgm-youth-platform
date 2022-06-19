@@ -41,7 +41,7 @@ const style = {
   margin: "0 auto",
 };
 
-export default function ControlledAccordions({ loggedinUser }) {
+export default function ControlledAccordions() {
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => {
     setOpendeleteModal(true);
@@ -101,9 +101,12 @@ export default function ControlledAccordions({ loggedinUser }) {
 
   useEffect(() => {
     const getUsers = async () => {
+      setLoading(true);
       const data = await getDocs(activitiesCollectiion);
       setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+
+    setLoading(false);
 
     getUsers();
   }, []);
@@ -112,8 +115,8 @@ export default function ControlledAccordions({ loggedinUser }) {
     <div className="activitiesTable">
       {success && <ToastContainer />}
 
-      {activities.length === 0 ? (
-        <ButtonLoader />
+      {!activities ? (
+        <h4 style={{ color: "purple" }}>No activities found</h4>
       ) : (
         <div>
           {/* DELETE DEPARTMENT MODAL */}
@@ -143,7 +146,7 @@ export default function ControlledAccordions({ loggedinUser }) {
               </div>
             </Box>
           </Modal>
-          {activities.map((activity, index) => (
+          {activities?.map((activity, index) => (
             <Accordion
               key={index}
               sx={{ marginTop: 1, marginBottom: 1 }}
@@ -222,7 +225,7 @@ export default function ControlledAccordions({ loggedinUser }) {
                   </div>
 
                   <div>
-                    {activity?.formValues.map((activity, index) => (
+                    {activity?.formValues?.map((activity, index) => (
                       <div key={index}>
                         <span className="AccordionDetailsBreakdownName">
                           {activity?.name}

@@ -78,7 +78,7 @@ export default function ControlledAccordions() {
     <div className="reportsTable">
       {success && <ToastContainer />}
 
-      {reports?.length === 0 ? (
+      {loading ? (
         <ButtonLoader />
       ) : (
         <div>
@@ -109,6 +109,7 @@ export default function ControlledAccordions() {
               </div>
             </Box>
           </Modal>
+
           {reports?.map((report, index) => (
             <Accordion
               key={index}

@@ -10,6 +10,8 @@ import HomepageEventTablet from "../HomepageEventTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getDocs, collection, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebse";
+import ButtonLoader from "../ButtonLoader";
+
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 
@@ -19,9 +21,15 @@ function HomePageContent() {
   const [womem, setWomen] = useState([]);
   const [newConvert, setNewConvert] = useState([]);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   let numberOfMen = [];
   let numberOfWomen = [];
   let numberOfNewConvert = [];
+  const [activities, setActivities] = React.useState([]);
+
+  const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
+
   const { allDepartment } = useSelector((state) => state.departments);
   const [departments, setDeparments] = useState([]);
   const [loggedinUser, setLoggedinUser] = useState();
@@ -82,6 +90,18 @@ function HomePageContent() {
     setNewConvert(numberOfNewConvert[0].length);
   }, [allUsers]);
 
+  useEffect(() => {
+    const getUsers = async () => {
+      setLoading(true);
+      const data = await getDocs(activitiesCollectiion);
+      setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoading(false);
+    };
+
+
+    getUsers();
+  }, []);
+
   return (
     <div className="layout_margin">
       <h3 style={{ color: "purple" }}>Dashboard</h3>
@@ -110,7 +130,7 @@ function HomePageContent() {
               <GroupsIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Total Youth</h4>
-                <h2>{allUsers?.length}</h2>
+                <h2>{allUsers?.length -1}</h2>
               </div>
             </Paper>
           </div>
@@ -177,7 +197,20 @@ function HomePageContent() {
           >
             Activities
           </h3>
-          <HomepageEventTablet loggedinUser={loggedinUser} />
+
+          {loading ? (
+            <div>
+              <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
+              <span>
+                {" "}
+                <ButtonLoader />
+              </span>
+            </div>
+          ) : activities || activities?.length === 0 ? (
+            <h4 style={{ color: "purple" }}>No activities found</h4>
+          ) : (
+            <HomepageEventTablet />
+          )}
         </div>
       </div>
     </div>

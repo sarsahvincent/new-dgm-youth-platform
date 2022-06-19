@@ -131,6 +131,7 @@ function ProgramsAndContacts() {
           Program Contacts
         </h3>
       </div>
+
       <Box
         sx={{ flexGrow: 1 }}
         className="login-profile-page main-profile-page"
@@ -146,6 +147,10 @@ function ProgramsAndContacts() {
             className="prog-department-container"
           >
             <div className="all-department-container">
+              {!contacts ||
+                (contacts.length === 0 && (
+                  <h4 style={{ color: "purple" }}>No data found</h4>
+                ))}
               {contacts?.map((contact) => (
                 <div
                   key={contact?.id}
