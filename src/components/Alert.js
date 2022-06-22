@@ -6,6 +6,7 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
+
 export const SuccesAlert = ({ alertTitle, alertDescription }) => {
   return (
     <Alert
