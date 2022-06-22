@@ -119,7 +119,7 @@ function Settings() {
   const [loadingImage, setLoadingImage] = useState(false);
   const [email, setEmail] = useState("");
   const {
-    profileDetails: { firstName, lastName, avatarPath },
+    profileDetails: { firstName, lastName, role },
   } = useSelector((state) => state.users);
   const { allDepartment } = useSelector((state) => state.departments);
 
@@ -283,6 +283,16 @@ function Settings() {
       uplaodImg();
     }
   }, [img]);
+
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
 
   return allDepartment ? (
     <div className="layout_margin m-2 mt-3">
@@ -564,11 +574,11 @@ function Settings() {
             {/* CREATE DEPARTMENT BUTTON */}
             <Button
               disabled={
-                loggedinUser?.role * 1 === 3 ||
-                loggedinUser?.role * 1 === 4 ||
-                loggedinUser?.role * 1 === 5 ||
-                loggedinUser?.role * 1 === 6 ||
-                loggedinUser?.role * 1 === 7
+                role * 1 === 3 ||
+                role * 1 === 4 ||
+                role * 1 === 5 ||
+                role * 1 === 6 ||
+                role * 1 === 7
               }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenDepartmentModal}
@@ -584,9 +594,7 @@ function Settings() {
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             {/* ADD PROGRAM IMAGE BUTTON */}
             <Button
-              disabled={
-                loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
-              }
+              disabled={role * 1 === 5 || role * 1 === 7}
               style={{ marginLeft: "55px" }}
               onClick={handleOpenImagetModal}
               size="large"
@@ -602,12 +610,12 @@ function Settings() {
             {/*RESET PASSWORD  BUTTON */}
             <Button
               disabled={
-                loggedinUser?.role * 1 === 2 ||
-                loggedinUser?.role * 1 === 3 ||
-                loggedinUser?.role * 1 === 4 ||
-                loggedinUser?.role * 1 === 5 ||
-                loggedinUser?.role * 1 === 6 ||
-                loggedinUser?.role * 1 === 7
+                role * 1 === 2 ||
+                role * 1 === 3 ||
+                role * 1 === 4 ||
+                role * 1 === 5 ||
+                role * 1 === 6 ||
+                role * 1 === 7
               }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenresetPasswordModal}
@@ -632,20 +640,24 @@ function Settings() {
             <h3 style={{ color: "purple", fontWeight: "bold" }}>
               List of Departments
             </h3>
-            <div className="all-department-container">
-              {allDepartment?.map((department) => (
-                <div
-                  key={department?.id}
-                  className="main_profile_container department-list-container"
-                >
+
+            {loadingDepartments ? (
+              <Loading />
+            ) : (
+              <div className="all-department-container">
+                {allDepartment?.map((department) => (
                   <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                    key={department?.id}
+                    className="main_profile_container department-list-container"
                   >
-                    {/* {loggedinUser?.role * 1 === 1 ||
-                    loggedinUser?.role * 1 === 0 ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* {role * 1 === 1 ||
+                    role * 1 === 0 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -674,114 +686,112 @@ function Settings() {
                         </Link>
                       </div>
                     ) : null} */}
-                    {loggedinUser?.role * 1 === 2 ||
-                    loggedinUser?.role * 1 === 1 ||
-                    loggedinUser?.role * 1 === 0 ? (
-                      <div
-                        className="edit-icon-backround"
-                        onClick={() => {
-                          dispatch(getCureentEditDepartment(department));
-                        }}
-                      >
-                        <Link to={`/edit-department/${department?.id}`}>
-                          <Tooltip title="Edit Deparment">
-                            <span
-                              onClick={() => {
-                                localStorage.setItem(
-                                  "editDepartment",
-                                  JSON.stringify(department)
-                                );
-                              }}
-                            >
-                              <EditIcon
+                      {role * 1 === 2 || role * 1 === 1 || role * 1 === 0 ? (
+                        <div
+                          className="edit-icon-backround"
+                          onClick={() => {
+                            dispatch(getCureentEditDepartment(department));
+                          }}
+                        >
+                          <Link to={`/edit-department/${department?.id}`}>
+                            <Tooltip title="Edit Deparment">
+                              <span
+                                onClick={() => {
+                                  localStorage.setItem(
+                                    "editDepartment",
+                                    JSON.stringify(department)
+                                  );
+                                }}
+                              >
+                                <EditIcon
+                                  style={{
+                                    color: "white",
+                                    fontSize: 18,
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              </span>
+                            </Tooltip>
+                          </Link>
+                        </div>
+                      ) : null}
+
+                      {role * 1 === 1 || role * 1 === 0 ? (
+                        <div
+                          className="edit-icon-backround"
+                          onClick={() => {
+                            setEditDepartmentId(department?.id);
+                          }}
+                        >
+                          <Tooltip title=" Delete Department">
+                            <span onClick={handleOpendeleteModal}>
+                              <DeleteIcon
                                 style={{
                                   color: "white",
                                   fontSize: 18,
+
                                   cursor: "pointer",
                                 }}
                               />
                             </span>
                           </Tooltip>
-                        </Link>
-                      </div>
-                    ) : null}
-
-                    {loggedinUser?.role * 1 === 1 ||
-                    loggedinUser?.role * 1 === 0 ? (
-                      <div
-                        className="edit-icon-backround"
-                        onClick={() => {
-                          setEditDepartmentId(department?.id);
-                        }}
-                      >
-                        <Tooltip title=" Delete Department">
-                          <span onClick={handleOpendeleteModal}>
-                            <DeleteIcon
-                              style={{
-                                color: "white",
-                                fontSize: 18,
-
-                                cursor: "pointer",
-                              }}
-                            />
-                          </span>
-                        </Tooltip>
-                      </div>
-                    ) : null}
+                        </div>
+                      ) : null}
+                    </div>
+                    <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                      <Item className="full_profile_container">
+                        <h4 className="full_profile">Name :</h4>
+                        <h4 className="full_profile_details">
+                          {department?.departmentName
+                            ? department.departmentName
+                            : "Not available"}
+                        </h4>
+                      </Item>
+                    </Grid>
+                    <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                      <Item className="full_profile_container">
+                        <h4 className="full_profile">Leader :</h4>
+                        <h4 className="full_profile_details">
+                          {department?.groupLeaderName
+                            ? department.groupLeaderName.split(":", 1)
+                            : "Not available"}
+                        </h4>
+                      </Item>
+                    </Grid>
+                    <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                      <Item className="full_profile_container">
+                        <h4 className="full_profile">Phone :</h4>
+                        <h4 className="full_profile_details">
+                          {department?.groupLeaderName
+                            ? department.groupLeaderName.split(":")[1]
+                            : "Not available"}
+                        </h4>
+                      </Item>
+                    </Grid>
+                    <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                      <Item className="full_profile_container">
+                        <h4 className="full_profile">Asistant:</h4>
+                        <h4 className="full_profile_details">
+                          {department?.gropAssitant
+                            ? department.gropAssitant.split(":", 1)
+                            : "Not available"}
+                        </h4>
+                      </Item>
+                    </Grid>
+                    <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                      <Item className="full_profile_container">
+                        <h4 className="full_profile">Phone :</h4>
+                        <h4 className="full_profile_details">
+                          {department?.gropAssitant
+                            ? department.gropAssitant.split(":")[1]
+                            : "Not available"}
+                        </h4>
+                      </Item>
+                    </Grid>
                   </div>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Name :</h4>
-                      <h4 className="full_profile_details">
-                        {department?.departmentName
-                          ? department.departmentName
-                          : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Leader :</h4>
-                      <h4 className="full_profile_details">
-                        {department?.groupLeaderName
-                          ? department.groupLeaderName.split(":", 1)
-                          : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Phone :</h4>
-                      <h4 className="full_profile_details">
-                        {department?.groupLeaderName
-                          ? department.groupLeaderName.split(":")[1]
-                          : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Asistant:</h4>
-                      <h4 className="full_profile_details">
-                        {department?.gropAssitant
-                          ? department.gropAssitant.split(":", 1)
-                          : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Phone :</h4>
-                      <h4 className="full_profile_details">
-                        {department?.gropAssitant
-                          ? department.gropAssitant.split(":")[1]
-                          : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </Grid>
         </Grid>
       </Box>

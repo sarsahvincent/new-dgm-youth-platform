@@ -22,7 +22,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { useContext } from "react";
 import { auth, db } from "../firebse";
 import { signOut } from "firebase/auth";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../context/auth";
 import { Paid } from "@mui/icons-material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -35,6 +35,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserDetails } from "../services/redux/reducers/userSlice";
 
 const drawerWidth = "50px";
 
@@ -115,6 +117,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ layout }) {
+  const dispatch = useDispatch();
+  const {
+    profileDetails: { role },
+  } = useSelector((state) => state.users);
+
   const [loggedinUser, setLoggedinUser] = React.useState(
     localStorage.getItem("loggedinUser")
       ? JSON.parse(localStorage.getItem("loggedinUser"))
@@ -334,10 +341,10 @@ export default function MiniDrawer({ layout }) {
               </List>
             </Link>
           </LightTooltip>
-          {loggedinUser?.role * 1 === 1 ||
-          loggedinUser?.role * 1 === 2 ||
-          loggedinUser?.role * 1 === 0 ||
-          loggedinUser?.role * 1 === 10 ? (
+          {role * 1 === 1 ||
+          role * 1 === 2 ||
+          role * 1 === 0 ||
+          role * 1 === 10 ? (
             <>
               <Divider />
               <LightTooltip title="Add Account">

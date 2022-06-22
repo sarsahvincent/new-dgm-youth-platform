@@ -17,15 +17,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { db } from "../firebse";
+import { auth, db } from "../firebse";
+import { useDispatch, useSelector } from "react-redux";
 import {
   collection,
   getDocs,
   doc,
   updateDoc,
   deleteDoc,
+  getDoc,
 } from "firebase/firestore";
 import { Spinner } from "react-bootstrap";
+import { getUserDetails } from "../services/redux/reducers/userSlice";
 
 const style = {
   position: "absolute",
@@ -46,10 +49,12 @@ export default function ControlledAccordions() {
   const handleOpendeleteModal = () => {
     setOpendeleteModal(true);
   };
+  const dispatch = useDispatch();
   const handleCloseDeleteModal = () => setOpendeleteModal(false);
   const [expanded, setExpanded] = React.useState(false);
   const [activities, setActivities] = React.useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const [success, setSuccess] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState(null);
   const [user, setUser] = useState(
@@ -58,13 +63,17 @@ export default function ControlledAccordions() {
       : []
   );
 
+  const {
+    profileDetails: { role },
+  } = useSelector((state) => state.users);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const activitiesCollectiion = collection(db, "DGM_YOUTH_Activities");
+
   const updateStatus = async (id, status) => {
-    setLoading(true);
+    setLoadingStatus(true);
 
     const updateDate = async () => {
       try {
@@ -72,7 +81,7 @@ export default function ControlledAccordions() {
           status,
         });
 
-        setLoading(false);
+        setLoadingStatus(false);
         setSuccess(true);
 
         toast.success(`Status Successfully Updated!.`, {
@@ -101,14 +110,21 @@ export default function ControlledAccordions() {
 
   useEffect(() => {
     const getUsers = async () => {
-      setLoading(true);
+      setLoadingStatus(true);
       const data = await getDocs(activitiesCollectiion);
       setActivities(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoadingStatus(false);
     };
 
-    setLoading(false);
-
     getUsers();
+  }, []);
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+      }
+    });
   }, []);
 
   return (
@@ -198,9 +214,7 @@ export default function ControlledAccordions() {
                       <b>BREAKDOWN</b>
                     </div>
 
-                    {user?.role * 1 === 0 ||
-                    user?.role * 1 === 1 ||
-                    user?.role * 1 === 2 ? (
+                    {role * 1 === 0 || role * 1 === 1 || role * 1 === 2 ? (
                       <div
                         className="edit-icon-backround"
                         onClick={() => {
@@ -244,9 +258,7 @@ export default function ControlledAccordions() {
                     Totol: <span>{activity?.total}</span>{" "}
                   </b>
 
-                  {user?.role * 1 === 1 ||
-                  user?.role * 1 === 2 ||
-                  user?.role * 1 === 0 ? (
+                  {role * 1 === 1 || role * 1 === 2 || role * 1 === 0 ? (
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (
                         <React.Fragment>
@@ -291,7 +303,7 @@ export default function ControlledAccordions() {
                     </PopupState>
                   ) : null}
 
-                  {loading && <ButtonLoader />}
+                  {loadingStatus && <ButtonLoader />}
                 </div>
               </AccordionDetails>
             </Accordion>

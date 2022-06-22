@@ -82,7 +82,7 @@ function EditSetting() {
   const dispatch = useDispatch();
   const id = getEditDepartment?.id;
   const {
-    profileDetails: { firstName, lastName, avatarPath },
+    profileDetails: { firstName, lastName, role },
   } = useSelector((state) => state.users);
   const { allDepartment } = useSelector((state) => state.departments);
 

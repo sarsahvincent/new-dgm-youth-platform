@@ -10,14 +10,24 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { ToastContainer, toast } from "react-toastify";
 import SendIcon from "@mui/icons-material/Send";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth, db } from "../../firebse";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
-import ButtonLoader from "../ButtonLoader";
 import Loading from "../Loading";
 
-const id = Math.random().toString(36).slice(2);
-const time = new Date().getTime()
+function create_UUID() {
+  var dt = new Date().getTime();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+const password = "123456789";
+const time = new Date().getTime();
 function AddAccount() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -42,8 +52,7 @@ function AddAccount() {
     phone: "",
     department: "",
     emergencyContact: "",
-    password: "",
-    confirmPassword: "",
+
     loading: null,
     error: false,
   });
@@ -67,8 +76,6 @@ function AddAccount() {
     email,
     phone,
     emergencyContact,
-    password,
-    confirmPassword,
     department,
     error,
   } = data;
@@ -102,31 +109,34 @@ function AddAccount() {
     } else {
       setLoading(true);
       try {
-        await setDoc(doc(db, "DGM_YOUTH_users", id + firstName + lastName), {
-          uid: id + firstName + lastName,
-          salutation,
-          firstName,
-          middleName,
-          lastName,
-          emergencyContactName,
-          occupation,
-          maritalStatus,
-          age,
-          sex,
-          status,
-          baptism,
-          city,
-          address,
-          email,
-          phone,
-          fullName: `${firstName} ${middleName} ${lastName} `,
-          membershipStatus,
-          role,
-          department,
-          emergencyContact,
-          createdAt: Date.now(),
-          isOnline: true,
-        });
+        await setDoc(
+          doc(db, "DGM_YOUTH_users", create_UUID() + firstName + lastName),
+          {
+            uid: create_UUID(),
+            salutation,
+            firstName,
+            middleName,
+            lastName,
+            emergencyContactName,
+            occupation,
+            maritalStatus,
+            age,
+            sex,
+            status,
+            baptism,
+            city,
+            address,
+            email,
+            phone,
+            fullName: `${firstName} ${middleName} ${lastName} `,
+            membershipStatus,
+            role,
+            department,
+            emergencyContact,
+            createdAt: Date.now(),
+            isOnline: true,
+          }
+        );
 
         setLoading(false);
         setSuccess(true);
@@ -193,8 +203,6 @@ function AddAccount() {
       !role
     ) {
       setData({ ...data, error: "Please fill all required * fields." });
-    } else if (role !== 5 && password !== confirmPassword) {
-      setData({ ...data, error: "Password do not match" });
     } else {
       setLoading(true);
       try {
@@ -229,6 +237,8 @@ function AddAccount() {
           isOnline: true,
         });
 
+        await sendPasswordResetEmail(auth, email);
+
         setLoading(false);
         setSuccess(true);
         setData({
@@ -258,9 +268,12 @@ function AddAccount() {
           error: null,
         });
 
-        toast.success(`Profile Creation Success.`, {
-          position: "top-right",
-        });
+        toast.success(
+          `Profile Creation Success. Check your email to reset your password`,
+          {
+            position: "top-right",
+          }
+        );
 
         setTimeout(() => {
           if (role * 1 === 5) {
@@ -268,7 +281,7 @@ function AddAccount() {
           } else {
             navigate("/profile");
           }
-        }, 4000);
+        }, 6000);
       } catch (err) {
         setData({ ...data, error: err.message, loading: false });
       }
@@ -692,7 +705,7 @@ function AddAccount() {
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            {/* <div className="new_member_form_group">
               <div>
                 <label htmlFor="password"></label>
                 <Box
@@ -737,33 +750,36 @@ function AddAccount() {
                   />
                 </Box>
               </div>
-            </div>
+            </div> */}
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group"></div>
             )}
           </div>
           {error ? <p className="error">{error}</p> : null}
 
-          <Button
-            disabled={loading}
-            type="submit"
-            style={{
-              textAlign: "center",
-              height: 50,
-              width: "100%",
-              marginTop: 20,
-              backgroundColor: "purple",
-              fontSize: 14,
-              fontWeight: "bolder",
-              letterSpacing: "5px",
-              borderRadius: 2,
-              marginBottom: 10,
-            }}
-            variant="contained"
-            endIcon={loading ? null : <SendIcon />}
-          >
-            Register
-          </Button>
+          <div className="d-flex align-items-center mb-0 justify-content-between">
+            <Button
+              disabled={loading}
+              type="submit"
+              style={{
+                textAlign: "center",
+                height: 50,
+                width: "50%",
+                marginTop: 20,
+                backgroundColor: "purple",
+                fontSize: 14,
+                fontWeight: "bolder",
+                letterSpacing: "5px",
+                borderRadius: 2,
+                marginBottom: 10,
+                margin: "0 auto",
+              }}
+              variant="contained"
+              endIcon={loading ? null : <SendIcon />}
+            >
+              Register
+            </Button>
+          </div>
         </Paper>
         {loading && <Loading />}
         {success && <ToastContainer />}

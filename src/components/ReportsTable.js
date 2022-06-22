@@ -15,6 +15,7 @@ import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import Moment from "react-moment";
 
 import { Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -53,6 +54,9 @@ export default function ControlledAccordions() {
     return dateObject.toLocaleString("en-US", { timeZoneName: "short" }); //2019-12-9 10:30:15
   };
   const reportsCollectiion = collection(db, "DGM_YOUTH_Reports");
+  const {
+    profileDetails: { role },
+  } = useSelector((state) => state.users);
 
   const deleteReport = async () => {
     setDeleteReportLoading(true);
@@ -66,9 +70,11 @@ export default function ControlledAccordions() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const getUsers = async () => {
       const data = await getDocs(reportsCollectiion);
       setReports(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoading(false);
     };
 
     getUsers();
@@ -135,26 +141,28 @@ export default function ControlledAccordions() {
                     <div>
                       <b>Content</b>
                     </div>
-                    <div
-                      className="edit-icon-backround"
-                      onClick={() => {
-                        handleOpendeleteModal();
-                        setDeleteEventId(report?.id);
-                      }}
-                    >
-                      <Tooltip title=" Delete report">
-                        <span>
-                          <DeleteIcon
-                            style={{
-                              color: "white",
-                              fontSize: 25,
+                    {role * 1 === 0 || role * 1 === 1 || role * 1 === 2 ? (
+                      <div
+                        className="edit-icon-backround"
+                        onClick={() => {
+                          handleOpendeleteModal();
+                          setDeleteEventId(report?.id);
+                        }}
+                      >
+                        <Tooltip title=" Delete report">
+                          <span>
+                            <DeleteIcon
+                              style={{
+                                color: "white",
+                                fontSize: 25,
 
-                              cursor: "pointer",
-                            }}
-                          />
-                        </span>
-                      </Tooltip>
-                    </div>
+                                cursor: "pointer",
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                      </div>
+                    ) : null}
                   </div>
                   <div>
                     <p>{report?.content}</p>

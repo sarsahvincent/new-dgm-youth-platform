@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { getCurrentUserId } from "../../services/redux/reducers/userSlice";
 import { Spinner } from "react-bootstrap";
 import LoginIcon from "@mui/icons-material/Login";
+import LoingImage from "../../assets/images/login-icon-3058.png";
 
 function Login() {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function Login() {
       } catch (err) {
         setData({
           ...data,
-          error: err.messag,
+          error: err.message,
           loading: false,
         });
       }
@@ -56,8 +57,13 @@ function Login() {
 
   return (
     <section className="login_container">
-      <h3>Login to your Account</h3>
-      <form className="form" onSubmit={handleSubmit}>
+      <h3 className="">
+        Login{" "}
+        <span>
+          <img src={LoingImage} width="80px" height="80px" alt="" />
+        </span>
+      </h3>
+      <form className="form mt-0" onSubmit={handleSubmit}>
         <div className="input_container">
           <label htmlFor="email">Email</label>
           <input

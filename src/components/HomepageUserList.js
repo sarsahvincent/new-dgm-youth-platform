@@ -282,11 +282,12 @@ export default function HomepageUserList({ allDepartment }) {
                           role="checkbox"
                           tabIndex={-1}
                           key={row.code}
+                       
                         >
                           {columns.map((column) => {
                             const value = row[column.id];
                             return (
-                              <TableCell key={column.id} align={column.align}>
+                              <TableCell key={column.id} align={column.align}    style={{padding: 5}}>
                                 {column.format && typeof value === "number"
                                   ? column.format(value)
                                   : value}

@@ -24,13 +24,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 
-
 function EditProfile() {
   const [loogedinUser, setLoggedinUser] = useState(
     localStorage.getItem("loggedinUser")
       ? JSON.parse(localStorage.getItem("loggedinUser"))
       : []
   );
+
+  const {
+    profileDetails: { role: loggedinUserrole },
+  } = useSelector((state) => state.users);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -42,38 +46,38 @@ function EditProfile() {
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
   const { allDepartment } = useSelector((state) => state.departments);
 
-  const { profileDetails } = useSelector((state) => state.users);
+  const { viewUserDetails } = useSelector((state) => state.users);
   const [data, setData] = useState({
-    salutation: profileDetails?.salutation ? profileDetails.salutation : "",
-    firstName: profileDetails?.lastName ? profileDetails.firstName : "",
-    middleName: profileDetails?.middleName ? profileDetails.middleName : "",
-    lastName: profileDetails?.lastName ? profileDetails.lastName : "",
-    emergencyContactName: profileDetails?.emergencyContactName
-      ? profileDetails.emergencyContactName
+    salutation: viewUserDetails?.salutation ? viewUserDetails.salutation : "",
+    firstName: viewUserDetails?.lastName ? viewUserDetails.firstName : "",
+    middleName: viewUserDetails?.middleName ? viewUserDetails.middleName : "",
+    lastName: viewUserDetails?.lastName ? viewUserDetails.lastName : "",
+    emergencyContactName: viewUserDetails?.emergencyContactName
+      ? viewUserDetails.emergencyContactName
       : "",
-    occupation: profileDetails?.occupation ? profileDetails.occupation : "",
-    maritalStatus: profileDetails?.maritalStatus
-      ? profileDetails.maritalStatus
+    occupation: viewUserDetails?.occupation ? viewUserDetails.occupation : "",
+    maritalStatus: viewUserDetails?.maritalStatus
+      ? viewUserDetails.maritalStatus
       : "",
-    age: profileDetails?.age ? profileDetails.age : "",
-    sex: profileDetails?.sex ? profileDetails.sex : "",
-    membershipStatus: profileDetails?.membershipStatus
-      ? profileDetails.membershipStatus
+    age: viewUserDetails?.age ? viewUserDetails.age : "",
+    sex: viewUserDetails?.sex ? viewUserDetails.sex : "",
+    membershipStatus: viewUserDetails?.membershipStatus
+      ? viewUserDetails.membershipStatus
       : "",
-    role: profileDetails?.role ? profileDetails.role : "",
-    status: profileDetails?.status ? profileDetails.status : "",
-    baptism: profileDetails?.baptism ? profileDetails.baptism : "",
-    city: profileDetails?.city ? profileDetails.city : "",
-    address: profileDetails?.address ? profileDetails.address : "",
-    email: profileDetails?.email ? profileDetails.email : "",
-    phone: profileDetails?.phone ? profileDetails.phone : "",
-    emergencyContact: profileDetails?.emergencyContact
-      ? profileDetails.emergencyContact
+    role: viewUserDetails?.role ? viewUserDetails.role : "",
+    status: viewUserDetails?.status ? viewUserDetails.status : "",
+    baptism: viewUserDetails?.baptism ? viewUserDetails.baptism : "",
+    city: viewUserDetails?.city ? viewUserDetails.city : "",
+    address: viewUserDetails?.address ? viewUserDetails.address : "",
+    email: viewUserDetails?.email ? viewUserDetails.email : "",
+    phone: viewUserDetails?.phone ? viewUserDetails.phone : "",
+    emergencyContact: viewUserDetails?.emergencyContact
+      ? viewUserDetails.emergencyContact
       : "",
-    dues: profileDetails?.dues ? profileDetails.dues : 0,
-    department: profileDetails?.department ? profileDetails.department : "",
-    groupRole: profileDetails?.groupRole ? profileDetails.groupRole : "",
-    soulsWon: profileDetails?.soulsWon ? profileDetails.soulsWon : 0,
+    dues: viewUserDetails?.dues ? viewUserDetails.dues : 0,
+    department: viewUserDetails?.department ? viewUserDetails.department : "",
+    groupRole: viewUserDetails?.groupRole ? viewUserDetails.groupRole : "",
+    soulsWon: viewUserDetails?.soulsWon ? viewUserDetails.soulsWon : 0,
     loading: null,
     error: false,
   });
@@ -225,6 +229,16 @@ function EditProfile() {
     dispatch(getDepartments(departments));
   }, 1000);
 
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
+
   return (
     <div className="edit-profile-layout_margin">
       <h3 style={{ color: "purple" }}>Edit Account</h3>
@@ -269,12 +283,12 @@ function EditProfile() {
                     </InputLabel>
                     <Select
                       disabled={
-                        loogedinUser?.role * 1 === 2 ||
-                        loogedinUser?.role * 1 === 3 ||
-                        loogedinUser?.role * 1 === 4 ||
-                        loogedinUser?.role * 1 === 5 ||
-                        loogedinUser?.role * 1 === 6 ||
-                        loogedinUser?.role * 1 === 7
+                        loggedinUserrole * 1 === 2 ||
+                        loggedinUserrole * 1 === 3 ||
+                        loggedinUserrole * 1 === 4 ||
+                        loggedinUserrole * 1 === 5 ||
+                        loggedinUserrole * 1 === 6 ||
+                        loggedinUserrole * 1 === 7
                       }
                       name="role"
                       labelId="demo-simple-select-label"
@@ -767,6 +781,12 @@ function EditProfile() {
                   autoComplete="off"
                 >
                   <TextField
+                    disabled={
+                      loggedinUserrole * 1 === 3 ||
+                      loggedinUserrole * 1 === 5 ||
+                      loggedinUserrole * 1 === 4 ||
+                      loggedinUserrole * 1 === 7
+                    }
                     name="dues"
                     id="outlined-basic"
                     label="Monthly Dues*"
@@ -800,7 +820,7 @@ function EditProfile() {
             variant="contained"
             endIcon={loading ? null : <SendIcon />}
           >
-            {loading ? <ButtonLoader /> : "Update Profile"}
+            {loading ? "Updateding Profile..." : "Update Profile"}
           </Button>
         </Paper>
         {success && <ToastContainer />}

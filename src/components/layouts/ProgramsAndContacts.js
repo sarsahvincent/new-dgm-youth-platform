@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../../firebse";
-import { collection, doc, getDocs, deleteDoc } from "firebase/firestore";
+import { auth, db } from "../../firebse";
+import {
+  collection,
+  doc,
+  getDocs,
+  deleteDoc,
+  getDoc,
+} from "firebase/firestore";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -8,7 +14,10 @@ import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import Loading from "../Loading";
-import { getProgramContacts } from "../../services/redux/reducers/userSlice";
+import {
+  getProgramContacts,
+  getUserDetails,
+} from "../../services/redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
 import Modal from "@mui/material/Modal";
@@ -82,16 +91,24 @@ function ProgramsAndContacts() {
     const getAllContacts = async () => {
       const data = await getDocs(contactCollection);
       setContacts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      dispatch(getProgramContacts(contacts));
+      setLoading(false);
     };
-    dispatch(getProgramContacts(contacts));
 
     getAllContacts();
-    setLoading(false);
   }, []);
 
-  setTimeout(() => {
-    dispatch(getProgramContacts(contacts));
-  }, 1000);
+  console.log("loading", loading);
+
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
 
   return contacts ? (
     <div className="layout_margin m-2 mt-3">
@@ -146,90 +163,102 @@ function ProgramsAndContacts() {
             xl={9}
             className="prog-department-container"
           >
+            {/* 
+             {loading && <Loading />}
+            
+            */}
             <div className="all-department-container">
-              {!contacts ||
-                (contacts.length === 0 && (
-                  <h4 style={{ color: "purple" }}>No data found</h4>
-                ))}
-              {contacts?.map((contact) => (
-                <div
-                  key={contact?.id}
-                  className="main_profile_container prog-contact-list-container"
-                >
-                  {loggedinUser?.role * 1 === 1 ||
-                  loggedinUser?.role * 1 === 0 ? (
+              {loading ? (
+                <Loading />
+              ) : contacts.length === 0 ? (
+                <h4 style={{ color: "purple" }}>No data found</h4>
+              ) : (
+                <>
+                  {contacts?.map((contact) => (
                     <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                      key={contact?.id}
+                      className="main_profile_container prog-contact-list-container"
                     >
-                      <div
-                        className="edit-icon-backround"
-                        onClick={() => {
-                          setDeleteContactId(contact?.id);
-                        }}
-                      >
-                        <Tooltip title=" Delete Department">
-                          <span onClick={handleOpendeleteModal}>
-                            <DeleteIcon
-                              style={{
-                                color: "white",
-                                fontSize: 18,
+                      {loggedinUser?.role * 1 === 1 ||
+                      loggedinUser?.role * 1 === 0 ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div
+                            className="edit-icon-backround"
+                            onClick={() => {
+                              setDeleteContactId(contact?.id);
+                            }}
+                          >
+                            <Tooltip title=" Delete Department">
+                              <span onClick={handleOpendeleteModal}>
+                                <DeleteIcon
+                                  style={{
+                                    color: "white",
+                                    fontSize: 18,
 
-                                cursor: "pointer",
-                              }}
-                            />
-                          </span>
-                        </Tooltip>
-                      </div>
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              </span>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      ) : null}
+                      <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                        <Item className="full_profile_container">
+                          <h4 className="full_profile">Name :</h4>
+                          <h4 className="full_profile_details">
+                            {contact?.name ? contact.name : "Not available"}
+                          </h4>
+                        </Item>
+                      </Grid>
+                      <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                        <Item className="full_profile_container">
+                          <h4 className="full_profile">Phone :</h4>
+                          <h4 className="full_profile_details">
+                            {contact?.phone ? contact.phone : "Not available"}
+                          </h4>
+                        </Item>
+                      </Grid>
+                      <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                        <Item className="full_profile_container">
+                          <h4 className="full_profile">Location :</h4>
+                          <h4 className="full_profile_details">
+                            {contact?.location
+                              ? contact.location
+                              : "Not available"}
+                          </h4>
+                        </Item>
+                      </Grid>
+
+                      <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                        <Item className="full_profile_container">
+                          <h4 className="full_profile">Sent :</h4>
+                          <h6 className="full_profile_details">
+                            {contact?.sentAt
+                              ? dateConvertor(contact.sentAt)
+                              : "Not available"}
+                          </h6>
+                        </Item>
+                      </Grid>
+                      <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
+                        <Item className="full_profile_container">
+                          <h4 className="full_profile">Message:</h4>
+                          <p className="full_profile_details">
+                            {contact?.content
+                              ? contact.content
+                              : "Not available"}
+                          </p>
+                        </Item>
+                      </Grid>
                     </div>
-                  ) : null}
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Name :</h4>
-                      <h4 className="full_profile_details">
-                        {contact?.name ? contact.name : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Phone :</h4>
-                      <h4 className="full_profile_details">
-                        {contact?.phone ? contact.phone : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Location :</h4>
-                      <h4 className="full_profile_details">
-                        {contact?.location ? contact.location : "Not available"}
-                      </h4>
-                    </Item>
-                  </Grid>
-
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Sent :</h4>
-                      <h6 className="full_profile_details">
-                        {contact?.sentAt
-                          ? dateConvertor(contact.sentAt)
-                          : "Not available"}
-                      </h6>
-                    </Item>
-                  </Grid>
-                  <Grid sx={{ marginTop: 1, boxShadow: 2 }} item>
-                    <Item className="full_profile_container">
-                      <h4 className="full_profile">Message:</h4>
-                      <p className="full_profile_details">
-                        {contact?.content ? contact.content : "Not available"}
-                      </p>
-                    </Item>
-                  </Grid>
-                </div>
-              ))}
+                  ))}
+                </>
+              )}
             </div>
           </Grid>
         </Grid>

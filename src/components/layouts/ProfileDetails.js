@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
 import Delete from "../../components/svg/Delete";
@@ -28,7 +28,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 import Modal from "@mui/material/Modal";
-import { getUserDetails } from "../../services/redux/reducers/userSlice";
+import {
+  getUserDetails,
+  getUserViewUserDetails,
+} from "../../services/redux/reducers/userSlice";
 import { Spinner } from "react-bootstrap";
 
 const style = {
@@ -51,12 +54,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ProfileDetails() {
-  const [loggedinUser, setLoggedinUser] = useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
-      : []
-  );
-
   //HOOKS FOR CONTROLLING DELETE IMAGE MODAL
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
   const handleOpendeleteModal = () => setOpendeleteModal(true);
@@ -74,13 +71,32 @@ function ProfileDetails() {
   const [user, setUser] = useState();
 
   const navigate = useNavigate();
+
+  const {
+    profileDetails: { role },
+  } = useSelector((state) => state.users);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      await getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then(
+        (docSnap) => {
+          if (docSnap.exists) {
+            const data = docSnap.data();
+
+            dispatch(getUserDetails(data));
+          }
+        }
+      );
+    };
+    getUsers();
+  }, []);
   useEffect(() => {
     const getUsers = async () => {
       await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
         if (docSnap.exists) {
           const data = docSnap.data();
           setUser(data);
-          dispatch(getUserDetails(data));
+          dispatch(getUserViewUserDetails(data));
         }
       });
     };
@@ -210,7 +226,7 @@ function ProfileDetails() {
         >
           {user?.role * 1 === 0 ? null : (
             <>
-              {loggedinUser?.role * 1 === 1 || loggedinUser?.role * 1 === 0 ? (
+              {role * 1 === 1 || role * 1 === 0 ? (
                 <>
                   {auth?.currentUser?.uid !== user.uid && (
                     <div
@@ -238,7 +254,7 @@ function ProfileDetails() {
           )}
           {user?.role * 1 === 0 ? null : (
             <>
-              {loggedinUser?.role * 1 === 1 || loggedinUser?.role * 1 === 0 ? (
+              {role * 1 === 1 || role * 1 === 0 ? (
                 <>
                   {auth?.currentUser?.uid !== user.uid && (
                     <div
@@ -274,8 +290,7 @@ function ProfileDetails() {
                   <img src={user?.avatar || Img} alt="profle" />
                   {user?.role * 1 === 0 ? null : (
                     <>
-                      {loggedinUser?.role * 1 === 1 ||
-                      loggedinUser?.role * 1 === 0 ? (
+                      {role * 1 === 1 || role * 1 === 0 ? (
                         <div className="overlay">
                           <div>
                             <label htmlFor="photo">

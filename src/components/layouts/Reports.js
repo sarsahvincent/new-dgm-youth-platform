@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReportTable from "../ReportsTable";
 import ButtonLoader from "../ButtonLoader";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { db } from "../../firebse";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { auth, db } from "../../firebse";
+import { doc, setDoc, collection, getDoc } from "firebase/firestore";
+import { getUserDetails } from "../../services/redux/reducers/userSlice";
+import { useDispatch } from "react-redux";
 
 function Reports() {
-  const time = new Date().getTime()
+  const time = new Date().getTime();
 
   const [loggedinUser, setLoggedinUser] = useState(
     localStorage.getItem("loggedinUser")
@@ -21,8 +23,10 @@ function Reports() {
   const [success, setSuccess] = useState(false);
   const id = Math.random().toString(36).slice(2);
   const {
-    profileDetails: { firstName, lastName, avatarPath },
+    profileDetails: { firstName, lastName,  role },
   } = useSelector((state) => state.users);
+
+  const dispatch = useDispatch();
 
   const handleSubmitReport = async (e) => {
     e.preventDefault();
@@ -57,6 +61,16 @@ function Reports() {
       }
     }
   };
+
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
   return (
     <div className="reportSubmitContainer-main  layout_margin d-flex justify-content-between m-2 mt-3">
       <div>
@@ -67,18 +81,14 @@ function Reports() {
         >
           <label htmlFor="">Report Title</label>
           <input
-            disabled={
-              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
-            }
+            disabled={role * 1 === 5 || role * 1 === 7}
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
           <label htmlFor="">Report Content</label>
           <textarea
-            disabled={
-              loggedinUser?.role * 1 === 5 || loggedinUser?.role * 1 === 7
-            }
+            disabled={role * 1 === 5 || role * 1 === 7}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             name=""
@@ -88,11 +98,7 @@ function Reports() {
           ></textarea>
           <button
             type="submit"
-            disabled={
-              loggedinUser?.role * 1 === 5 ||
-              loggedinUser?.role * 1 === 7 ||
-              loading
-            }
+            disabled={role * 1 === 5 || role * 1 === 7 || loading}
           >
             {loading ? <ButtonLoader /> : " Submit Report"}
           </button>

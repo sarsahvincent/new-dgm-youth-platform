@@ -10,7 +10,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import Moment from "react-moment";
-
 import GroupIcon from "@mui/icons-material/Group";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -23,7 +22,7 @@ import Card from "@mui/material/Card";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "../Loading";
 import { Spinner } from "react-bootstrap";
 import Modal from "@mui/material/Modal";
@@ -56,12 +55,15 @@ function Profile() {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
 
+  const {
+    profileDetails: { role },
+  } = useSelector((state) => state.users);
+
   const [loggedinUser, setLoggedinUser] = useState(
     localStorage.getItem("loggedinUser")
       ? JSON.parse(localStorage.getItem("loggedinUser"))
       : []
   );
-
 
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
@@ -153,8 +155,7 @@ function Profile() {
             justifyContent: "space-around",
           }}
         >
-          {loggedinUser?.role * 1 === 7 ||
-          loggedinUser?.role * 1 === 0 ? null : (
+          {role * 1 === 7 || role * 1 === 0 ? null : (
             <div className="edit-icon-backround">
               <Tooltip title="Edit Profile">
                 <Link to={`/edit-profile/${user.uid}`}>
@@ -184,8 +185,7 @@ function Profile() {
                 <div className="img_container">
                   <img src={user?.avatar || Img} alt="profle" />
                   <div className="overlay">
-                    {loggedinUser?.role * 1 === 1 ||
-                    loggedinUser?.role * 1 === 0 ? (
+                    {role * 1 === 1 || role * 1 === 0 ? (
                       <div>
                         {user?.role * 1 !== 0 && (
                           <label htmlFor="photo">

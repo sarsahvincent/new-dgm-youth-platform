@@ -90,7 +90,7 @@ function Finance() {
   const [success, setSuccess] = useState(false);
 
   const {
-    profileDetails: { firstName, lastName, avatarPath },
+    profileDetails: { firstName, lastName, avatarPath, role },
   } = useSelector((state) => state.users);
 
   //HOOKS TO REQUEST FOR FUNDSF
@@ -105,11 +105,6 @@ function Finance() {
     setRequestedAmount("");
   };
 
-  const [loggedinUser, setLoggedinUser] = useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
-      : []
-  );
   const [allMonthlyDuesRequested, setAllMonthlyDuesRequested] = useState([]);
   const [allDonConRequested, setAllDonConRequested] = useState([]);
 
@@ -455,6 +450,15 @@ function Finance() {
     }
   }, [img]);
 
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
+
   return user ? (
     <div className="layout_margin m-2 mt-3">
       {/* DELETE Dues Withdraw History */}
@@ -715,11 +719,7 @@ function Finance() {
         <Grid sx={{ boxShadow: 0 }} container spacing={2}>
           <Grid sx={{ boxShadow: 0 }} item xs={12} sm={12} md={4} lg={3} xl={3}>
             <Button
-              disabled={
-                loggedinUser?.role * 1 === 4 ||
-                loggedinUser?.role * 1 === 5 ||
-                loggedinUser?.role * 1 === 7
-              }
+              disabled={role * 1 === 4 || role * 1 === 5 || role * 1 === 7}
               style={{ marginLeft: "55px" }}
               onClick={handleOpenAddFundsModal}
               size="large"
@@ -732,10 +732,10 @@ function Finance() {
             </Button>
             <Button
               disabled={
-                loggedinUser?.role * 1 === 2 ||
-                loggedinUser?.role * 1 === 4 ||
-                loggedinUser?.role * 1 === 5 ||
-                loggedinUser?.role * 1 === 7
+                role * 1 === 2 ||
+                role * 1 === 4 ||
+                role * 1 === 5 ||
+                role * 1 === 7
               }
               style={{ marginLeft: "55px" }}
               onClick={handleOpenRequestFundsModal}
@@ -893,8 +893,7 @@ function Finance() {
                                 - {item?.requestedAmount}
                               </h6>
                             </div>
-                            {loggedinUser?.role * 1 === 1 ||
-                            loggedinUser?.role * 1 === 0 ? (
+                            {role * 1 === 1 || role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -971,8 +970,7 @@ function Finance() {
                               </h6>
                             </div>
 
-                            {loggedinUser?.role * 1 === 1 ||
-                            loggedinUser?.role * 1 === 0 ? (
+                            {role * 1 === 1 || role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -1044,8 +1042,7 @@ function Finance() {
                               </h6>
                             </div>
 
-                            {loggedinUser?.role * 1 === 1 ||
-                            loggedinUser?.role * 1 === 0 ? (
+                            {role * 1 === 1 || role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {
@@ -1112,8 +1109,7 @@ function Finance() {
                                 + {item?.amoutToAddfunds}
                               </h6>
                             </div>
-                            {loggedinUser?.role * 1 === 1 ||
-                            loggedinUser?.role * 1 === 0 ? (
+                            {role * 1 === 1 || role * 1 === 0 ? (
                               <div
                                 className="edit-icon-backround"
                                 onClick={() => {

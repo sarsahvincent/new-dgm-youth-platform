@@ -98,7 +98,6 @@ function HomePageContent() {
       setLoading(false);
     };
 
-
     getUsers();
   }, []);
 
@@ -130,7 +129,13 @@ function HomePageContent() {
               <GroupsIcon style={{ color: "white", fontSize: 24 }} />
               <div style={{ color: "white", textAlign: "right" }}>
                 <h4>Total Youth</h4>
-                <h2>{allUsers?.length -1}</h2>
+                {!allUsers?.length ? (
+                  <h2>0</h2>
+                ) : (
+                  <>
+                    <h2>{allUsers?.length - 1}</h2>
+                  </>
+                )}
               </div>
             </Paper>
           </div>
@@ -206,7 +211,7 @@ function HomePageContent() {
                 <ButtonLoader />
               </span>
             </div>
-          ) : activities || activities?.length === 0 ? (
+          ) : activities?.length === 0 ? (
             <h4 style={{ color: "purple" }}>No activities found</h4>
           ) : (
             <HomepageEventTablet />

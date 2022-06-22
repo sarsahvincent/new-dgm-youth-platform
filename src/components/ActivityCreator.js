@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { db } from "../firebse";
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { auth, db } from "../firebse";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import ButtonLoader from "./ButtonLoader";
 import { useDispatch } from "react-redux";
 import { getAllActivities } from "../services/redux/reducers/activitiesSlice";
 import _ from "lodash";
+import { getCurrentUserId, getUserDetails } from "../services/redux/reducers/userSlice";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const id = Math.random().toString(36).slice(2);
 
@@ -109,6 +118,17 @@ const ActivityCreator = () => {
     getToalUnitCosts();
     getAllActivityTotals();
   }, [formValues]);
+
+
+  useEffect(() => {
+    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setLoggedinUser(docSnap.data());
+        dispatch(getUserDetails(docSnap.data()));
+        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+      }
+    });
+  }, []);
 
   return (
     <form className="activityFormContainer" onSubmit={handleSubmit}>
