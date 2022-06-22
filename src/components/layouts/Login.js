@@ -45,10 +45,11 @@ function Login() {
         });
         setData({ ...data, loading: true });
         navigate("/");
-      } catch (err) {
+      } catch (error) {
+        console.log("erro", error);
         setData({
           ...data,
-          error: err.message,
+          error: error.message,
           loading: false,
         });
       }

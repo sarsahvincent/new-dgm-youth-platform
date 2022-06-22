@@ -757,20 +757,20 @@ function AddAccount() {
           </div>
           {error ? <p className="error">{error}</p> : null}
 
-          <div className="d-flex align-items-center mb-0 justify-content-between">
+          <div className="d-flex align-items-center justify-content-between mt-5">
             <Button
               disabled={loading}
               type="submit"
               style={{
                 textAlign: "center",
                 height: 50,
-                width: "50%",
+                width: "60%",
                 marginTop: 20,
                 backgroundColor: "purple",
                 fontSize: 14,
                 fontWeight: "bolder",
                 letterSpacing: "5px",
-                borderRadius: 2,
+                borderRadius: 4,
                 marginBottom: 10,
                 margin: "0 auto",
               }}
