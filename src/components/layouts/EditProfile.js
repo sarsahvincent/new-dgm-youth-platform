@@ -10,7 +10,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebse";
 import {
   doc,
@@ -19,18 +18,11 @@ import {
   getDocs,
   collection,
 } from "firebase/firestore";
-import ButtonLoader from "../ButtonLoader";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { getDepartments } from "../../services/redux/reducers/departmentSlice";
 
 function EditProfile() {
-  const [loogedinUser, setLoggedinUser] = useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
-      : []
-  );
-
   const {
     profileDetails: { role: loggedinUserrole },
   } = useSelector((state) => state.users);
@@ -232,7 +224,6 @@ function EditProfile() {
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
-        setLoggedinUser(docSnap.data());
         dispatch(getUserDetails(docSnap.data()));
         localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
       }
@@ -782,7 +773,6 @@ function EditProfile() {
                 >
                   <TextField
                     disabled={
-                      loggedinUserrole * 1 === 3 ||
                       loggedinUserrole * 1 === 5 ||
                       loggedinUserrole * 1 === 4 ||
                       loggedinUserrole * 1 === 7

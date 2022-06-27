@@ -200,12 +200,12 @@ function HomePageContent() {
           <h3
             style={{ textAlign: "center", color: "purple", marginTop: "15px" }}
           >
-            Activities
+            Events
           </h3>
 
           {loading ? (
             <div>
-              <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
+              <b style={{ color: "purple" }}>Loading Events...</b>{" "}
               <span>
                 {" "}
                 <ButtonLoader />

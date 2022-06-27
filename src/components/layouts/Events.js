@@ -162,7 +162,7 @@ function HomePageContent() {
           <h3
             style={{ textAlign: "center", color: "purple", marginTop: "15px" }}
           >
-            Create Activity
+            Create Event
           </h3>
           <ActivityCreator />
         </div>
@@ -170,11 +170,11 @@ function HomePageContent() {
           <h3
             style={{ textAlign: "center", color: "purple", marginTop: "15px" }}
           >
-            Activities
+            Events
           </h3>
           {loading ? (
             <div>
-              <b style={{ color: "purple" }}>Loading Activities...</b>{" "}
+              <b style={{ color: "purple" }}>Loading Events...</b>{" "}
               <span>
                 {" "}
                 <ButtonLoader />
@@ -182,7 +182,7 @@ function HomePageContent() {
             </div>
           ) : activities.length === 0 || !activities ? (
             <div>
-              <h4 style={{ color: "purple" }}>No activities found</h4>
+              <h4 style={{ color: "purple" }}>No Event found</h4>
             </div>
           ) : (
             <HomepageEventTablet />
