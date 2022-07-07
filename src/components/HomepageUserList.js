@@ -8,12 +8,16 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { db } from "../firebse";
+// import { read, writeFileXLSX, XLSX } from "xlsx";
+import * as XLSX from "xlsx/xlsx.mjs";
 import { collection, getDocs } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../services/redux/reducers/userSlice";
 import UserTableAvatar from "./UserTableAvatar";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,7 +25,19 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import PhoneIcon from "@mui/icons-material/Phone";
+import DownloadIcon from "@mui/icons-material/Download";
 import EmailIcon from "@mui/icons-material/Email";
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
 
 const columns = [
   { id: "picture", label: "Picture", minWidth: 170 },
@@ -117,6 +133,14 @@ export default function HomepageUserList({ allDepartment }) {
     setFilterByMemberShip("");
   };
 
+  const downloadList = () => {
+    const worksheet = XLSX.utils.json_to_sheet(searchResults);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DGM YOUTH MEMBERS");
+    let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+    XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFileXLSX(workbook, "DGM_YOUTH.xlsx");
+  };
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
@@ -177,6 +201,7 @@ export default function HomepageUserList({ allDepartment }) {
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
         />
+
         <button onClick={clearFilters} className="clear-filter-btn">
           Clear Filters
           <span>
@@ -184,6 +209,14 @@ export default function HomepageUserList({ allDepartment }) {
             <ClearIcon />
           </span>
         </button>
+        <LightTooltip title="Download List">
+          <div
+            style={{ color: "purple", marginLeft: 10, cursor: "pointer" }}
+            onClick={downloadList}
+          >
+            <DownloadIcon />
+          </div>
+        </LightTooltip>
       </div>
       <div className="d-flex align-items-center justify-content-between filter-container">
         <div>
@@ -282,12 +315,15 @@ export default function HomepageUserList({ allDepartment }) {
                           role="checkbox"
                           tabIndex={-1}
                           key={row.code}
-                       
                         >
                           {columns.map((column) => {
                             const value = row[column.id];
                             return (
-                              <TableCell key={column.id} align={column.align}    style={{padding: 5}}>
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ padding: 5 }}
+                              >
                                 {column.format && typeof value === "number"
                                   ? column.format(value)
                                   : value}
