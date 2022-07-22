@@ -775,7 +775,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {currentBalance ? currentBalance?.toFixed(2) : 0}
+                    ¢{currentBalance ? currentBalance?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -803,7 +803,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {totalDues ? totalDues?.toFixed(2) : 0}
+                    ¢{totalDues ? totalDues?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -831,7 +831,7 @@ function Finance() {
                       textAlign: "right",
                     }}
                   >
-                    {totalDonCont ? totalDonCont?.toFixed(2) : 0}
+                    ¢{totalDonCont ? totalDonCont?.toFixed(2) : 0}
                   </div>
                 </div>
               </Card>
@@ -890,7 +890,7 @@ function Finance() {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <h6 className="amoutToRequest">
-                                - {item?.requestedAmount}
+                                - ¢{item?.requestedAmount}
                               </h6>
                             </div>
                             {role * 1 === 1 || role * 1 === 0 ? (
@@ -966,7 +966,7 @@ function Finance() {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <h6 className="amoutToRequest">
-                                - {item?.requestedAmount}
+                                - ¢{item?.requestedAmount}
                               </h6>
                             </div>
 
@@ -1038,7 +1038,7 @@ function Finance() {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <h6 className="amoutToAddfunds">
-                                + {item?.amoutToAddfunds}
+                                + ¢{item?.amoutToAddfunds}
                               </h6>
                             </div>
 
@@ -1106,7 +1106,7 @@ function Finance() {
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
                               <h6 className="amoutToAddfunds">
-                                + {item?.amoutToAddfunds}
+                                + ¢{item?.amoutToAddfunds}
                               </h6>
                             </div>
                             {role * 1 === 1 || role * 1 === 0 ? (

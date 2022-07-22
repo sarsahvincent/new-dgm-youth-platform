@@ -245,17 +245,17 @@ export default function ControlledAccordions() {
                           {activity?.name}
                         </span>{" "}
                         {""}
-                        <span>Quantiy: {activity?.quantity}</span> / Unit Cost:{" "}
-                        <span> ${activity?.unitCost}</span> / Total ={" "}
+                        <span>Quantiy: {activity?.quantity}</span> | Unit Cost:{" "}
+                        <span> ¢{activity?.unitCost}</span> | Total ={" "}
                         <span>
                           {" "}
-                          ${activity?.quantity * 1 * (activity?.unitCost * 1)}
+                          {activity?.quantity * 1 * (activity?.unitCost * 1)}
                         </span>
                       </div>
                     ))}
                   </div>
                   <b>
-                    Totol: <span>{activity?.total}</span>{" "}
+                    Totol: <span>¢{activity?.total}</span>{" "}
                   </b>
 
                   {role * 1 === 1 || role * 1 === 2 || role * 1 === 0 ? (
