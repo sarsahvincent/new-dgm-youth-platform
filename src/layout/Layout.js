@@ -1,51 +1,52 @@
-import * as React from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { useContext } from "react";
-import { auth, db } from "../firebse";
-import { signOut } from "firebase/auth";
-import { updateDoc, doc, getDoc } from "firebase/firestore";
-import { AuthContext } from "../context/auth";
-import { Paid } from "@mui/icons-material";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import DGMlogo from "../assets/images/dgm.jpg";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import TodayIcon from "@mui/icons-material/Today";
-import GroupsIcon from "@mui/icons-material/Groups";
-import CreateIcon from "@mui/icons-material/Create";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import { useSelector, useDispatch } from "react-redux";
-import { getUserDetails } from "../services/redux/reducers/userSlice";
+import * as React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Link from '@mui/material/Link';
+import { styled, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { useContext } from 'react';
+import { auth, db } from '../firebse';
+import { signOut } from 'firebase/auth';
+import { updateDoc, doc, getDoc } from 'firebase/firestore';
+import { AuthContext } from '../context/auth';
+import { Paid } from '@mui/icons-material';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import DGMlogo from '../assets/images/dgm.jpg';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import TodayIcon from '@mui/icons-material/Today';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CreateIcon from '@mui/icons-material/Create';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserDetails } from '../services/redux/reducers/userSlice';
 
-const drawerWidth = "50px";
+const drawerWidth = '50px';
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: theme.palette.common.white,
-    color: "rgba(0, 0, 0, 0.87)",
+    color: 'rgba(0, 0, 0, 0.87)',
     boxShadow: theme.shadows[1],
     fontSize: 11,
   },
@@ -53,46 +54,46 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
-  transition: theme.transitions.create("width", {
+  transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: "hidden",
+  overflowX: 'hidden',
 });
 
 const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
+  transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: "hidden",
+  overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(9)} + 1px)`,
   },
 });
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
+  transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -100,19 +101,19 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
   }),
   ...(!open && {
     ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
 
@@ -123,8 +124,8 @@ export default function MiniDrawer({ layout }) {
   } = useSelector((state) => state.users);
 
   const [loggedinUser, setLoggedinUser] = React.useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
+    localStorage.getItem('loggedinUser')
+      ? JSON.parse(localStorage.getItem('loggedinUser'))
       : []
   );
   const location = useLocation();
@@ -144,12 +145,12 @@ export default function MiniDrawer({ layout }) {
   const navigate = useNavigate();
 
   const handleSignout = async () => {
-    await updateDoc(doc(db, "DGM_YOUTH_users", auth.currentUser?.uid), {
+    await updateDoc(doc(db, 'DGM_YOUTH_users', auth.currentUser?.uid), {
       isOnline: false,
     });
     localStorage.clear();
     await signOut(auth);
-    navigate("/login");
+    navigate('/login');
   };
 
   const pathname = window.location.pathname;
@@ -165,42 +166,42 @@ export default function MiniDrawer({ layout }) {
     <Box>
       <CssBaseline />
       <AppBar
-        style={{ backgroundColor: "purple" }}
-        position="fixed"
+        style={{ backgroundColor: 'purple' }}
+        position='fixed'
         open={open}
       >
         <Toolbar
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          {user && window.location.pathname !== "/upcoming-event" ? (
+          {user && window.location.pathname !== '/upcoming-event' ? (
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
+              color='inherit'
+              aria-label='open drawer'
               onClick={handleDrawerOpen}
-              edge="start"
+              edge='start'
               sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
               }}
             >
               {/* <MenuIcon /> */}
             </IconButton>
           ) : null}
           <div>
-            <Link to="/">
+            <Link to='/'>
               <Typography
                 style={{
-                  color: "white",
+                  color: 'white',
                 }}
-                variant="h6"
+                variant='h6'
                 noWrap
-                component="div"
+                component='div'
               >
-                <img src={DGMlogo} alt="Logo" className="navbar_logos" />
+                <img src={DGMlogo} alt='Logo' className='navbar_logos' />
                 DGM Youth
               </Typography>
             </Link>
@@ -210,21 +211,21 @@ export default function MiniDrawer({ layout }) {
             {user ? (
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <div
                   style={{
-                    color: "white",
-                    justifyContent: "space-between",
-                    paddingLeft: "5px",
-                    paddingRight: "5px",
+                    color: 'white',
+                    justifyContent: 'space-between',
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
                   }}
                 >
                   <Typography
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={handleSignout}
                   >
                     Logout <LogoutIcon />
@@ -234,54 +235,59 @@ export default function MiniDrawer({ layout }) {
             ) : (
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingLeft: "5px",
-                  paddingRight: "5px",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
                 }}
               >
-                {window.location.pathname !== "/login" && (
+                {window.location.pathname !== '/login' && (
                   <Link
                     style={{
-                      color: "white",
-                      justifyContent: "space-between",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
+                      color: 'white',
+                      justifyContent: 'space-between',
+                      paddingLeft: '5px',
+                      paddingRight: '5px',
                     }}
-                    to="/login"
+                    to='/login'
                   >
                     Login
                   </Link>
                 )}
-                {window.location.pathname !== "/upcoming-event" && (
-                  <Link
-                    style={{
-                      color: "white",
-                      justifyContent: "space-between",
-                      paddingLeft: "5px",
-                      paddingRight: "5px",
-                    }}
-                    to="/upcoming-event"
-                  >
-                    Event
-                  </Link>
+                {window.location.pathname !== '/upcoming-event' && (
+                  <div>
+                    <Link href='/upcoming-event' color='inherit'>
+                     Event
+                    </Link>
+                    {/* <Link
+                      style={{
+                        color: 'white',
+                        justifyContent: 'space-between',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                      }}
+                      to='/upcoming-event'
+                    >
+                      Event
+                    </Link> */}
+                  </div>
                 )}
               </div>
             )}
           </div>
         </Toolbar>
       </AppBar>
-      {user && window.location.pathname !== "/upcoming-event" ? (
+      {user && window.location.pathname !== '/upcoming-event' ? (
         <Drawer
-          className="left-drawer-width"
+          className='left-drawer-width'
           sx={{ flexGrow: 1 }}
-          variant="permanent"
+          variant='permanent'
           open={open}
         >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
+              {theme.direction === 'rtl' ? (
                 <ChevronRightIcon />
               ) : (
                 <ChevronLeftIcon />
@@ -290,21 +296,21 @@ export default function MiniDrawer({ layout }) {
           </DrawerHeader>
           <Divider />
 
-          <LightTooltip title="Dashboard">
-            <Link to="/">
+          <LightTooltip title='Dashboard'>
+            <Link to='/'>
               <List>
-                <ListItem sx={{ cursor: "pointer" }}>
+                <ListItem sx={{ cursor: 'pointer' }}>
                   <ListItemIcon>
                     <DashboardIcon
                       style={{
-                        color: `${getPathname() === "/" ? "orange" : "purple"}`,
+                        color: `${getPathname() === '/' ? 'orange' : 'purple'}`,
                       }}
-                      fontSize="medium"
+                      fontSize='medium'
                     />
                   </ListItemIcon>
                   <ListItemText
                     style={{
-                      color: `${getPathname() === "/" ? "orange" : "purple"}`,
+                      color: `${getPathname() === '/' ? 'orange' : 'purple'}`,
                     }}
                   >
                     <b>Dashboard</b>
@@ -314,24 +320,24 @@ export default function MiniDrawer({ layout }) {
             </Link>
           </LightTooltip>
           <Divider />
-          <LightTooltip title="Profile">
-            <Link to="/profile">
+          <LightTooltip title='Profile'>
+            <Link to='/profile'>
               <List>
-                <ListItem sx={{ cursor: "pointer" }}>
+                <ListItem sx={{ cursor: 'pointer' }}>
                   <ListItemIcon>
                     <AccountBoxIcon
                       style={{
                         color: `${
-                          getPathname() === "/profile" ? "orange" : "purple"
+                          getPathname() === '/profile' ? 'orange' : 'purple'
                         }`,
                       }}
-                      fontSize="medium"
+                      fontSize='medium'
                     />
                   </ListItemIcon>
                   <ListItemText
                     style={{
                       color: `${
-                        getPathname() === "/profile" ? "orange" : "purple"
+                        getPathname() === '/profile' ? 'orange' : 'purple'
                       }`,
                     }}
                   >
@@ -347,25 +353,25 @@ export default function MiniDrawer({ layout }) {
           role * 1 === 10 ? (
             <>
               <Divider />
-              <LightTooltip title="Add Account">
-                <Link to="/add-account">
-                  <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+              <LightTooltip title='Add Account'>
+                <Link to='/add-account'>
+                  <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                     <ListItemIcon>
                       <PersonAddIcon
                         style={{
                           color: `${
-                            getPathname() === "/add-account"
-                              ? "orange"
-                              : "purple"
+                            getPathname() === '/add-account'
+                              ? 'orange'
+                              : 'purple'
                           }`,
                         }}
-                        fontSize="medium"
+                        fontSize='medium'
                       />
                     </ListItemIcon>
                     <ListItemText
                       style={{
                         color: `${
-                          getPathname() === "/add-account" ? "orange" : "purple"
+                          getPathname() === '/add-account' ? 'orange' : 'purple'
                         }`,
                       }}
                     >
@@ -378,27 +384,27 @@ export default function MiniDrawer({ layout }) {
           ) : null}
 
           <Divider />
-          <LightTooltip title="Convert">
-            <Link to="/new-converts-management">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Convert'>
+            <Link to='/new-converts-management'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <GroupsIcon
                     style={{
                       color: `${
-                        getPathname() === "/new-converts-management"
-                          ? "orange"
-                          : "purple"
+                        getPathname() === '/new-converts-management'
+                          ? 'orange'
+                          : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/new-converts-managementnt"
-                        ? "orange"
-                        : "purple"
+                      getPathname() === '/new-converts-managementnt'
+                        ? 'orange'
+                        : 'purple'
                     }`,
                   }}
                 >
@@ -408,23 +414,23 @@ export default function MiniDrawer({ layout }) {
             </Link>
           </LightTooltip>
           <Divider />
-          <LightTooltip title="Events">
-            <Link to="/events">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Events'>
+            <Link to='/events'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <TodayIcon
                     style={{
                       color: `${
-                        getPathname() === "/events" ? "orange" : "purple"
+                        getPathname() === '/events' ? 'orange' : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/events" ? "orange" : "purple"
+                      getPathname() === '/events' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -435,23 +441,23 @@ export default function MiniDrawer({ layout }) {
           </LightTooltip>
 
           <Divider />
-          <LightTooltip title="Finance">
-            <Link to="/finance">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Finance'>
+            <Link to='/finance'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <Paid
                     style={{
                       color: `${
-                        getPathname() === "/finance" ? "orange" : "purple"
+                        getPathname() === '/finance' ? 'orange' : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/finance" ? "orange" : "purple"
+                      getPathname() === '/finance' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -462,23 +468,23 @@ export default function MiniDrawer({ layout }) {
           </LightTooltip>
 
           <Divider />
-          <LightTooltip title="Reports">
-            <Link to="/reports">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Reports'>
+            <Link to='/reports'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <CreateIcon
                     style={{
                       color: `${
-                        getPathname() === "/reports" ? "orange" : "purple"
+                        getPathname() === '/reports' ? 'orange' : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/reports" ? "orange" : "purple"
+                      getPathname() === '/reports' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -488,23 +494,23 @@ export default function MiniDrawer({ layout }) {
             </Link>
           </LightTooltip>
           <Divider />
-          <LightTooltip title="Settings">
-            <Link to="/settings">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Settings'>
+            <Link to='/settings'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <ManageAccountsIcon
                     style={{
                       color: `${
-                        getPathname() === "/settings" ? "orange" : "purple"
+                        getPathname() === '/settings' ? 'orange' : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/settings" ? "orange" : "purple"
+                      getPathname() === '/settings' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -516,25 +522,25 @@ export default function MiniDrawer({ layout }) {
 
           <Divider />
 
-          <LightTooltip title="Contacts">
-            <Link to="/program-contact">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Contacts'>
+            <Link to='/program-contact'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <ContactPhoneIcon
                     style={{
                       color: `${
-                        getPathname() === "/program-contact"
-                          ? "orange"
-                          : "purple"
+                        getPathname() === '/program-contact'
+                          ? 'orange'
+                          : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/program-contact" ? "orange" : "purple"
+                      getPathname() === '/program-contact' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -544,25 +550,25 @@ export default function MiniDrawer({ layout }) {
             </Link>
           </LightTooltip>
           <Divider />
-          <LightTooltip title="Program">
-            <Link to="/upcoming-event">
-              <ListItem className="drawerIcons" sx={{ cursor: "pointer" }}>
+          <LightTooltip title='Program'>
+            <Link to='/upcoming-event'>
+              <ListItem className='drawerIcons' sx={{ cursor: 'pointer' }}>
                 <ListItemIcon>
                   <ConnectWithoutContactIcon
                     style={{
                       color: `${
-                        getPathname() === "/upcoming-event"
-                          ? "orange"
-                          : "purple"
+                        getPathname() === '/upcoming-event'
+                          ? 'orange'
+                          : 'purple'
                       }`,
                     }}
-                    fontSize="medium"
+                    fontSize='medium'
                   />
                 </ListItemIcon>
                 <ListItemText
                   style={{
                     color: `${
-                      getPathname() === "/upcoming-event" ? "orange" : "purple"
+                      getPathname() === '/upcoming-event' ? 'orange' : 'purple'
                     }`,
                   }}
                 >
@@ -576,13 +582,13 @@ export default function MiniDrawer({ layout }) {
 
       <Box
         className={
-          getPathname() === "/login"
-            ? "loginLogoutbackround"
-            : "layoutbackround"
+          getPathname() === '/login'
+            ? 'loginLogoutbackround'
+            : 'layoutbackround'
         }
-        component="main"
+        component='main'
         style={{
-          height: "100%",
+          height: '100%',
         }}
       >
         <DrawerHeader />
