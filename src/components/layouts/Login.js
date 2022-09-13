@@ -20,7 +20,6 @@ function Login() {
   });
 
   const { email, password, error, loading } = data;
-
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -85,11 +84,11 @@ function Login() {
         </div>
         {error ? (
           <p className="error">
-            {error === "Firebase: Error (auth/user-not-found)."
-              ? "User Does Not Exist"
+            {error === "Firebase: Error (auth/user-not-found)." || error ==="Firebase: Error (auth/wrong-password)."
+              ? "Invalid Email or Password"
               : error === "Firebase: Error (auth/timeout)."
               ? "Network  error! Please try again"
-              : Error}
+              : error === "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests)." ? 'Your Account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later': error}
           </p>
         ) : null}
         <div className="btn_container">

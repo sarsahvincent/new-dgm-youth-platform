@@ -8,12 +8,10 @@ import ActivityCreator from "../ActivityCreator";
 import HomepageEventTablet from "../HomepageEventTable";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ButtonLoader from "../ButtonLoader";
-import { useSelector } from "react-redux";
 import { db } from "../../firebse";
 import { collection, getDocs } from "firebase/firestore";
 
 function HomePageContent() {
-  const { allUsers } = useSelector((state) => state.users);
   const [loading, setLoading] = useState(false);
   const [activities, setActivities] = React.useState([]);
   const [allPending, setAllPending] = React.useState([]);

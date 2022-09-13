@@ -43,7 +43,6 @@ import Modal from "@mui/material/Modal";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";

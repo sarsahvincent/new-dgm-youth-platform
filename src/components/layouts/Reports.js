@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReportTable from "../ReportsTable";
 import ButtonLoader from "../ButtonLoader";
 import { ToastContainer, toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { auth, db } from "../../firebse";
-import { doc, setDoc, collection, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { getUserDetails } from "../../services/redux/reducers/userSlice";
-import { useDispatch } from "react-redux";
 
 function Reports() {
   const time = new Date().getTime();

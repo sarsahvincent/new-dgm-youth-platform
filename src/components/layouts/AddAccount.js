@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
@@ -15,13 +15,13 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, db } from "../../firebse";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import Loading from "../Loading";
 
 function create_UUID() {
-  var dt = new Date().getTime();
+  const dt = new Date().getTime();
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
+    const r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
     return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
@@ -705,52 +705,7 @@ function AddAccount() {
                 </Box>
               </div>
             </div>
-            {/* <div className="new_member_form_group">
-              <div>
-                <label htmlFor="password"></label>
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <TextField
-                    disabled={role === "5"}
-                    name="password"
-                    id="outlined-basic"
-                    label="Password *"
-                    type="password"
-                    variant="outlined"
-                    value={password}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </div>
-              <div>
-                <label htmlFor="confirmPassword"></label>
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <TextField
-                    disabled={role === "5"}
-                    name="confirmPassword"
-                    id="outlined-basic"
-                    label="Confirm Password *"
-                    type="password"
-                    variant="outlined"
-                    value={confirmPassword}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </div>
-            </div> */}
+         
             {membershipStatus === "New Convert" && (
               <div className="new_member_form_group"></div>
             )}

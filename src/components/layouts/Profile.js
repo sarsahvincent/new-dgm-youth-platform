@@ -59,12 +59,6 @@ function Profile() {
     profileDetails: { role },
   } = useSelector((state) => state.users);
 
-  const [loggedinUser, setLoggedinUser] = useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
-      : []
-  );
-
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
@@ -455,14 +449,7 @@ function Profile() {
                   </h4>
                 </Item>
               </Grid>
-              <Grid sx={{ marginTop: 1 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">
-                    {user?.occupation ? user.occupation : "Not available"}
-                  </h4>
-                </Item>
-              </Grid>
+             
             </div>
           </Grid>
         </Grid>

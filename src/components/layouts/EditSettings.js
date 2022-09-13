@@ -54,7 +54,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function EditSetting() {
   const [openDeleteModal, setOpendeleteModal] = React.useState(false);
-  const handleOpendeleteModal = () => setOpendeleteModal(true);
   const navigate = useNavigate();
   const handleCloseDeleteModal = () => setOpendeleteModal(false);
   const [loading, setLoading] = useState(false);
@@ -82,7 +81,7 @@ function EditSetting() {
   const dispatch = useDispatch();
   const id = getEditDepartment?.id;
   const {
-    profileDetails: { firstName, lastName, role },
+    profileDetails: { firstName, lastName },
   } = useSelector((state) => state.users);
   const { allDepartment } = useSelector((state) => state.departments);
 

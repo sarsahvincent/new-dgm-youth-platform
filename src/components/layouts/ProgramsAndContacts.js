@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
 import Modal from "@mui/material/Modal";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const style = {
   position: "absolute",

@@ -32,8 +32,6 @@ function HomePageContent() {
 
   const { allDepartment } = useSelector((state) => state.departments);
   const [departments, setDeparments] = useState([]);
-  const [loggedinUser, setLoggedinUser] = useState();
-
   const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
 
   const getAllMen = () => {
@@ -71,7 +69,6 @@ function HomePageContent() {
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
-        setLoggedinUser(docSnap.data());
         dispatch(getUserDetails(docSnap.data()));
         localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
       }

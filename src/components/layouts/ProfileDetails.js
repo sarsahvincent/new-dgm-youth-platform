@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Img from "../../assets/images/avatar.png";
 import Camera from "../../components/svg/Camera";
-import Delete from "../../components/svg/Delete";
 import { storage, db, auth } from "../../firebse";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import {
   ref,
   getDownloadURL,
@@ -528,12 +525,6 @@ function ProfileDetails() {
                 <Item className="full_profile_container">
                   <h4 className="full_profile">Baptize :</h4>
                   <h4 className="full_profile_details">{user.baptism}</h4>
-                </Item>
-              </Grid>
-              <Grid sx={{ marginTop: 1 }} item>
-                <Item className="full_profile_container">
-                  <h4 className="full_profile"> Occupation :</h4>
-                  <h4 className="full_profile_details">{user.occupation}</h4>
                 </Item>
               </Grid>
             </div>

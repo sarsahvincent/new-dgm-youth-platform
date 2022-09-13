@@ -1,8 +1,7 @@
 import * as React from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MuiDrawer from "@mui/material/Drawer";
@@ -13,7 +12,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -22,7 +20,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { useContext } from "react";
 import { auth, db } from "../firebse";
 import { signOut } from "firebase/auth";
-import { updateDoc, doc, getDoc } from "firebase/firestore";
+import { updateDoc, doc } from "firebase/firestore";
 import { AuthContext } from "../context/auth";
 import { Paid } from "@mui/icons-material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -36,7 +34,6 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserDetails } from "../services/redux/reducers/userSlice";
 
 const drawerWidth = "50px";
 
@@ -121,13 +118,6 @@ export default function MiniDrawer({ layout }) {
   const {
     profileDetails: { role },
   } = useSelector((state) => state.users);
-
-  const [loggedinUser, setLoggedinUser] = React.useState(
-    localStorage.getItem("loggedinUser")
-      ? JSON.parse(localStorage.getItem("loggedinUser"))
-      : []
-  );
-  const location = useLocation();
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
