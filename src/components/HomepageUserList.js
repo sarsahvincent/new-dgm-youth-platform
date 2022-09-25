@@ -144,6 +144,7 @@ export default function HomepageUserList({ allDepartment }) {
   useEffect(() => {
     const filteredData = users?.filter(
       (user) =>
+        user?.fullName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
         user?.firstName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
         user?.lastName?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
         user?.phone?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
