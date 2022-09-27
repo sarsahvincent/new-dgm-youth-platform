@@ -98,8 +98,6 @@ function ProgramsAndContacts() {
     getAllContacts();
   }, []);
 
-  console.log("loading", loading);
-
   useEffect(() => {
     getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {

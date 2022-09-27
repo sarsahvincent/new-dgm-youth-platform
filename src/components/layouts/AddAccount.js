@@ -697,20 +697,20 @@ function AddAccount() {
               style={{
                 textAlign: 'center',
                 height: 50,
-                width: '60%',
+                width: 200,
                 marginTop: 20,
                 backgroundColor: 'purple',
                 fontSize: 14,
                 fontWeight: 'bolder',
                 letterSpacing: '5px',
-                borderRadius: 4,
+                borderRadius: 6,
                 marginBottom: 10,
                 margin: '0 auto',
               }}
               variant='contained'
               endIcon={loading ? null : <SendIcon />}
             >
-              Register
+              SUBMIT
             </Button>
           </div>
         </Paper>
