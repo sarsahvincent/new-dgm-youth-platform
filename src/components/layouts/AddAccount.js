@@ -40,7 +40,7 @@ function AddAccount() {
     emergencyContactName: '',
     occupation: '',
     maritalStatus: '',
-   
+
     sex: '',
     membershipStatus: '',
     role: '',
@@ -65,7 +65,7 @@ function AddAccount() {
     emergencyContactName,
     occupation,
     maritalStatus,
-  
+
     sex,
     status,
     baptism,
@@ -93,7 +93,6 @@ function AddAccount() {
       !lastName ||
       !occupation ||
       !maritalStatus ||
-    
       !sex ||
       !status ||
       !baptism ||
@@ -120,7 +119,7 @@ function AddAccount() {
             emergencyContactName,
             occupation,
             maritalStatus,
-           
+
             sex,
             status,
             baptism,
@@ -148,7 +147,7 @@ function AddAccount() {
           emergencyContactName: '',
           occupation: '',
           maritalStatus: '',
-        
+
           sex: '',
           status: '',
           baptism: '',
@@ -189,7 +188,6 @@ function AddAccount() {
       !emergencyContactName ||
       !occupation ||
       !maritalStatus ||
-     
       !sex ||
       !status ||
       !baptism ||
@@ -220,7 +218,7 @@ function AddAccount() {
           emergencyContactName,
           occupation,
           maritalStatus,
-         
+
           sex,
           status,
           baptism,
@@ -249,7 +247,7 @@ function AddAccount() {
           emergencyContactName: '',
           occupation: '',
           maritalStatus: '',
-        
+
           sex: '',
           status: '',
           baptism: '',
@@ -484,29 +482,7 @@ function AddAccount() {
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
-              <div>
-                <label htmlFor='maritalStatus'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
-                  <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
-                      Marital Status *
-                    </InputLabel>
-                    <Select
-                      name='maritalStatus'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={maritalStatus}
-                      label='Marital Status '
-                      onChange={handleChange}
-                    >
-                      <MenuItem value='Single'>Single</MenuItem>
-                      <MenuItem value='Married'>Married</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-              </div>
-            </div>
+
             <div className='new_member_form_group'>
               <div>
                 <label htmlFor='occupation'></label>
@@ -681,6 +657,29 @@ function AddAccount() {
                     value={emergencyContact}
                     onChange={handleChange}
                   />
+                </Box>
+              </div>
+            </div>
+            <div className='new_member_form_group'>
+              <div>
+                <label htmlFor='maritalStatus'></label>
+                <Box sx={{ m: 0.5, width: '35ch' }}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-label'>
+                      Marital Status *
+                    </InputLabel>
+                    <Select
+                      name='maritalStatus'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
+                      value={maritalStatus}
+                      label='Marital Status '
+                      onChange={handleChange}
+                    >
+                      <MenuItem value='Single'>Single</MenuItem>
+                      <MenuItem value='Married'>Married</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Box>
               </div>
             </div>
