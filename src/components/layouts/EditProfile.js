@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import { useParams, useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import { ToastContainer, toast } from "react-toastify";
-import { auth, db } from "../../firebse";
+import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import { useParams, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+import { ToastContainer, toast } from 'react-toastify';
+import { auth, db } from '../../firebse';
 import {
   doc,
   getDoc,
   updateDoc,
   getDocs,
   collection,
-} from "firebase/firestore";
-import { useSelector, useDispatch } from "react-redux";
-import { getUserDetails } from "../../services/redux/reducers/userSlice";
-import { getDepartments } from "../../services/redux/reducers/departmentSlice";
+} from 'firebase/firestore';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserDetails } from '../../services/redux/reducers/userSlice';
+import { getDepartments } from '../../services/redux/reducers/departmentSlice';
 
 function EditProfile() {
   const {
@@ -35,40 +35,39 @@ function EditProfile() {
   const [success, setSuccess] = useState(false);
   const test = user?.firstName;
   const [departments, setDeparments] = useState([]);
-  const deparmentCollectiion = collection(db, "DGM_YOUTH_Departments");
+  const deparmentCollectiion = collection(db, 'DGM_YOUTH_Departments');
   const { allDepartment } = useSelector((state) => state.departments);
 
   const { viewUserDetails } = useSelector((state) => state.users);
   const [data, setData] = useState({
-    salutation: viewUserDetails?.salutation ? viewUserDetails.salutation : "",
-    firstName: viewUserDetails?.lastName ? viewUserDetails.firstName : "",
-    middleName: viewUserDetails?.middleName ? viewUserDetails.middleName : "",
-    lastName: viewUserDetails?.lastName ? viewUserDetails.lastName : "",
+    salutation: viewUserDetails?.salutation ? viewUserDetails.salutation : '',
+    firstName: viewUserDetails?.lastName ? viewUserDetails.firstName : '',
+    middleName: viewUserDetails?.middleName ? viewUserDetails.middleName : '',
+    lastName: viewUserDetails?.lastName ? viewUserDetails.lastName : '',
     emergencyContactName: viewUserDetails?.emergencyContactName
       ? viewUserDetails.emergencyContactName
-      : "",
-    occupation: viewUserDetails?.occupation ? viewUserDetails.occupation : "",
+      : '',
+    occupation: viewUserDetails?.occupation ? viewUserDetails.occupation : '',
     maritalStatus: viewUserDetails?.maritalStatus
       ? viewUserDetails.maritalStatus
-      : "",
-    age: viewUserDetails?.age ? viewUserDetails.age : "",
-    sex: viewUserDetails?.sex ? viewUserDetails.sex : "",
+      : '',
+    sex: viewUserDetails?.sex ? viewUserDetails.sex : '',
     membershipStatus: viewUserDetails?.membershipStatus
       ? viewUserDetails.membershipStatus
-      : "",
-    role: viewUserDetails?.role ? viewUserDetails.role : "",
-    status: viewUserDetails?.status ? viewUserDetails.status : "",
-    baptism: viewUserDetails?.baptism ? viewUserDetails.baptism : "",
-    city: viewUserDetails?.city ? viewUserDetails.city : "",
-    address: viewUserDetails?.address ? viewUserDetails.address : "",
-    email: viewUserDetails?.email ? viewUserDetails.email : "",
-    phone: viewUserDetails?.phone ? viewUserDetails.phone : "",
+      : '',
+    role: viewUserDetails?.role ? viewUserDetails.role : '',
+    status: viewUserDetails?.status ? viewUserDetails.status : '',
+    baptism: viewUserDetails?.baptism ? viewUserDetails.baptism : '',
+    city: viewUserDetails?.city ? viewUserDetails.city : '',
+    address: viewUserDetails?.address ? viewUserDetails.address : '',
+    email: viewUserDetails?.email ? viewUserDetails.email : '',
+    phone: viewUserDetails?.phone ? viewUserDetails.phone : '',
     emergencyContact: viewUserDetails?.emergencyContact
       ? viewUserDetails.emergencyContact
-      : "",
+      : '',
     dues: viewUserDetails?.dues ? viewUserDetails.dues : 0,
-    department: viewUserDetails?.department ? viewUserDetails.department : "",
-    groupRole: viewUserDetails?.groupRole ? viewUserDetails.groupRole : "",
+    department: viewUserDetails?.department ? viewUserDetails.department : '',
+    groupRole: viewUserDetails?.groupRole ? viewUserDetails.groupRole : '',
     soulsWon: viewUserDetails?.soulsWon ? viewUserDetails.soulsWon : 0,
     loading: null,
     error: false,
@@ -82,7 +81,7 @@ function EditProfile() {
     emergencyContactName,
     occupation,
     maritalStatus,
-    age,
+
     sex,
     status,
     baptism,
@@ -114,7 +113,6 @@ function EditProfile() {
       !lastName ||
       !occupation ||
       !maritalStatus ||
-      !age ||
       !sex ||
       !status ||
       !baptism ||
@@ -122,18 +120,18 @@ function EditProfile() {
       !address ||
       !role
     ) {
-      setData({ ...data, error: "Please fill all required * fields." });
+      setData({ ...data, error: 'Please fill all required * fields.' });
     } else if (dues * 1 > 12) {
       setData({
         ...data,
-        error: "Monthly dues apaied cannot be more than 12!",
+        error: 'Monthly dues apaied cannot be more than 12!',
       });
     } else {
       setLoading(true);
       const updateDate = async () => {
         setLoading(true);
         try {
-          await updateDoc(doc(db, "DGM_YOUTH_users", id), {
+          await updateDoc(doc(db, 'DGM_YOUTH_users', id), {
             salutation,
             firstName,
             middleName,
@@ -141,7 +139,7 @@ function EditProfile() {
             emergencyContactName,
             occupation,
             maritalStatus,
-            age,
+
             sex,
             status,
             baptism,
@@ -158,7 +156,7 @@ function EditProfile() {
             soulsWon,
           });
 
-          await getDoc(doc(db, "DGM_YOUTH_users", id)).then((docSnap) => {
+          await getDoc(doc(db, 'DGM_YOUTH_users', id)).then((docSnap) => {
             if (docSnap.exists) {
               const data = docSnap.data();
               setUser(data);
@@ -169,34 +167,34 @@ function EditProfile() {
           setSuccess(true);
 
           setData({
-            salutation: "",
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            emergencyContactName: "",
-            occupation: "",
-            maritalStatus: "",
-            age: "",
-            sex: "",
-            status: "",
-            baptism: "",
-            city: "",
-            address: "",
-            email: "",
-            phone: "",
-            membershipStatus: "",
-            role: "",
-            emergencyContact: "",
-            dues: "",
-            department: "",
-            groupRole: "",
-            soulsWon: "",
+            salutation: '',
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            emergencyContactName: '',
+            occupation: '',
+            maritalStatus: '',
+
+            sex: '',
+            status: '',
+            baptism: '',
+            city: '',
+            address: '',
+            email: '',
+            phone: '',
+            membershipStatus: '',
+            role: '',
+            emergencyContact: '',
+            dues: '',
+            department: '',
+            groupRole: '',
+            soulsWon: '',
             loading: false,
             error: null,
           });
 
           toast.success(`Profile Successfully Updated!.`, {
-            position: "top-right",
+            position: 'top-right',
           });
           setTimeout(function () {
             navigate(`/profile-details/${id}`);
@@ -222,54 +220,54 @@ function EditProfile() {
   }, 1000);
 
   useEffect(() => {
-    getDoc(doc(db, "DGM_YOUTH_users", auth.currentUser.uid)).then((docSnap) => {
+    getDoc(doc(db, 'DGM_YOUTH_users', auth.currentUser.uid)).then((docSnap) => {
       if (docSnap.exists) {
         dispatch(getUserDetails(docSnap.data()));
-        localStorage.setItem("loggedinUser", JSON.stringify(docSnap.data()));
+        localStorage.setItem('loggedinUser', JSON.stringify(docSnap.data()));
       }
     });
   }, []);
 
   return (
-    <div className="edit-profile-layout_margin">
-      <h3 style={{ color: "purple" }}>Edit Account</h3>
-      <form action="" className="new_member_form" onSubmit={handleSubmit}>
+    <div className='edit-profile-layout_margin'>
+      <h3 style={{ color: 'purple' }}>Edit Account</h3>
+      <form action='' className='new_member_form' onSubmit={handleSubmit}>
         <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="salutation"></label>
+                <label htmlFor='salutation'></label>
                 <Box
-                  className="edit-member_form-input"
-                  sx={{ m: 0.5, width: "35ch" }}
+                  className='edit-member_form-input'
+                  sx={{ m: 0.5, width: '35ch' }}
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Salutation *
                     </InputLabel>
                     <Select
-                      name="salutation"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='salutation'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={salutation}
-                      label="Salutation"
+                      label='Salutation'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Mr">Mr</MenuItem>
-                      <MenuItem value="Mrs">Mrs</MenuItem>
-                      <MenuItem value="Miss">Miss</MenuItem>
+                      <MenuItem value='Mr'>Mr</MenuItem>
+                      <MenuItem value='Mrs'>Mrs</MenuItem>
+                      <MenuItem value='Miss'>Miss</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor="role"></label>
+                <label htmlFor='role'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Role *
                     </InputLabel>
                     <Select
@@ -281,94 +279,94 @@ function EditProfile() {
                         loggedinUserrole * 1 === 6 ||
                         loggedinUserrole * 1 === 7
                       }
-                      name="role"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='role'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={role}
-                      label="Role"
+                      label='Role'
                       onChange={handleChange}
                     >
-                      <MenuItem value="1">President</MenuItem>
-                      <MenuItem value="2">Vice President</MenuItem>
-                      <MenuItem value="6">Financial Secretary</MenuItem>
-                      <MenuItem value="3">Treasurer</MenuItem>
-                      <MenuItem value="4">Exective</MenuItem>
-                      <MenuItem value="5">Member</MenuItem>
-                      <MenuItem value="7">Observer</MenuItem>
+                      <MenuItem value='1'>President</MenuItem>
+                      <MenuItem value='2'>Vice President</MenuItem>
+                      <MenuItem value='6'>Financial Secretary</MenuItem>
+                      <MenuItem value='3'>Treasurer</MenuItem>
+                      <MenuItem value='4'>Exective</MenuItem>
+                      <MenuItem value='5'>Member</MenuItem>
+                      <MenuItem value='7'>Observer</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="membershipStatus"></label>
+                <label htmlFor='membershipStatus'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Membership Status *
                     </InputLabel>
                     <Select
-                      name="membershipStatus"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='membershipStatus'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={membershipStatus}
-                      label="Membership Status"
+                      label='Membership Status'
                       onChange={handleChange}
                     >
-                      <MenuItem value="New Convert">New Convert</MenuItem>
-                      <MenuItem value="Member">Member</MenuItem>
+                      <MenuItem value='New Convert'>New Convert</MenuItem>
+                      <MenuItem value='Member'>Member</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor="status"></label>
+                <label htmlFor='status'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Status *
                     </InputLabel>
                     <Select
-                      name="status"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='status'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={status}
-                      label="Status"
+                      label='Status'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Very Active">Very active</MenuItem>
-                      <MenuItem value="Active">Active</MenuItem>
-                      <MenuItem value="Inactive">Inactive</MenuItem>
+                      <MenuItem value='Very Active'>Very active</MenuItem>
+                      <MenuItem value='Active'>Active</MenuItem>
+                      <MenuItem value='Inactive'>Inactive</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
                 <div>
-                  <label htmlFor="firstName"></label>
+                  <label htmlFor='firstName'></label>
                   <Box
-                    component="form"
-                    className="edit-member_form-input"
+                    component='form'
+                    className='edit-member_form-input'
                     sx={{
-                      "& > :not(style)": { m: 0.5, width: "35ch" },
+                      '& > :not(style)': { m: 0.5, width: '35ch' },
                     }}
                     noValidate
-                    autoComplete="off"
+                    autoComplete='off'
                   >
                     <TextField
-                      name="firstName"
-                      id="outlined-basic"
-                      label="First Name *"
-                      variant="outlined"
+                      name='firstName'
+                      id='outlined-basic'
+                      label='First Name *'
+                      variant='outlined'
                       defaultValue={firstName}
                       onChange={handleChange}
                     />
@@ -376,161 +374,139 @@ function EditProfile() {
                 </div>
               </div>
               <div>
-                <label htmlFor="middleName"></label>
+                <label htmlFor='middleName'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="middleName"
-                    id="outlined-basic"
-                    label="Middle Name"
-                    variant="outlined"
+                    name='middleName'
+                    id='outlined-basic'
+                    label='Middle Name'
+                    variant='outlined'
                     defaultValue={middleName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="lastName"></label>
+                <label htmlFor='lastName'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="lastName"
-                    id="outlined-basic"
-                    label="Last Name *"
-                    variant="outlined"
+                    name='lastName'
+                    id='outlined-basic'
+                    label='Last Name *'
+                    variant='outlined'
                     value={lastName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="sex"></label>
+                <label htmlFor='sex'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Gender *
                     </InputLabel>
                     <Select
-                      name="sex"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='sex'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={sex}
-                      label="Gender"
+                      label='Gender'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Male">Male</MenuItem>
-                      <MenuItem value="Female">Female</MenuItem>
+                      <MenuItem value='Male'>Male</MenuItem>
+                      <MenuItem value='Female'>Female</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="maritalStatus"></label>
+                <label htmlFor='maritalStatus'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Marital Status *
                     </InputLabel>
                     <Select
-                      name="maritalStatus"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='maritalStatus'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={maritalStatus}
-                      label="Marital Status"
+                      label='Marital Status'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Single">Single</MenuItem>
-                      <MenuItem value="Married">Married</MenuItem>
+                      <MenuItem value='Single'>Single</MenuItem>
+                      <MenuItem value='Married'>Married</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
-              <div>
-                <label htmlFor="age"></label>
-                <Box
-                  component="form"
-                  className="edit-member_form-input"
-                  sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <TextField
-                    name="age"
-                    type="number"
-                    id="outlined-basic"
-                    label="Age *"
-                    variant="outlined"
-                    value={age}
-                    onChange={handleChange}
-                  />
-                </Box>
-              </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="occupation"></label>
+                <label htmlFor='occupation'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="occupation"
-                    id="outlined-basic"
-                    label="Occupation *"
-                    variant="outlined"
+                    name='occupation'
+                    id='outlined-basic'
+                    label='Occupation *'
+                    variant='outlined'
                     value={occupation}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="phone"></label>
+                <label htmlFor='phone'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="phone"
-                    id="outlined-basic"
-                    label="Phone Number"
-                    type="number"
-                    variant="outlined"
+                    name='phone'
+                    id='outlined-basic'
+                    label='Phone Number'
+                    type='number'
+                    variant='outlined'
                     value={phone}
                     onChange={handleChange}
                   />
@@ -541,162 +517,162 @@ function EditProfile() {
         </Paper>
         <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="baptism"></label>
+                <label htmlFor='baptism'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Baptism *
                     </InputLabel>
                     <Select
-                      name="baptism"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='baptism'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={baptism}
-                      label="baptism"
+                      label='baptism'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Yes">Yes</MenuItem>
-                      <MenuItem value="No">No</MenuItem>
+                      <MenuItem value='Yes'>Yes</MenuItem>
+                      <MenuItem value='No'>No</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor="city"></label>
+                <label htmlFor='city'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="city"
-                    id="outlined-basic"
-                    label="City *"
-                    variant="outlined"
+                    name='city'
+                    id='outlined-basic'
+                    label='City *'
+                    variant='outlined'
                     value={city}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="address"></label>
+                <label htmlFor='address'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="address"
-                    id="outlined-basic"
-                    label="Address *"
-                    variant="outlined"
+                    name='address'
+                    id='outlined-basic'
+                    label='Address *'
+                    variant='outlined'
                     value={address}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="email"></label>
+                <label htmlFor='email'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
                     disabled
-                    name="email"
-                    id="outlined-basic"
-                    label="Email *"
-                    type="email"
-                    variant="outlined"
+                    name='email'
+                    id='outlined-basic'
+                    label='Email *'
+                    type='email'
+                    variant='outlined'
                     value={email}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="emergencyContactName"></label>
+                <label htmlFor='emergencyContactName'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="emergencyContactName"
-                    id="outlined-basic"
-                    label="Emergency Contact Name *"
-                    type="text"
-                    variant="outlined"
+                    name='emergencyContactName'
+                    id='outlined-basic'
+                    label='Emergency Contact Name *'
+                    type='text'
+                    variant='outlined'
                     value={emergencyContactName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="emergencyContact"></label>
+                <label htmlFor='emergencyContact'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="emergencyContact"
-                    id="outlined-basic"
-                    label="Emergency Contact *"
-                    type="number"
-                    variant="outlined"
+                    name='emergencyContact'
+                    id='outlined-basic'
+                    label='Emergency Contact *'
+                    type='number'
+                    variant='outlined'
                     value={emergencyContact}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="department"></label>
+                <label htmlFor='department'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Department
                     </InputLabel>
                     <Select
-                      name="department"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='department'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={department}
-                      label="  Department"
+                      label='  Department'
                       onChange={handleChange}
                     >
                       {allDepartment?.map((department, index) => (
@@ -712,64 +688,64 @@ function EditProfile() {
                 </Box>
               </div>
               <div>
-                <label htmlFor="groupRole"></label>
+                <label htmlFor='groupRole'></label>
                 <Box
-                  sx={{ m: 0.5, width: "35ch" }}
-                  className="edit-member_form-input"
+                  sx={{ m: 0.5, width: '35ch' }}
+                  className='edit-member_form-input'
                 >
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
+                    <InputLabel id='demo-simple-select-label'>
                       Group Role
                     </InputLabel>
                     <Select
-                      name="groupRole"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      name='groupRole'
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={groupRole}
-                      label=" Group Role"
+                      label=' Group Role'
                       onChange={handleChange}
                     >
-                      <MenuItem value="Mr">Leader</MenuItem>
-                      <MenuItem value="Mrs">Asistant Leader</MenuItem>
-                      <MenuItem value="Miss">Member</MenuItem>
+                      <MenuItem value='Mr'>Leader</MenuItem>
+                      <MenuItem value='Mrs'>Asistant Leader</MenuItem>
+                      <MenuItem value='Miss'>Member</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className="new_member_form_group">
+            <div className='new_member_form_group'>
               <div>
-                <label htmlFor="soulsWon"></label>
+                <label htmlFor='soulsWon'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
-                    name="soulsWon"
-                    id="outlined-basic"
-                    label="Souls Won"
-                    type="number"
-                    variant="outlined"
+                    name='soulsWon'
+                    id='outlined-basic'
+                    label='Souls Won'
+                    type='number'
+                    variant='outlined'
                     value={soulsWon}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor="dues"></label>
+                <label htmlFor='dues'></label>
                 <Box
-                  component="form"
-                  className="edit-member_form-input"
+                  component='form'
+                  className='edit-member_form-input'
                   sx={{
-                    "& > :not(style)": { m: 0.5, width: "35ch" },
+                    '& > :not(style)': { m: 0.5, width: '35ch' },
                   }}
                   noValidate
-                  autoComplete="off"
+                  autoComplete='off'
                 >
                   <TextField
                     disabled={
@@ -777,11 +753,11 @@ function EditProfile() {
                       loggedinUserrole * 1 === 4 ||
                       loggedinUserrole * 1 === 7
                     }
-                    name="dues"
-                    id="outlined-basic"
-                    label="Monthly Dues*"
-                    type="number"
-                    variant="outlined"
+                    name='dues'
+                    id='outlined-basic'
+                    label='Monthly Dues*'
+                    type='number'
+                    variant='outlined'
                     value={dues}
                     onChange={handleChange}
                   />
@@ -789,28 +765,28 @@ function EditProfile() {
               </div>
             </div>
 
-            {membershipStatus === "New Convert" && (
-              <div className="new_member_form_group"></div>
+            {membershipStatus === 'New Convert' && (
+              <div className='new_member_form_group'></div>
             )}
           </div>
-          {error ? <p className="error">{error}</p> : null}
+          {error ? <p className='error'>{error}</p> : null}
 
           <Button
-            type="submit"
+            type='submit'
             sx={{
-              textAlign: "center",
+              textAlign: 'center',
               height: 50,
-              width: "100%",
+              width: '100%',
               mt: 4,
-              backgroundColor: "purple",
+              backgroundColor: 'purple',
               fontSize: 14,
-              fontWeight: "bolder",
-              letterSpacing: "5px",
+              fontWeight: 'bolder',
+              letterSpacing: '5px',
             }}
-            variant="contained"
+            variant='contained'
             endIcon={loading ? null : <SendIcon />}
           >
-            {loading ? "Updateding Profile..." : "Update Profile"}
+            {loading ? 'Updateding Profile...' : 'Update Profile'}
           </Button>
         </Paper>
         {success && <ToastContainer />}
