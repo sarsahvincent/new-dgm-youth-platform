@@ -18,20 +18,13 @@ import { auth, db } from "../../firebse";
 import { doc, setDoc } from "firebase/firestore";
 import Loading from "../Loading";
 
-function create_UUID() {
-  let dt = new Date().getTime();
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-  });
-}
 const password = "123456789";
 const time = new Date().getTime();
 function AddAccount() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const [memberId, setMemberId] = useState(null);
   const [data, setData] = useState({
     salutation: "",
     firstName: "",
@@ -77,12 +70,26 @@ function AddAccount() {
     error,
   } = data;
 
+  React.useEffect(() => {
+    function create_UUID() {
+      let dt = new Date().getTime();
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          const r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+          return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+    }
+    setMemberId(create_UUID());
+  }, []);
+
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const handleSubmitMember = async (e) => {
-    console.log("member was logged");
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
     if (
@@ -106,35 +113,30 @@ function AddAccount() {
     } else {
       setLoading(true);
       try {
-        console.log("try 111");
-        await setDoc(
-          doc(db, "DGM_YOUTH_users", create_UUID() + firstName + lastName),
-          {
-            uid: create_UUID(),
-            salutation,
-            firstName,
-            middleName,
-            lastName,
-            emergencyContactName,
-            occupation,
-            maritalStatus,
-            sex,
-            status,
-            baptism,
-            city,
-            address,
-            email,
-            phone,
-            fullName: `${firstName} ${middleName} ${lastName} `,
-            membershipStatus,
-            role,
-            department,
-            emergencyContact,
-            createdAt: Date.now(),
-            isOnline: true,
-          }
-        );
-        console.log("try 222");
+        await setDoc(doc(db, "DGM_YOUTH_users", memberId), {
+          uid: memberId,
+          salutation,
+          firstName,
+          middleName,
+          lastName,
+          emergencyContactName,
+          occupation,
+          maritalStatus,
+          sex,
+          status,
+          baptism,
+          city,
+          address,
+          email,
+          phone,
+          fullName: `${firstName} ${middleName} ${lastName} `,
+          membershipStatus,
+          role,
+          department,
+          emergencyContact,
+          createdAt: Date.now(),
+          isOnline: true,
+        });
         setLoading(false);
         setSuccess(true);
         setData({
@@ -171,13 +173,11 @@ function AddAccount() {
           window.location.reload();
         }, 4000);
       } catch (err) {
-        console.log("erorrrr", err);
         setData({ ...data, error: err.message, loading: false });
       }
     }
   };
   const handleSubmit = async (e) => {
-    console.log("executive was logged");
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
     if (
@@ -282,7 +282,6 @@ function AddAccount() {
       }
     }
   };
-  console.log("role", role);
 
   return (
     <div className="layout_margin">
