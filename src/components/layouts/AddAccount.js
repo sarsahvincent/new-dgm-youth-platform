@@ -1,58 +1,56 @@
-import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import { ToastContainer, toast } from 'react-toastify';
-import SendIcon from '@mui/icons-material/Send';
+import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { ToastContainer, toast } from "react-toastify";
+import SendIcon from "@mui/icons-material/Send";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-} from 'firebase/auth';
-import { auth, db } from '../../firebse';
-import { doc, setDoc } from 'firebase/firestore';
-import Loading from '../Loading';
+} from "firebase/auth";
+import { auth, db } from "../../firebse";
+import { doc, setDoc } from "firebase/firestore";
+import Loading from "../Loading";
 
 function create_UUID() {
   let dt = new Date().getTime();
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     const r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
-    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
 }
-const password = '123456789';
+const password = "123456789";
 const time = new Date().getTime();
 function AddAccount() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const [data, setData] = useState({
-    salutation: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    emergencyContactName: '',
-    occupation: '',
-    maritalStatus: '',
-
-    sex: '',
-    membershipStatus: '',
-    role: '',
-    status: '',
-    baptism: '',
-    city: '',
-    address: '',
-    email: '',
-    phone: '',
-    department: '',
-    emergencyContact: '',
-
+    salutation: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    emergencyContactName: "",
+    occupation: "",
+    maritalStatus: "",
+    sex: "",
+    membershipStatus: "",
+    role: "",
+    status: "",
+    baptism: "",
+    city: "",
+    address: "",
+    email: "",
+    phone: "",
+    department: "",
+    emergencyContact: "",
     loading: null,
     error: false,
   });
@@ -65,7 +63,6 @@ function AddAccount() {
     emergencyContactName,
     occupation,
     maritalStatus,
-
     sex,
     status,
     baptism,
@@ -85,6 +82,7 @@ function AddAccount() {
   };
 
   const handleSubmitMember = async (e) => {
+    console.log("member was logged");
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
     if (
@@ -103,13 +101,14 @@ function AddAccount() {
     ) {
       setData({
         ...data,
-        error: 'Please fill all required * fields.',
+        error: "Please fill all required * fields.",
       });
     } else {
       setLoading(true);
       try {
+        console.log("try 111");
         await setDoc(
-          doc(db, 'DGM_YOUTH_users', create_UUID() + firstName + lastName),
+          doc(db, "DGM_YOUTH_users", create_UUID() + firstName + lastName),
           {
             uid: create_UUID(),
             salutation,
@@ -119,7 +118,6 @@ function AddAccount() {
             emergencyContactName,
             occupation,
             maritalStatus,
-
             sex,
             status,
             baptism,
@@ -136,49 +134,50 @@ function AddAccount() {
             isOnline: true,
           }
         );
-
+        console.log("try 222");
         setLoading(false);
         setSuccess(true);
         setData({
-          salutation: '',
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          emergencyContactName: '',
-          occupation: '',
-          maritalStatus: '',
-
-          sex: '',
-          status: '',
-          baptism: '',
-          city: '',
-          address: '',
-          email: '',
-          phone: '',
-          membershipStatus: '',
-          role: '',
-          emergencyContact: '',
-          dues: '',
-          department: '',
-          groupRole: '',
-          soulsWon: '',
+          salutation: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          emergencyContactName: "",
+          occupation: "",
+          maritalStatus: "",
+          sex: "",
+          status: "",
+          baptism: "",
+          city: "",
+          address: "",
+          email: "",
+          phone: "",
+          membershipStatus: "",
+          role: "",
+          emergencyContact: "",
+          dues: "",
+          department: "",
+          groupRole: "",
+          soulsWon: "",
           loading: false,
           error: null,
         });
 
         toast.success(`Profile Creation Success.`, {
-          position: 'top-right',
+          position: "top-right",
         });
 
         setTimeout(() => {
           window.location.reload();
         }, 4000);
       } catch (err) {
+        console.log("erorrrr", err);
         setData({ ...data, error: err.message, loading: false });
       }
     }
   };
   const handleSubmit = async (e) => {
+    console.log("executive was logged");
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
     if (
@@ -200,7 +199,7 @@ function AddAccount() {
       !membershipStatus ||
       !role
     ) {
-      setData({ ...data, error: 'Please fill all required * fields.' });
+      setData({ ...data, error: "Please fill all required * fields." });
     } else {
       setLoading(true);
       try {
@@ -209,7 +208,7 @@ function AddAccount() {
           email,
           password
         );
-        await setDoc(doc(db, 'DGM_YOUTH_users', result.user.uid), {
+        await setDoc(doc(db, "DGM_YOUTH_users", result.user.uid), {
           uid: result.user.uid,
           salutation,
           firstName,
@@ -218,7 +217,6 @@ function AddAccount() {
           emergencyContactName,
           occupation,
           maritalStatus,
-
           sex,
           status,
           baptism,
@@ -240,28 +238,27 @@ function AddAccount() {
         setLoading(false);
         setSuccess(true);
         setData({
-          salutation: '',
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          emergencyContactName: '',
-          occupation: '',
-          maritalStatus: '',
-
-          sex: '',
-          status: '',
-          baptism: '',
-          city: '',
-          address: '',
-          email: '',
-          phone: '',
-          membershipStatus: '',
-          role: '',
-          emergencyContact: '',
-          dues: '',
-          department: '',
-          groupRole: '',
-          soulsWon: '',
+          salutation: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          emergencyContactName: "",
+          occupation: "",
+          maritalStatus: "",
+          sex: "",
+          status: "",
+          baptism: "",
+          city: "",
+          address: "",
+          email: "",
+          phone: "",
+          membershipStatus: "",
+          role: "",
+          emergencyContact: "",
+          dues: "",
+          department: "",
+          groupRole: "",
+          soulsWon: "",
           loading: false,
           error: null,
         });
@@ -269,7 +266,7 @@ function AddAccount() {
         toast.success(
           `Profile Creation Success. Check your email to reset your password`,
           {
-            position: 'top-right',
+            position: "top-right",
           }
         );
 
@@ -277,7 +274,7 @@ function AddAccount() {
           if (role * 1 === 5) {
             window.location.reload();
           } else {
-            navigate('/profile');
+            navigate("/profile");
           }
         }, 6000);
       } catch (err) {
@@ -285,133 +282,134 @@ function AddAccount() {
       }
     }
   };
+  console.log("role", role);
 
   return (
-    <div className='layout_margin'>
-      <h3 style={{ color: 'purple' }}>New Account</h3>
+    <div className="layout_margin">
+      <h3 style={{ color: "purple" }}>New Account</h3>
       <form
-        action=''
-        className='new_member_form'
+        action=""
+        className="new_member_form"
         onSubmit={role * 1 === 5 ? handleSubmitMember : handleSubmit}
       >
         <Paper
-          className='firstSectionForm'
+          className="firstSectionForm"
           elevation={1}
           sx={{ padding: 1, mt: 1 }}
         >
           <div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='salutation'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="salutation"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Salutation *
                     </InputLabel>
                     <Select
-                      name='salutation'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="salutation"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={salutation}
-                      label='Salutation'
+                      label="Salutation"
                       onChange={handleChange}
                     >
-                      <MenuItem value='Mr'>Mr</MenuItem>
-                      <MenuItem value='Mrs'>Mrs</MenuItem>
-                      <MenuItem value='Miss'>Miss</MenuItem>
+                      <MenuItem value="Mr">Mr</MenuItem>
+                      <MenuItem value="Mrs">Mrs</MenuItem>
+                      <MenuItem value="Miss">Miss</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor='role'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="role"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Role *
                     </InputLabel>
                     <Select
-                      name='role'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="role"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={role}
-                      label='Role'
+                      label="Role"
                       onChange={handleChange}
                     >
-                      <MenuItem value='1'>President</MenuItem>
-                      <MenuItem value='2'>Vice President</MenuItem>
-                      <MenuItem value='6'>Financial Secretary</MenuItem>
-                      <MenuItem value='3'>Treasurer</MenuItem>
-                      <MenuItem value='4'>Exective</MenuItem>
-                      <MenuItem value='5'>Member</MenuItem>
-                      <MenuItem value='7'>Observer</MenuItem>
+                      <MenuItem value="1">President</MenuItem>
+                      <MenuItem value="2">Vice President</MenuItem>
+                      <MenuItem value="6">Financial Secretary</MenuItem>
+                      <MenuItem value="3">Treasurer</MenuItem>
+                      <MenuItem value="4">Exective</MenuItem>
+                      <MenuItem value="5">Member</MenuItem>
+                      <MenuItem value="7">Observer</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='membershipStatus'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="membershipStatus"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Membership Status *
                     </InputLabel>
                     <Select
-                      name='membershipStatus'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="membershipStatus"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={membershipStatus}
-                      label='Membership Status'
+                      label="Membership Status"
                       onChange={handleChange}
                     >
-                      <MenuItem value='New Convert'>New Convert</MenuItem>
-                      <MenuItem value='Member'>Member</MenuItem>
+                      <MenuItem value="New Convert">New Convert</MenuItem>
+                      <MenuItem value="Member">Member</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor='status'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="status"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Status *
                     </InputLabel>
                     <Select
-                      name='status'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="status"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={status}
-                      label='Status'
+                      label="Status"
                       onChange={handleChange}
                     >
-                      <MenuItem value='Very Active'>Very active</MenuItem>
-                      <MenuItem value='Active'>Active</MenuItem>
-                      <MenuItem value='Inactive'>Inactive</MenuItem>
+                      <MenuItem value="Very Active">Very active</MenuItem>
+                      <MenuItem value="Active">Active</MenuItem>
+                      <MenuItem value="Inactive">Inactive</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
                 <div>
-                  <label htmlFor='firstName'></label>
+                  <label htmlFor="firstName"></label>
                   <Box
-                    component='form'
+                    component="form"
                     sx={{
-                      '& > :not(style)': { m: 0.5, width: '35ch' },
+                      "& > :not(style)": { m: 0.5, width: "35ch" },
                     }}
                     noValidate
-                    autoComplete='off'
+                    autoComplete="off"
                   >
                     <TextField
-                      name='firstName'
-                      id='outlined-basic'
-                      label='First Name *'
-                      variant='outlined'
+                      name="firstName"
+                      id="outlined-basic"
+                      label="First Name *"
+                      variant="outlined"
                       value={firstName}
                       onChange={handleChange}
                     />
@@ -419,107 +417,107 @@ function AddAccount() {
                 </div>
               </div>
               <div>
-                <label htmlFor='middleName'></label>
+                <label htmlFor="middleName"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='middleName'
-                    id='outlined-basic'
-                    label='Middle Name'
-                    variant='outlined'
+                    name="middleName"
+                    id="outlined-basic"
+                    label="Middle Name"
+                    variant="outlined"
                     value={middleName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='lastName'></label>
+                <label htmlFor="lastName"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='lastName'
-                    id='outlined-basic'
-                    label='Last Name *'
-                    variant='outlined'
+                    name="lastName"
+                    id="outlined-basic"
+                    label="Last Name *"
+                    variant="outlined"
                     value={lastName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor='sex'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="sex"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Gender *
                     </InputLabel>
                     <Select
-                      name='sex'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="sex"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={sex}
-                      label='Gender'
+                      label="Gender"
                       onChange={handleChange}
                     >
-                      <MenuItem value='Male'>Male</MenuItem>
-                      <MenuItem value='Female'>Female</MenuItem>
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
 
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='occupation'></label>
+                <label htmlFor="occupation"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='occupation'
-                    id='outlined-basic'
-                    label='Occupation *'
-                    variant='outlined'
+                    name="occupation"
+                    id="outlined-basic"
+                    label="Occupation *"
+                    variant="outlined"
                     value={occupation}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor='phone'></label>
+                <label htmlFor="phone"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='phone'
-                    id='outlined-basic'
-                    label='Phone Number'
-                    type='number'
-                    variant='outlined'
+                    name="phone"
+                    id="outlined-basic"
+                    label={role * 1 === 5 ? "Phone Number" : "Phone Number *"}
+                    type="number"
+                    variant="outlined"
                     value={phone}
                     onChange={handleChange}
                   />
@@ -530,184 +528,192 @@ function AddAccount() {
         </Paper>
         <Paper elevation={1} sx={{ padding: 1, mt: 1 }}>
           <div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='baptism'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="baptism"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Baptism *
                     </InputLabel>
                     <Select
-                      name='baptism'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="baptism"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={baptism}
-                      label='baptism'
+                      label="baptism"
                       onChange={handleChange}
                     >
-                      <MenuItem value='Yes'>Yes</MenuItem>
-                      <MenuItem value='No'>No</MenuItem>
+                      <MenuItem value="Yes">Yes</MenuItem>
+                      <MenuItem value="No">No</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
               <div>
-                <label htmlFor='city'></label>
+                <label htmlFor="city"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='city'
-                    id='outlined-basic'
-                    label='City *'
-                    variant='outlined'
+                    name="city"
+                    id="outlined-basic"
+                    label="City *"
+                    variant="outlined"
                     value={city}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='address'></label>
+                <label htmlFor="address"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='address'
-                    id='outlined-basic'
-                    label='Address *'
-                    variant='outlined'
+                    name="address"
+                    id="outlined-basic"
+                    label="Address *"
+                    variant="outlined"
                     value={address}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor='email'></label>
+                <label htmlFor="email"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='email'
-                    id='outlined-basic'
-                    label='Email *'
-                    type='email'
-                    variant='outlined'
+                    name="email"
+                    id="outlined-basic"
+                    label={role * 1 === 5 ? "Email" : "Email *"}
+                    type="email"
+                    variant="outlined"
                     value={email}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='emergencyContactName'></label>
+                <label htmlFor="emergencyContactName"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='emergencyContactName'
-                    id='outlined-basic'
-                    label='Emergency Contact Name *'
-                    type='text'
-                    variant='outlined'
+                    name="emergencyContactName"
+                    id="outlined-basic"
+                    label={
+                      role * 1 === 5
+                        ? "Emergency Contact Name"
+                        : "Emergency Contact Name *"
+                    }
+                    type="text"
+                    variant="outlined"
                     value={emergencyContactName}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
               <div>
-                <label htmlFor='emergencyContact'></label>
+                <label htmlFor="emergencyContact"></label>
                 <Box
-                  component='form'
+                  component="form"
                   sx={{
-                    '& > :not(style)': { m: 0.5, width: '35ch' },
+                    "& > :not(style)": { m: 0.5, width: "35ch" },
                   }}
                   noValidate
-                  autoComplete='off'
+                  autoComplete="off"
                 >
                   <TextField
-                    name='emergencyContact'
-                    id='outlined-basic'
-                    label='Emergency Contact *'
-                    type='number'
-                    variant='outlined'
+                    name="emergencyContact"
+                    id="outlined-basic"
+                    label={
+                      role * 1 === 5
+                        ? "Emergency Contact"
+                        : "Emergency Contact *"
+                    }
+                    type="number"
+                    variant="outlined"
                     value={emergencyContact}
                     onChange={handleChange}
                   />
                 </Box>
               </div>
             </div>
-            <div className='new_member_form_group'>
+            <div className="new_member_form_group">
               <div>
-                <label htmlFor='maritalStatus'></label>
-                <Box sx={{ m: 0.5, width: '35ch' }}>
+                <label htmlFor="maritalStatus"></label>
+                <Box sx={{ m: 0.5, width: "35ch" }}>
                   <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Marital Status *
                     </InputLabel>
                     <Select
-                      name='maritalStatus'
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
+                      name="maritalStatus"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
                       value={maritalStatus}
-                      label='Marital Status '
+                      label="Marital Status "
                       onChange={handleChange}
                     >
-                      <MenuItem value='Single'>Single</MenuItem>
-                      <MenuItem value='Married'>Married</MenuItem>
+                      <MenuItem value="Single">Single</MenuItem>
+                      <MenuItem value="Married">Married</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
               </div>
             </div>
 
-            {membershipStatus === 'New Convert' && (
-              <div className='new_member_form_group'></div>
+            {membershipStatus === "New Convert" && (
+              <div className="new_member_form_group"></div>
             )}
           </div>
-          {error ? <p className='error'>{error}</p> : null}
+          {error ? <p className="error">{error}</p> : null}
 
-          <div className='d-flex align-items-center justify-content-between mt-5'>
+          <div className="d-flex align-items-center justify-content-between mt-5">
             <Button
               disabled={loading}
-              type='submit'
+              type="submit"
               style={{
-                textAlign: 'center',
+                textAlign: "center",
                 height: 50,
                 width: 200,
                 marginTop: 20,
-                backgroundColor: 'purple',
+                backgroundColor: "purple",
                 fontSize: 14,
-                fontWeight: 'bolder',
-                letterSpacing: '5px',
+                fontWeight: "bolder",
+                letterSpacing: "5px",
                 borderRadius: 6,
                 marginBottom: 10,
-                margin: '0 auto',
+                margin: "0 auto",
               }}
-              variant='contained'
+              variant="contained"
               endIcon={loading ? null : <SendIcon />}
             >
               SUBMIT
