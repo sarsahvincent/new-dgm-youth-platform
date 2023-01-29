@@ -19,7 +19,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import Loading from '../Loading';
 
 function create_UUID() {
-  const dt = new Date().getTime();
+  let dt = new Date().getTime();
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
